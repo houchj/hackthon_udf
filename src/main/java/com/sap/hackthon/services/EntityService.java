@@ -25,6 +25,6 @@ public interface EntityService {
 
     public List<DynamicEntity> list(String objectType, String tanentId);
 
-    public PropertyMeta getEntityMeta(String objectType, String tanentId);
+    public List<PropertyMeta> getEntityMeta(String objectType, String tanentId);
 
 }

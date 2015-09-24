@@ -65,7 +65,7 @@ public class EntityServiceImpl implements EntityService {
     }
 
     @Override
-    public PropertyMeta getEntityMeta(String objectType, String tanentId) {
+    public List<PropertyMeta> getEntityMeta(String objectType, String tanentId) {
         return null;
     }
 }
