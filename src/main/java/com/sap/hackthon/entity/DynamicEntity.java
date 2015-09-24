@@ -6,6 +6,8 @@ package com.sap.hackthon.entity;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.sap.hackthon.utils.ObjectTypeEnum;
+
 /**
  * @author I310717
  *
@@ -14,13 +16,13 @@ public class DynamicEntity {
 
     private Map<String, Object> propertities;
 
-    private String objectType;
+    private ObjectTypeEnum objectType;
 
-    public DynamicEntity(String objectType) {
+    public DynamicEntity(ObjectTypeEnum objectType) {
         this.objectType = objectType;
     }
 
-    public DynamicEntity(String objectType, Map<String, Object> propertities) {
+    public DynamicEntity(ObjectTypeEnum objectType, Map<String, Object> propertities) {
         this(objectType);
         this.propertities = propertities;
     }
@@ -39,11 +41,11 @@ public class DynamicEntity {
         propertities.put(name, value);
     }
 
-    public String getObjectType() {
+    public ObjectTypeEnum getObjectType() {
         return objectType;
     }
 
-    public void setObjectType(String objectType) {
+    public void setObjectType(ObjectTypeEnum objectType) {
         this.objectType = objectType;
     }
 
