@@ -78,4 +78,10 @@ public class PropertyMetaServiceImpl implements PropertyMetaService {
 		return propertyMetaRepository.findByTenantIdAndObjectName(tenantId, objectName);
 	}
 
+	@Override
+	public PropertyMeta get(Long id) {
+		
+		return propertyMetaRepository.findOne(id);
+	}
+
 }
