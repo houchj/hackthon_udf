@@ -28,7 +28,7 @@ public class EntityController {
         session.setAttribute(GlobalConstants.TENANT, tenantId);
     }
 
-    @RequestMapping(value = "/entity", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public @ResponseBody Map<String, Object> create(@RequestBody String objectType,
             @RequestBody Map<String, Object> entity, HttpServletRequest request) {
         if (objectType == null || entity == null) {
@@ -47,7 +47,7 @@ public class EntityController {
         return dynamicEntity.getPropertities();
     }
 
-    @RequestMapping(value = "/entity", method = RequestMethod.PUT)
+    @RequestMapping(method = RequestMethod.PUT)
     public @ResponseBody Map<String, Object> update(@RequestBody String objectType,
             @RequestBody Map<String, Object> entity, HttpServletRequest request) {
         if (objectType == null || entity == null) {
@@ -69,7 +69,7 @@ public class EntityController {
         return dynamicEntity.getPropertities();
     }
 
-    @RequestMapping(value = "/entity", method = RequestMethod.DELETE)
+    @RequestMapping(method = RequestMethod.DELETE)
     public @ResponseBody boolean delete(@RequestBody String objectType, @RequestBody Long entityId,
             HttpServletRequest request) {
         if (objectType == null || entityId == null) {
