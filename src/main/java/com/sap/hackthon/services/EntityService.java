@@ -15,16 +15,16 @@ import com.sap.hackthon.entity.PropertyMeta;
  */
 public interface EntityService {
 
-    public DynamicEntity create(DynamicEntity entity, Long tanentId);
+    public DynamicEntity create(DynamicEntity entity, String tanentId);
 
-    public DynamicEntity update(DynamicEntity entity, Long tanentId);
+    public DynamicEntity update(DynamicEntity entity, String tanentId);
 
     public boolean delete(Long id, String objectType);
 
     public DynamicEntity get(Long id, String objectType);
 
-    public List<DynamicEntity> list(String objectType, Long tanentId);
+    public List<DynamicEntity> list(String objectType, String tanentId);
 
-    public PropertyMeta getEntityMeta(String objectType, Long tanentId);
+    public PropertyMeta getEntityMeta(String objectType, String tanentId);
 
 }

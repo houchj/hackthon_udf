@@ -23,7 +23,7 @@ public class EntityServiceImpl implements EntityService {
     EntityManager entityManager;
 
     @Override
-    public DynamicEntity create(DynamicEntity entity, Long tanentId) {
+    public DynamicEntity create(DynamicEntity entity, String tanentId) {
         PropertyMeta meta = new PropertyMeta();
         meta.setDisplayName("Display");
         meta.setInternalName("Internal_001");
@@ -41,7 +41,7 @@ public class EntityServiceImpl implements EntityService {
     }
 
     @Override
-    public DynamicEntity update(DynamicEntity entity, Long tanentId) {
+    public DynamicEntity update(DynamicEntity entity, String tanentId) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -59,13 +59,13 @@ public class EntityServiceImpl implements EntityService {
     }
 
     @Override
-    public List<DynamicEntity> list(String objectType, Long tanentId) {
+    public List<DynamicEntity> list(String objectType, String tanentId) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public PropertyMeta getEntityMeta(String objectType, Long tanentId) {
+    public PropertyMeta getEntityMeta(String objectType, String tanentId) {
         return null;
     }
 }

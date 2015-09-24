@@ -26,7 +26,7 @@ public class EntityController {
     private EntityService service;
 
     @RequestMapping(value = "/tenant", method = RequestMethod.POST)
-    public void tenant(@RequestParam Long tenantId, HttpServletRequest request) {
+    public void tenant(@RequestParam String tenantId, HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.setAttribute(GlobalConstants.TENANT, tenantId);
     }
@@ -39,7 +39,7 @@ public class EntityController {
         }
         DynamicEntity dynamicEntity = new DynamicEntity(objectType, entity);
         HttpSession session = request.getSession();
-        Long tenantId = (Long) session.getAttribute(GlobalConstants.TENANT);
+        String tenantId = (String) session.getAttribute(GlobalConstants.TENANT);
         if (tenantId == null) {
             return null;
         }
@@ -58,7 +58,7 @@ public class EntityController {
 
         DynamicEntity dynamicEntity = new DynamicEntity(objectType, entity);
         HttpSession session = request.getSession();
-        Long tenantId = (Long) session.getAttribute(GlobalConstants.TENANT);
+        String tenantId = (String) session.getAttribute(GlobalConstants.TENANT);
         if (tenantId == null) {
             return null;
         }
@@ -87,7 +87,7 @@ public class EntityController {
             return null;
         }
         HttpSession session = request.getSession();
-        Long tenantId = (Long) session.getAttribute(GlobalConstants.TENANT);
+        String tenantId = (String) session.getAttribute(GlobalConstants.TENANT);
         if (tenantId == null) {
             return null;
         }
