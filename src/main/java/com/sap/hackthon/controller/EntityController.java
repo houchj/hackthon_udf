@@ -16,13 +16,14 @@ import com.sap.hackthon.entity.DynamicEntity;
 import com.sap.hackthon.services.EntityService;
 import com.sap.hackthon.utils.GlobalConstants;
 
-@Controller(value = "entity")
+@Controller
+@RequestMapping("/entities")
 public class EntityController {
 
     @Autowired
     private EntityService service;
 
-    @RequestMapping(value = "/tenant", method = RequestMethod.POST)
+    @RequestMapping(value = "tenant", method = RequestMethod.POST)
     public void tenant(@RequestBody Long tenantId, HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.setAttribute(GlobalConstants.TENANT, tenantId);
@@ -77,4 +78,11 @@ public class EntityController {
         }
         return service.delete(entityId, objectType);
     }
+
+    @RequestMapping(value="test",method=RequestMethod.GET)
+    public String test(){
+    	service.create(null, null);
+    	return "home";
+    }
+
 }

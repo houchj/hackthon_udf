@@ -2,16 +2,41 @@ package com.sap.hackthon.services;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sap.hackthon.entity.DynamicEntity;
+import com.sap.hackthon.entity.PropertyMeta;
+import com.sap.hackthon.entity.PropertyMetaRepository;
 
 @Service
 public class EntityServiceImpl implements EntityService {
+	
+	@Autowired
+	PropertyMetaRepository propertyMetaRepository;
+	
+	@PersistenceContext
+	EntityManager entityManager;
 
 	@Override
 	public DynamicEntity create(DynamicEntity entity, Long tanentId) {
-		// TODO Auto-generated method stub
+		PropertyMeta meta=new PropertyMeta();
+		meta.setDisplayName("Display");
+		meta.setInternalName("Internal_001");
+		meta.setObjectName("order");
+		meta.setParamIndex(1);
+		meta.setSystemField(false);
+		meta.setTenantId("TN001");
+		meta.setType("Numeric");
+		
+		propertyMetaRepository.saveAndFlush(meta);
+//		entityManager.persist(meta);
+//		entityManager.flush();
+		
 		return null;
 	}
 
