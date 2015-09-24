@@ -1,5 +1,6 @@
 package com.sap.hackthon.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,8 +32,8 @@ public class EntityController {
     }
 
     @RequestMapping(value = "/entity", method = RequestMethod.POST)
-    public @ResponseBody Map<String, Object> create(@RequestBody String objectType,
-            @RequestBody Map<String, Object> entity, HttpServletRequest request) {
+    public @ResponseBody DynamicEntity create(@RequestBody String objectType, @RequestBody Map<String, Object> entity,
+            HttpServletRequest request) {
         if (objectType == null || entity == null) {
             return null;
         }
@@ -42,16 +43,12 @@ public class EntityController {
         if (tenantId == null) {
             return null;
         }
-        dynamicEntity = service.create(dynamicEntity, tenantId);
-        if (dynamicEntity == null) {
-            return null;
-        }
-        return dynamicEntity.getPropertities();
+        return service.create(dynamicEntity, tenantId);
     }
 
     @RequestMapping(value = "/entity", method = RequestMethod.PUT)
-    public @ResponseBody Map<String, Object> update(@RequestBody String objectType,
-            @RequestBody Map<String, Object> entity, HttpServletRequest request) {
+    public @ResponseBody DynamicEntity update(@RequestBody String objectType, @RequestBody Map<String, Object> entity,
+            HttpServletRequest request) {
         if (objectType == null || entity == null) {
             return null;
         }
@@ -65,11 +62,7 @@ public class EntityController {
         if (tenantId == null) {
             return null;
         }
-        dynamicEntity = service.update(dynamicEntity, tenantId);
-        if (dynamicEntity == null) {
-            return null;
-        }
-        return dynamicEntity.getPropertities();
+        return service.update(dynamicEntity, tenantId);
     }
 
     @RequestMapping(value = "/entity/{id}", method = RequestMethod.DELETE)
@@ -81,11 +74,23 @@ public class EntityController {
     }
 
     @RequestMapping(value = "/entity/{id}", method = RequestMethod.DELETE)
-    public @ResponseBody Map<String, Object> get(@RequestBody String objectType, @PathVariable("id") Long entityId) {
+    public @ResponseBody DynamicEntity get(@RequestBody String objectType, @PathVariable("id") Long entityId) {
         if (objectType == null || entityId == null) {
             return null;
         }
-        DynamicEntity entity = service.get(entityId, objectType);
-        return entity.getPropertities();
+        return service.get(entityId, objectType);
+    }
+
+    @RequestMapping(value = "/entities", method = RequestMethod.PATCH)
+    public @ResponseBody List<DynamicEntity> list(@RequestParam String objectType, HttpServletRequest request) {
+        if (objectType == null) {
+            return null;
+        }
+        HttpSession session = request.getSession();
+        Long tenantId = (Long) session.getAttribute(GlobalConstants.TENANT);
+        if (tenantId == null) {
+            return null;
+        }
+        return service.list(objectType, tenantId);
     }
 }
