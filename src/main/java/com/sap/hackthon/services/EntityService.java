@@ -1,9 +1,9 @@
 package com.sap.hackthon.services;
 
 import java.util.List;
-import java.util.Map;
 
 import com.sap.hackthon.entity.DynamicEntity;
+import com.sap.hackthon.entity.PropertyMeta;
 
 /**
  * 
@@ -25,6 +25,6 @@ public interface EntityService {
 
     public List<DynamicEntity> list(String objectType, Long tanentId);
 
-    public Map<String, String> getEntityMeta(String objectType, Long tanentId);
+    public PropertyMeta getEntityMeta(String objectType, Long tanentId);
 
 }

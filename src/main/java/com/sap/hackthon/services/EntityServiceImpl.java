@@ -2,7 +2,6 @@ package com.sap.hackthon.services;
 
 import java.util.List;
 
-import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -16,53 +15,57 @@ import com.sap.hackthon.utils.UDFTypeEnum;
 
 @Service
 public class EntityServiceImpl implements EntityService {
-	
-	@Autowired
-	PropertyMetaRepository propertyMetaRepository;
-	
-	@PersistenceContext
-	EntityManager entityManager;
 
-	@Override
-	public DynamicEntity create(DynamicEntity entity, Long tanentId) {
-		PropertyMeta meta=new PropertyMeta();
-		meta.setDisplayName("Display");
-		meta.setInternalName("Internal_001");
-		meta.setObjectName("order");
-		meta.setParamIndex(1);
-		meta.setSystemField(false);
-		meta.setTenantId("TN001");
-		meta.setType(UDFTypeEnum.NVARCHAR);
-		
-		propertyMetaRepository.saveAndFlush(meta);
-//		entityManager.persist(meta);
-//		entityManager.flush();
-		
-		return null;
-	}
+    @Autowired
+    PropertyMetaRepository propertyMetaRepository;
 
-	@Override
-	public DynamicEntity update(DynamicEntity entity, Long tanentId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @PersistenceContext
+    EntityManager entityManager;
 
-	@Override
-	public boolean delete(Long id, String objectType) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public DynamicEntity create(DynamicEntity entity, Long tanentId) {
+        PropertyMeta meta = new PropertyMeta();
+        meta.setDisplayName("Display");
+        meta.setInternalName("Internal_001");
+        meta.setObjectName("order");
+        meta.setParamIndex(1);
+        meta.setSystemField(false);
+        meta.setTenantId("TN001");
+        meta.setType(UDFTypeEnum.NVARCHAR);
 
-	@Override
-	public DynamicEntity get(Long id, String objectType) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+        propertyMetaRepository.saveAndFlush(meta);
+        // entityManager.persist(meta);
+        // entityManager.flush();
 
-	@Override
-	public List<DynamicEntity> list(String objectType, Long tanentId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+        return null;
+    }
 
+    @Override
+    public DynamicEntity update(DynamicEntity entity, Long tanentId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public boolean delete(Long id, String objectType) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public DynamicEntity get(Long id, String objectType) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<DynamicEntity> list(String objectType, Long tanentId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public PropertyMeta getEntityMeta(String objectType, Long tanentId) {
+        return null;
+    }
 }
