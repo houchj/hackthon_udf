@@ -18,7 +18,7 @@ import com.sap.hackthon.entity.PropertyMeta;
  */
 public class EntityConvertor {
 
-    protected EntityConvertor() {
+    private EntityConvertor() {
 
     }
 
