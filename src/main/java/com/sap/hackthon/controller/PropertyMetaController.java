@@ -22,7 +22,7 @@ public class PropertyMetaController {
 	private PropertyMetaService service;
 
 	@RequestMapping(value = "/getByTenantIdAndObjectName", method = RequestMethod.POST)
-	public List<PropertyMeta> getByTenantIdAndObjectName(
+	public @ResponseBody List<PropertyMeta> getByTenantIdAndObjectName(
 			@RequestParam String tenantId, @RequestParam String objectName) {
 		return service.getByTenantIdAndObjectName(tenantId, objectName);
 	}

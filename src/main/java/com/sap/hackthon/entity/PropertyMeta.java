@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import com.sap.hackthon.utils.UDFTypeEnum;
 
 @Entity
-@Table(name="T_PROPERTYMETA2")
+@Table(name="T_PROPERTYMETA")
 public class PropertyMeta {
 
 	    @Id
