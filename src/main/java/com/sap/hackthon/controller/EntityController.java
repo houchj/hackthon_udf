@@ -87,4 +87,19 @@ public class EntityController {
         }
         return service.list(objectType, tenantId);
     }
+
+    @RequestMapping(value = "/test/cr", method = RequestMethod.GET)
+    public String cr() {
+    	service.create(null, null);
+        return "home";
+    }
+
+    @RequestMapping(value = "/test/gt", method = RequestMethod.GET)
+    public String gt() {
+    	DynamicEntity entity=new DynamicEntity("T_ORDER");
+    	entity.setProperty("ORDER_ID", "orderid1009291");
+    	entity.setProperty("PRICE_UDF", "aa");
+    	service.update(entity, "TN001");
+        return "home";
+    }
 }
