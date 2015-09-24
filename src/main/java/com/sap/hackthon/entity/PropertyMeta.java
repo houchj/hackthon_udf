@@ -5,14 +5,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="T_PROPERTYMETA")
+@Table(name="T_PROPERTYMETA2")
 public class PropertyMeta {
 
 	    @Id
-	    @GeneratedValue(strategy = GenerationType.AUTO)
+//	    @GeneratedValue(strategy = GenerationType.AUTO)
+	    @GeneratedValue(generator = "PropertyMetaSeq")
+	    @SequenceGenerator(name = "PropertyMetaSeq", sequenceName = "PROPERTYMETA_SEQ", allocationSize = 100)
 	    @Column
 	    private Long id;
 
