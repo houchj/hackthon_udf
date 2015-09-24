@@ -1,4 +1,4 @@
-package com.sap.hackthon.utils;
+package com.sap.hackthon.enumeration;
 
 public enum UDFTypeEnum {
 	NVARCHAR,TIMESTAMP,DECIMAL

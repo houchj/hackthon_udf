@@ -6,7 +6,7 @@ package com.sap.hackthon.entity;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.sap.hackthon.utils.UDFTypeEnum;
+import com.sap.hackthon.enumeration.UDFTypeEnum;
 
 /**
  * @author I310717

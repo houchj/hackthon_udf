@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sap.hackthon.entity.PropertyMeta;
+import com.sap.hackthon.enumeration.UDFTypeEnum;
 import com.sap.hackthon.repository.PropertyMetaRepository;
-import com.sap.hackthon.utils.UDFTypeEnum;
 
 @Service
 @Transactional

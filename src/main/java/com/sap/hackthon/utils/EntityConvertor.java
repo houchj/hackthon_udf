@@ -11,6 +11,7 @@ import org.springframework.util.NumberUtils;
 
 import com.sap.hackthon.entity.DynamicEntity;
 import com.sap.hackthon.entity.PropertyMeta;
+import com.sap.hackthon.enumeration.UDFTypeEnum;
 
 /**
  * @author I310717

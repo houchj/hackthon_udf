@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 
 import com.sap.hackthon.entity.DynamicEntity;
 import com.sap.hackthon.entity.PropertyMeta;
+import com.sap.hackthon.enumeration.UDFTypeEnum;
 import com.sap.hackthon.repository.PropertyMetaRepository;
-import com.sap.hackthon.utils.UDFTypeEnum;
 
 @Service
 public class EntityServiceImpl implements EntityService {
@@ -26,7 +26,6 @@ public class EntityServiceImpl implements EntityService {
 
 	@Override
 	public DynamicEntity update(DynamicEntity entity, String tanentId) {
-//		this.getMetas(entity, tanentId);
 		List<PropertyMeta> metas=this.getMetas(entity, tanentId);
 		if(metas.isEmpty()){
 			throw new RuntimeException("No meta found for"+entity.getObjectType());
@@ -39,16 +38,6 @@ public class EntityServiceImpl implements EntityService {
 
     @Override
     public DynamicEntity create(DynamicEntity entity, String tanentId) {
-//        PropertyMeta meta = new PropertyMeta();
-//        meta.setDisplayName("PRICE_UDF");
-//        meta.setInternalName("Internal_001");
-//        meta.setObjectName("T_ORDER");
-//        meta.setParamIndex(1);
-//        meta.setSystemField(false);
-//        meta.setTenantId("TN001");
-//        meta.setType(UDFTypeEnum.NVARCHAR);
-//
-//        propertyMetaRepository.saveAndFlush(meta);
 		List<PropertyMeta> metas=this.getMetas(entity, tanentId);
 		if(metas.isEmpty()){
 			throw new RuntimeException("No meta found for"+entity.getObjectType());

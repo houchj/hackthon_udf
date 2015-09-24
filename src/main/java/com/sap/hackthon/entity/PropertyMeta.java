@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.sap.hackthon.utils.UDFTypeEnum;
+import com.sap.hackthon.enumeration.UDFTypeEnum;
 
 @Entity
 @Table(name="T_PROPERTYMETA")
