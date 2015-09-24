@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table
+@Table(name="T_PROPERTYMETA")
 public class PropertyMeta {
 
 	    @Id

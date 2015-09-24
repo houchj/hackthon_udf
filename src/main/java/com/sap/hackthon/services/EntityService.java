@@ -2,6 +2,8 @@ package com.sap.hackthon.services;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.sap.hackthon.entity.DynamicEntity;
 
 /**
