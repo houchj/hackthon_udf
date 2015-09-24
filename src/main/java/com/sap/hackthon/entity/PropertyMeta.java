@@ -17,9 +17,9 @@ import com.sap.hackthon.utils.UDFTypeEnum;
 public class PropertyMeta {
 
 	    @Id
-//	    @GeneratedValue(strategy = GenerationType.AUTO)
-	    @GeneratedValue(generator = "PropertyMetaSeq")
-	    @SequenceGenerator(name = "PropertyMetaSeq", sequenceName = "PROPERTYMETA_SEQ", allocationSize = 100)
+	    @GeneratedValue(strategy = GenerationType.AUTO)
+//	    @GeneratedValue(generator = "PropertyMetaSeq")
+//	    @SequenceGenerator(name = "PropertyMetaSeq", sequenceName = "PROPERTYMETA_SEQ", allocationSize = 100)
 	    @Column
 	    private Long id;
 
