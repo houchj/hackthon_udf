@@ -43,6 +43,14 @@ public class PropertyMetaController {
 		return false;
 	}
 
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	public @ResponseBody PropertyMeta get(@PathVariable("id") Long id) {
+		if (id == null) {
+			return null;
+		}
+		return service.get(id);
+	}
+
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public @ResponseBody boolean delete(@PathVariable("id") Long id) {
