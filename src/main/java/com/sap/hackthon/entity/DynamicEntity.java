@@ -20,7 +20,7 @@ public class DynamicEntity {
         this.objectType = objectType;
     }
 
-    public DynamicEntity(Map<String, Object> propertities) {
+    public DynamicEntity(String objectType, Map<String, Object> propertities) {
         super();
         this.propertities = propertities;
     }
@@ -45,6 +45,14 @@ public class DynamicEntity {
 
     public void setObjectType(String objectType) {
         this.objectType = objectType;
+    }
+
+    public Map<String, Object> getPropertities() {
+        return propertities;
+    }
+
+    public void setPropertities(Map<String, Object> propertities) {
+        this.propertities = propertities;
     }
 
 }

@@ -14,14 +14,14 @@ import com.sap.hackthon.entity.DynamicEntity;
  */
 public interface EntityService {
 
-    public void save(DynamicEntity entity, Long tanentId);
+    public DynamicEntity create(DynamicEntity entity, Long tanentId);
 
-    public void update(DynamicEntity entity);
+    public DynamicEntity update(DynamicEntity entity, Long tanentId);
 
-    public void delete(Long id, String objectType);
+    public boolean delete(Long id, String objectType);
 
     public DynamicEntity get(Long id, String objectType);
 
-    public List<DynamicEntity> list(String objectType);
+    public List<DynamicEntity> list(String objectType, Long tanentId);
 
 }
