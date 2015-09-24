@@ -2,11 +2,15 @@ package com.sap.hackthon.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import com.sap.hackthon.utils.ObjectTypeEnum;
 
 @Entity
 @Table(name="T_PROPERTYMETA2")
@@ -26,7 +30,8 @@ public class PropertyMeta {
 	    private String objectName;
 
 	    @Column
-	    private String type;
+	    @Enumerated(EnumType.STRING)
+	    private ObjectTypeEnum type;
 
 	    @Column
 	    private String internalName;
@@ -64,11 +69,11 @@ public class PropertyMeta {
 			this.objectName = objectName;
 		}
 
-		public String getType() {
+		public ObjectTypeEnum getType() {
 			return type;
 		}
 
-		public void setType(String type) {
+		public void setType(ObjectTypeEnum type) {
 			this.type = type;
 		}
 
