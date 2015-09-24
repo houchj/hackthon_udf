@@ -25,12 +25,6 @@ public class EntityController {
     @Autowired
     private EntityService service;
 
-    @RequestMapping(value = "/tenant", method = RequestMethod.POST)
-    public void tenant(@RequestParam String tenantId, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        session.setAttribute(GlobalConstants.TENANT, tenantId);
-    }
-
     @RequestMapping(value = "/entity", method = RequestMethod.POST)
     public @ResponseBody DynamicEntity create(@RequestBody String objectType, @RequestBody Map<String, Object> entity,
             HttpServletRequest request) {
