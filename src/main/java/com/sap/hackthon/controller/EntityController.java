@@ -1,7 +1,6 @@
 package com.sap.hackthon.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -28,9 +27,8 @@ public class EntityController {
     private EntityService service;
 
     @RequestMapping(value = "/entity", method = RequestMethod.POST)
-    public @ResponseBody DynamicEntity create(@RequestBody String objectType, @RequestBody Map<String, Object> entity,
-            HttpServletRequest request) {
-        if (objectType == null || entity == null) {
+    public @ResponseBody DynamicEntity create(@RequestBody DynamicEntity entity, HttpServletRequest request) {
+        if (entity == null || entity.getObjectType() == null) {
             return null;
         }
         HttpSession session = request.getSession();
@@ -39,18 +37,17 @@ public class EntityController {
             return null;
         }
         EntityConvertor convertor = EntityConvertor.getInstance();
-        List<PropertyMeta> entityMeta = service.getEntityMeta(objectType, tenantId);
-        DynamicEntity dynamicEntity = convertor.convertEntity(new DynamicEntity(objectType, entity), entityMeta);
+        List<PropertyMeta> entityMeta = service.getEntityMeta(entity.getObjectType(), tenantId);
+        DynamicEntity dynamicEntity = convertor.convertEntity(entity, entityMeta);
         return service.create(dynamicEntity, tenantId);
     }
 
     @RequestMapping(value = "/entity", method = RequestMethod.PUT)
-    public @ResponseBody DynamicEntity update(@RequestBody String objectType, @RequestBody Map<String, Object> entity,
-            HttpServletRequest request) {
-        if (objectType == null || entity == null) {
+    public @ResponseBody DynamicEntity update(@RequestBody DynamicEntity entity, HttpServletRequest request) {
+        if (entity == null || entity.getObjectType() == null) {
             return null;
         }
-        if (entity.get("id") == null) {
+        if (entity.getProperty("id") == null) {
             return null;
         }
 
@@ -60,8 +57,8 @@ public class EntityController {
             return null;
         }
         EntityConvertor convertor = EntityConvertor.getInstance();
-        List<PropertyMeta> entityMeta = service.getEntityMeta(objectType, tenantId);
-        DynamicEntity dynamicEntity = convertor.convertEntity(new DynamicEntity(objectType, entity), entityMeta);
+        List<PropertyMeta> entityMeta = service.getEntityMeta(entity.getObjectType(), tenantId);
+        DynamicEntity dynamicEntity = convertor.convertEntity(entity, entityMeta);
         return service.update(dynamicEntity, tenantId);
     }
 
@@ -96,16 +93,16 @@ public class EntityController {
 
     @RequestMapping(value = "/test/cr", method = RequestMethod.GET)
     public String cr() {
-    	service.create(null, null);
+        service.create(null, null);
         return "home";
     }
 
     @RequestMapping(value = "/test/gt", method = RequestMethod.GET)
     public String gt() {
-    	DynamicEntity entity=new DynamicEntity("T_ORDER");
-    	entity.setProperty("ORDER_ID", "orderid1009291");
-    	entity.setProperty("PRICE_UDF", "aa");
-    	service.update(entity, "TN001");
+        DynamicEntity entity = new DynamicEntity("T_ORDER");
+        entity.setProperty("ORDER_ID", "orderid1009291");
+        entity.setProperty("PRICE_UDF", "aa");
+        service.update(entity, "TN001");
         return "home";
     }
 }
