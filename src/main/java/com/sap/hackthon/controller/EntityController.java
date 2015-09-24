@@ -73,7 +73,7 @@ public class EntityController {
         return service.delete(entityId, objectType);
     }
 
-    @RequestMapping(value = "/entity/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/entity/{id}", method = RequestMethod.GET)
     public @ResponseBody DynamicEntity get(@RequestBody String objectType, @PathVariable("id") Long entityId) {
         if (objectType == null || entityId == null) {
             return null;
