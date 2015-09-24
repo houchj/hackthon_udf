@@ -1,8 +1,7 @@
 package com.sap.hackthon.services;
 
 import java.util.List;
-
-import org.springframework.stereotype.Service;
+import java.util.Map;
 
 import com.sap.hackthon.entity.DynamicEntity;
 
@@ -25,5 +24,7 @@ public interface EntityService {
     public DynamicEntity get(Long id, String objectType);
 
     public List<DynamicEntity> list(String objectType, Long tanentId);
+
+    public Map<String, String> getEntityMeta(String objectType, Long tanentId);
 
 }
