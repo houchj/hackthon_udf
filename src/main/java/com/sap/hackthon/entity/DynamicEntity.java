@@ -21,7 +21,7 @@ public class DynamicEntity {
     }
 
     public DynamicEntity(String objectType, Map<String, Object> propertities) {
-        super();
+        this(objectType);
         this.propertities = propertities;
     }
 
