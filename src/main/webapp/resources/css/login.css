@@ -1,0 +1,35 @@
+@import url(common.css);
+
+#loginForm{
+	margin-top: 20px;	
+}
+#loginDiv{
+	width: 80%;
+	margin:0 auto;
+}
+#userName{
+	padding-left: 40px;
+	background: url("../image/email.png") 4px center no-repeat;
+	background-size: 32px 32px;
+	background-color:#f7f7f7;
+}
+#password{
+	padding-left: 40px;
+	background: url("../image/password.png") 4px center no-repeat;
+	background-size: 32px 32px;
+	background-color:#f7f7f7;
+}
+
+/* @media screen and (max-width:1024px) and (min-width: 481px) { */	
+	.headerContainer{
+        display:none;
+    }
+      
+/* } */
+/* @media screen and (max-width: 480px) { 
+    .headerContainer{
+        display:none;
+    }
+   
+    
+ } */

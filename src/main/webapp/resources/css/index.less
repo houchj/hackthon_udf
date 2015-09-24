@@ -1,0 +1,344 @@
+@import "./common.less";
+
+
+body.desktop{
+  background: none;
+}
+
+body.pad, body.phone{
+  height: 100%;
+  
+}
+
+
+.cssB1Header {
+   &.pad, &.phone {
+      display: none;
+   }  
+   
+   @logoSize: 60px;
+   position: relative; 
+   padding: 20px 0px;   
+   
+   >div.cssB1HeaderLogo {
+   		//-moz-border-radius: @logoSize;
+   		//-ms-border-radius: @logoSize;
+   		//-o-border-radius: @logoSize;
+   		//-webkit-border-radius: @logoSize;
+   		//border-radius: @logoSize;
+   		overflow: hidden;
+   		//background-color: #33b7ff;
+   		
+		width: @logoSize;
+		float: left;
+	  
+      >div.desktop {
+         background: url("../image/new/common-B1AnywhereLogo.png") center center no-repeat;
+         background-size: contain;
+         
+         width: @logoSize;
+         height: @logoSize;
+      }
+   }
+   >div.cssB1HeaderTitle{
+     font-size: @fontSizeBig;
+     font-weight: bold;
+     line-height: @logoSize;
+     position: relative;
+     left: 20px;
+     color: grey;
+	
+     span {
+       color: rgb(0,172,240);     	 
+     }
+   }
+   
+   >div.cssLanguage-panel{
+      
+      color: black;
+      position: relative;
+      top: -40px;
+      text-align: center;
+      
+      >div.language-option {
+         float: right;
+         width: 60px;
+         margin-left: 40px;
+         text-align: center;
+         padding-top: 5px;
+         color: #009be3;
+         cursor: pointer;
+         
+         border-top: 2px solid rgba(0, 155, 227, 0);
+         &.selected {
+			border-top: 2px solid #009be3;
+         }      
+                 
+      }
+   }
+   
+}
+
+/*page*/
+.cssPage {
+	.cssCommonContext;
+	font-family: @fonts;
+	font-size: @fontSizeNormal;	
+	color: @fontColor;
+	min-width: 1024px;	
+	
+	/*head*/
+	>.cssheader {
+		display: none;
+	}
+	
+	&.pad, &.phone {
+	  height:100%;
+	  //no padding
+	  padding-bottom: 0;
+	}
+	
+	@pageWidth : 1024px;
+	
+	
+	> div.cssActionContent {
+	    width: 100%;
+	    min-width: 93px;
+	    min-height: 260px;
+	    
+	    &.desktop {
+	      background: url("../image/new/bg4.png") center top no-repeat;
+	       background-size: cover;
+	    }
+	    
+	    >div {
+		    margin-left: auto;
+		    margin-right: auto;
+		    
+		    >div.cssActionContentHeader {
+			       display: block;
+			}
+			
+			> div {
+				width: @pageWidth;
+				margin: 0 auto;	
+				position: relative;			
+				
+			   .cssDesc {
+				   float: left;				  
+					width: 40%;
+					line-height: 30px;
+					color: #4E4545;
+					font-weight: bold;
+				   
+				   p {
+				   	 margin: auto auto;
+				   }
+			   }
+			   
+			   .cssActionArea{				   
+				   width: 40%; 
+				   position: absolute;
+				   right: 0px;
+				   
+				   .cssLogin, .cssTry {
+				   	 margin: auto auto;
+				   	 .Button; 
+					 width: 100%;	
+					 position: relative;
+					 
+					 &:before {
+					 	font-size: 18px;
+					 }
+
+					 &.desktop {
+				   		width: 45%;	
+				   		float: right;
+				   		margin-left: 10px;
+				     }	
+				     
+				     &.pad {
+				   		width: 90%;	
+				   		float: left;
+				   		margin-left: 0;
+				     }
+			       }  
+			       
+			        
+			   }
+			}
+	    }		
+	}
+	
+	> div.cssIntro.desktop {
+	   width: @pageWidth;
+	   
+	   margin: auto auto;
+	   padding: 30px 0;
+	   
+	   @smallImgSize: 32px; 
+	   @smallImgSizeRound: 55px;
+	   @bigImgMargin: 30px;
+	   
+	   .colorTitle() {
+	      color: rgba(107, 81, 28, 0.55);
+	   }
+	   
+	   .colorDesc() {
+	      color: black;
+	   }
+	   
+	   .introTemplate(@smallImgSize, @imgLogoUrl, @bkgColor, @imgDescUrl) {
+	      .introTemplateDesc {
+		       &-logo {
+		         @smallImgSizeRound: @smallImgSize + 6;
+		         
+		         //for image
+		         .DivVerticalHorizenCenterDivLogoImg(@smallImgSize, @smallImgSize, @imgLogoUrl, @bkgColor);		          
+		         height: @smallImgSizeRound;
+		         width: @smallImgSizeRound;
+		         float: left;
+		         margin-right: 30px;
+		         
+		         //for radio image
+		         .commonRadio(@smallImgSizeRound);		         	
+		           		        
+	   		     //for box shadow
+	   		     border: 3px white solid;
+	   		     box-shadow: 0 2px 5px #888888;
+		       }
+		      
+		       &-textdesc {
+		           overflow: hidden;		           	
+		       }
+		       
+		       &-text {
+		            color: #222;		        
+		            font-size: @fontSize20;
+		         }
+		         
+			   &-desc {
+			            color: black;
+			            font-size: 14px;	
+			            margin: 20px 0;	            
+			   }
+		       
+	      }
+	      
+	      .introTemplateImg {
+	         background: url(@imgDescUrl) center center no-repeat;
+	         width: 100%;
+	         height: 400px;
+	         background-size: contain;
+	         margin-top: @bigImgMargin;
+	      }
+	            
+	   }
+	   
+	   div#intro1 {
+	    .introTemplate(@smallImgSize, "../image/new/index-desc-1-1.png", #f27020, "../image/new/01_MonitorPic_Cn.png");
+	    
+	    &.en {
+	    	.introTemplate(@smallImgSize, "../image/new/index-desc-1-1.png", #f27020, "../image/new/01_MonitorPic_En.png");	    	
+	    }
+	   }
+	   
+	   div#intro2 {
+	    .introTemplate(@smallImgSize, "../image/new/index-desc-2-1.png", #ab218e, "../image/new/02_Phone_Cn.png");
+	    
+	    &.en {	    		 
+	    	.introTemplate(@smallImgSize, "../image/new/index-desc-2-1.png", #ab218e, "../image/new/02_Phone_En.png");   	
+	    }
+	   }
+	   div#intro3 {
+	    .introTemplate(@smallImgSize, "../image/new/index-desc-3-1.png", #007cc0, "../image/new/03_Order_Cn.png");
+	    
+	    &.en {	    		 
+	    	.introTemplate(@smallImgSize, "../image/new/index-desc-3-1.png", #007cc0, "../image/new/03_Order_En.png");   	
+	    }
+	   }
+	   div#intro4 {
+	    .introTemplate(@smallImgSize, "../image/new/index-desc-4-1.png", #003283, "../image/new/05_Feed_Cn.png");
+	    &.en {	    		 
+	    	.introTemplate(@smallImgSize, "../image/new/index-desc-4-1.png", #003283, "../image/new/05_Feed_En.png");	
+	    }
+	   }
+	   div#intro5 {
+	    .introTemplate(@smallImgSize, "../image/new/index-desc-5-1.png", #279b59, "../image/new/04_Opportunities_Cn.png");
+	    &.en {	    		 
+	    	.introTemplate(@smallImgSize, "../image/new/index-desc-5-1.png", #279b59, "../image/new/04_Opportunities_En.png");
+	    }
+	    
+	   }	   
+	}
+} 
+
+
+.cssPage.pad, .cssPage.phone {
+	min-width: 100px;
+	
+	/*head*/	
+	>.cssheader {
+	   .commonHeader;		
+	}
+	
+	> div.cssActionContent {	
+	    height: 100%;
+	    
+	   	    
+	    
+	    >div {
+	    	height: 100%;
+	    	
+		    >div.cssActionContentHeader {
+			       display: block;
+			}
+			
+			> div {		
+			   width: 66%;
+			   padding-top: 250px;
+			   
+			   &.phone {
+	         	  width: 80%;
+			      padding-top: 150px;
+	           }
+	           
+			   .cssDesc {				   
+				   &.phone {
+	         		 display:none;
+	         	   }
+			   }
+			   
+			   .cssActionArea{
+				   float: right;
+				   width: 50%; 
+				   
+				   &:before {
+					 	font-size: 18px;
+					 }
+					 
+				   &.phone {
+				   	width: 100%;
+				   }
+				   
+				   .cssLogin, .cssTry {
+				   	 max-width: 10000px;
+				     &.phone {
+				     	width: 100%;
+				     }		 
+			       }  
+			       
+			        
+			       
+			      
+			        
+			   }
+			}
+	    }		
+	}
+	
+	> div.cssIntro {
+	   display: none;
+	}
+} 
+

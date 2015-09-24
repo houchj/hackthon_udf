@@ -1,0 +1,394 @@
+/*Const Variant*/
+@fontSizeSmall: 12px;
+@fontSizeNormal: 14px;
+@fontSize14: 14px; 
+@fontSize16: 16px;
+@fontSizeMiddle: 18px;
+@fontSize18: 18px;
+@fontSizeBig: 20px;
+@fontSize20: 20px;
+@fontSize24: 24px;
+@fonts: Arial;
+@fontColor: white;
+@headHeight: 48px;
+@phoneHeadHeight: 40px;
+@phoneHeadBorderHeight: 2px;
+@phoneFooterBorderHeight: 44px;
+
+@buttonDisabledTextColor:#777777;
+
+/*button property*/
+@buttonHeight: 50px;
+@buttonMargin: 20px;
+@buttonBkColor: #009be3;
+@maxBtnWidth:200px;
+@cssColorBlue: #009BE3;
+
+.cssColorBlue {
+  color: @cssColorBlue
+}
+
+.Button(@backcolor: @buttonBkColor) {	         
+  height: @buttonHeight;
+  margin-bottom: @buttonMargin;
+  background-color: @backcolor;
+  line-height: @buttonHeight;
+  text-align: center;
+  color: white;
+  &.disabled {
+			color: @buttonDisabledTextColor;
+			
+  }
+    
+  &:before {			
+			    position: relative;
+			    float: left;
+			    left: 20px;
+			   
+  }
+  
+  &:hover {
+    cursor: pointer;
+  }
+  
+  &.disabled:hover {
+    cursor: default;
+  }
+}
+
+.commonRadio(@radioSize) {	   	
+	   	-moz-border-radius: @radioSize;
+				-ms-border-radius: @radioSize;
+	         	-o-border-radius: @radioSize;
+   		        -webkit-border-radius: @radioSize;
+   		        border-radius: @radioSize;
+}
+
+.commonRadioShadow(@radioSize) {
+  .commonRadio(@radioSize);
+  border: 3px white solid;
+  box-shadow: 0 2px 5px #888888;
+}
+.pageBackgroundImg {
+	   	background: url("../image/new/indexBkg.png") bottom center repeat-x;
+	   	background-attachment: fixed;
+}
+
+
+
+/*head*/	
+.commonHeader {
+	display: block;
+	background-color: #F2F2F2;
+	height: @headHeight;		
+	width: 100%;	
+	position: absolute;
+	
+	&.desktop{
+    	min-width: 1024px;
+    }
+    
+     
+	
+	border-top: 5px solid #009de0;
+    .cssTitle {
+       .SAPAnywhere;
+       .TextVerticalCenter(@headHeight);
+       text-align: center;          
+       font-size: @fontSize20;  
+       
+       
+    }
+    
+    &.phone{    	
+    	height: @phoneHeadHeight;	
+    	border-top-width: @phoneHeadBorderHeight;
+    	
+    	.cssTitle {      
+       		.TextVerticalCenter(@phoneHeadHeight);
+    	}
+    }   
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  .pageBackgroundImg;
+  position: relative;  
+  min-height: 100%;
+  margin: 0 0;
+  font-family: @fonts;
+}
+
+
+@footerHeight: 48px;
+@footerContentWidth: 1024px;
+
+.cssCommonContext() {   
+   padding-bottom: @footerHeight+10px;
+   -webkit-overflow-scrolling : touch; 
+}
+
+div.cssFooter {
+	&.pad, &.phone {
+      display: none;
+    }
+    
+	background-color: black;
+	height: @footerHeight;
+	width: 100%;
+	min-width: 1024px;
+	position: absolute;
+	bottom: 0px;
+	
+	>div {
+	  width: @footerContentWidth;
+	  margin: 0 auto;
+	  
+		  .cssSAPLogo.desktop {
+			background: url("../image/new/common_sap_logo.png") center center no-repeat;
+			
+			width: 50px;
+			height: 25px;
+			float: left;
+			position: relative;
+			margin-top: 10px;
+		}
+		
+		.cssSAPFooterText {
+		   color: #ffffff;
+		   float: left;
+		   line-height: @footerHeight;
+		}
+	}
+	
+	
+}
+
+div.cssPadPhoneFooter {    
+	display: none;
+	&.phone,  &.pad{
+       display: block;
+       position: absolute;
+       bottom: 0px;
+       
+       &.phone {
+          //bottom: 10px;
+                 
+	       //comment: tempary set
+       	  	//right: 9%;
+       		//left: 9%;  
+       		margin: 0 auto;
+			position: relative;
+			width: 82%;			
+			padding-bottom: 10px;
+			
+			
+			
+       }
+       
+       &.pad {
+          background-color: black;
+          width: 100%;
+          height: @footerHeight;
+       }
+       
+       
+       
+       color: white;       
+       font-size: @fontSize20;       
+       
+                   
+       
+        .cssPadPhoneFooter-Button {
+          &.disabled:hover {
+	      	cursor: grey;
+	      }
+          
+          height: 100%;
+          
+          &.phone {
+            border-left: 0px;
+            background-color: #009be3;
+            
+            &.disabled {
+            	color: @buttonDisabledTextColor;
+            	background-color:#bbbbbb;
+            }
+				
+            width:100%;            
+          }          
+          
+	      
+	      &.disabled:hover {
+	      	cursor: default;
+	      }
+	      &:hover {
+		    cursor: pointer;
+		  }
+	   }
+   }   
+}
+
+
+
+/*for sap anywhere title*/
+.SAPAnywhere() {
+    font-size: @fontSizeNormal;
+	font-weight: bold;
+	color: grey;
+	
+	span {
+	   color: #33b7ff;
+	}
+}
+
+/*utilities*/
+.CenterHorizon {
+	margin: "0 auto";
+}
+
+.DivVerticalCenter(@height) {
+	height: @height;	
+	top: 50%;
+	margin-top: @height*(-0.5);
+	position: absolute;
+}
+
+
+.DivVerticalHorizenCenter(@width, @height) {
+	.DivVerticalCenter(@height);
+	
+	position: absolute;
+	width: @width;
+	left: 50%;
+	margin-left: @width*(-0.5);
+}
+
+.DivVerticalHorizenCenterDivLogoImg(@width, @height, @imgLogoUrl, @bkgColor:black) {
+    position:relative;
+    background-color:@bkgColor;
+    >div {
+       background: url(@imgLogoUrl) center center no-repeat;
+       background-size: contain;
+       .DivVerticalHorizenCenter(@width, @height);
+    }
+	
+}
+
+.TextVerticalCenter(@height) {
+	height: @height;
+	line-height: @height;
+}
+
+.cssHidden{
+  display:none;
+}
+
+
+
+/*field errors */
+div.errorInfo {
+	color: rgb(183, 59, 37);
+	border: 1px solid rgb(183, 59, 37);
+	font-size: 16px;
+	margin-top: 14px;
+	margin-bottom: 20px;
+	width: 77%;	
+	padding: 13px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+	position: relative;
+	top: 10px;
+	background-color: white;
+	
+	span.errorInfoArrow{
+		position:absolute;
+		top:-11px;
+		left:30px;
+		background:url('../image/new/common-errorInfoArrow.png') center center no-repeat;
+		width:20px;
+		height:11px;
+		z-index:1;
+	}
+}
+
+.errorStatus{
+	-moz-box-shadow: 0 0 5px red;
+	-o-box-shadow: 0 0 5px red;
+	-ms-box-shadow: 0 0 5px red;
+    -webkit-box-shadow: 0 0 5px red;
+    box-shadow: 0 0 5px red;
+}
+
+
+/*images*/
+
+/*move from old project*/
+.green-check
+{
+	height: 30px;
+	width: 16px;
+	background: url('../image/new/green_check.png') center center no-repeat;
+	position: absolute;	
+	top: 5px;
+	right: 10px;
+	background-size: contain;
+}
+
+
+ 
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// Loading UI
+#_preloader_container {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 10000;
+	display: block;
+	background-color: rgba(17, 17, 17, 0.51);
+	
+	@keyframes spin {
+	  0%	{ transform: rotate(0deg); }
+	  100%	{ transform: rotate(360deg); }
+	}
+	@-moz-keyframes spin {
+	  0%	{ -moz-transform: rotate(0deg); }
+	  100%	{ -moz-transform: rotate(360deg); }
+	}
+	@-webkit-keyframes spin {
+	  0%	{ -webkit-transform: rotate(0deg); }
+	  100%	{ -webkit-transform: rotate(360deg); }
+	}
+	
+	 > .loading {
+		display: block;
+		width: 36px;
+		height: 36px;
+		position: relative;
+		background-repeat: no-repeat;
+		background-position: center;
+		left: 50%;
+		top: 50%;
+		margin-left: -18px;
+		margin-top: -18px;
+		background: none;
+		border: 5px solid #33b7ff;
+		opacity: .9;
+		border-top: 5px solid rgba(0, 0, 0, 0);
+		border-left: 5px solid rgba(0, 0, 0, 0);
+		border-radius: 50px;
+		-moz-animation: spin 1s infinite linear;
+		-webkit-animation: spin 1s infinite linear;
+		-ms-animation: spin 1s infinite linear;
+		animation: spin 1s infinite linear;
+	}
+}
+ 

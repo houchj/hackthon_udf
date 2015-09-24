@@ -1,0 +1,174 @@
+@import url(common.css);
+
+.msgContainer{
+	margin:20px auto;
+	margin-top: 60px;
+	padding:20px;
+	border:0px solid #aaa;	
+	/* max-width:400px; */
+    /* background-color: #fff; */
+	filter: alpha(opacity=90);
+    -moz-opacity: 0.9;
+    opacity: 0.9;
+}
+#success-header{
+	width: 100%;
+	height: auto;
+	margin: 0 auto;
+	margin-top: 100px;
+	/* max-width: 500px; */
+	text-align: center;
+}
+
+#success-icon{	
+	/* float: left;	*/	
+	width: 80px;
+	height: 80px;
+	border-radius: 44px;	
+	-ms-border-radius: 44px;
+	-moz-border-radius: 44px;
+	-o-border-radius: 44px;
+	-webkit-border-radius: 44px;
+	line-height: 100px;
+	
+	display:inline-block;
+	text-align: center;	
+}
+#success-image{
+	background: url("../image/success-icon.png") center center no-repeat;
+	width: 100%;
+	height: 100%;
+	border:4px solid #60bf33;
+	border-radius: 44px;	
+	-ms-border-radius: 44px;
+	-moz-border-radius: 44px;
+	-o-border-radius: 44px;
+	-webkit-border-radius: 44px;
+}
+#confirm-image{
+	background: url("../image/email_white.png") center center no-repeat;
+	width: 100%;
+	height: 100%;
+	border:4px solid #33b7ff;
+	border-radius: 44px;	
+	-ms-border-radius: 44px;
+	-moz-border-radius: 44px;
+	-o-border-radius: 44px;
+	-webkit-border-radius: 44px;
+}
+#error-image{
+	background: url("../image/error.png") center center no-repeat;
+	width: 100%;
+	height: 100%;
+	border:4px solid #bc3618;
+	border-radius: 44px;	
+	-ms-border-radius: 44px;
+	-moz-border-radius: 44px;
+	-o-border-radius: 44px;
+	-webkit-border-radius: 44px;
+}
+#success-title{	
+	font-size: 22px;
+	vertical-align: 70%;
+	height:80px;
+	line-height:80px;
+}
+#success-separator{
+	display: none;
+	clear:both;
+}
+#success-description{
+	width: 100%;
+	/* max-width: 500px; */
+	text-align: center;
+	font-size: 14px;
+	margin: 0 auto;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-o-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	padding: 10px 10px;
+	clear: both;
+}
+.success-action{
+	width: 80%;
+	height: 50px;
+	max-width: 200px;
+	margin: 0 auto;
+	margin-top: 40px;
+}
+.success-action >button{
+	width: 100%;
+	height: 100%;
+	color: white;
+}
+#openEmail{
+	padding-left: 10px;
+	background-image: url("../image/email_white.png");
+	background-position: 5% 50%;
+	background-repeat: no-repeat;
+	background-size: 32px 32px;		
+}
+#backLogin{
+	padding-left: 10px;
+	background-image: url("../image/try_it_now.png");
+	background-position: 5% 50%;
+	background-repeat: no-repeat;
+	background-size: 22px 22px;	
+}
+
+/* @media screen and (max-width:1024px) and (min-width: 481px) { */	
+	
+	.headerContainer.pad, .headerContainer.phone{
+        display:none;
+        width: 94%;
+    }
+    #pageContainer.pad{
+    	margin-top: 100px;
+    	width: 94%;
+    }
+    
+    #pageContainer.pad, #pageContainer.phone{
+    	margin-top: 0px;
+    	width: 94%;
+    }
+    
+    #success-separator.pad, #success-separator.phone{
+    	display: block;
+    	width: 100%;    	
+    }   
+/* } */
+/* @media screen and (max-width: 480px) 
+{
+    .msgContainer{
+        margin-left:15px;
+        margin-right:15px;
+        margin-top: 25px;
+    }
+    .headerContainer{
+        display:none;
+    }    
+    #success-icon{    	
+    	margin:0 auto;
+    	float: none;
+    	display: block;
+    }
+    #success-title{
+    	width: 90%;
+    	text-align: center;
+    	margin:0 auto;
+    	float: none;
+    	display: block; 
+    }
+    #success-description{
+    	text-align: justify;
+    }
+    #success-action{
+    	max-width: none;    	
+    }
+    #success-separator{
+    	display: block;
+    	width: 100%;    	
+    }
+} */
