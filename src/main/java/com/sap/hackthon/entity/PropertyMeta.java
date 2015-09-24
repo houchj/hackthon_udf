@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.sap.hackthon.utils.ObjectTypeEnum;
+import com.sap.hackthon.utils.UDFTypeEnum;
 
 @Entity
 @Table(name="T_PROPERTYMETA2")
@@ -31,7 +31,7 @@ public class PropertyMeta {
 
 	    @Column
 	    @Enumerated(EnumType.STRING)
-	    private ObjectTypeEnum type;
+	    private UDFTypeEnum type;
 
 	    @Column
 	    private String internalName;
@@ -69,11 +69,11 @@ public class PropertyMeta {
 			this.objectName = objectName;
 		}
 
-		public ObjectTypeEnum getType() {
+		public UDFTypeEnum getType() {
 			return type;
 		}
 
-		public void setType(ObjectTypeEnum type) {
+		public void setType(UDFTypeEnum type) {
 			this.type = type;
 		}
 

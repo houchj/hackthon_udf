@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sap.hackthon.entity.DynamicEntity;
 import com.sap.hackthon.services.EntityService;
 import com.sap.hackthon.utils.GlobalConstants;
-import com.sap.hackthon.utils.ObjectTypeEnum;
+import com.sap.hackthon.utils.UDFTypeEnum;
 
 @Controller
 @RequestMapping("/entities")
@@ -36,7 +36,7 @@ public class EntityController {
         if (objectType == null || entity == null) {
             return null;
         }
-        DynamicEntity dynamicEntity = new DynamicEntity(ObjectTypeEnum.valueOf(objectType), entity);
+        DynamicEntity dynamicEntity = new DynamicEntity(objectType, entity);
         HttpSession session = request.getSession();
         Long tenantId = (Long) session.getAttribute(GlobalConstants.TENANT);
         if (tenantId == null) {
@@ -59,7 +59,7 @@ public class EntityController {
             return null;
         }
         
-        DynamicEntity dynamicEntity = new DynamicEntity(ObjectTypeEnum.valueOf(objectType), entity);
+        DynamicEntity dynamicEntity = new DynamicEntity(objectType, entity);
         HttpSession session = request.getSession();
         Long tenantId = (Long) session.getAttribute(GlobalConstants.TENANT);
         if (tenantId == null) {

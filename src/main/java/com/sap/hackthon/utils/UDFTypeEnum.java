@@ -1,5 +1,5 @@
 package com.sap.hackthon.utils;
 
-public enum ObjectTypeEnum {
+public enum UDFTypeEnum {
 	NVARCHAR,TIMESTAMP,DECIMAL
 }
