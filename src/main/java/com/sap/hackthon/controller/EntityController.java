@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sap.hackthon.entity.DynamicEntity;
+import com.sap.hackthon.entity.PropertyMeta;
 import com.sap.hackthon.services.EntityService;
+import com.sap.hackthon.utils.EntityConvertor;
 import com.sap.hackthon.utils.GlobalConstants;
 
 @Controller
@@ -31,12 +33,14 @@ public class EntityController {
         if (objectType == null || entity == null) {
             return null;
         }
-        DynamicEntity dynamicEntity = new DynamicEntity(objectType, entity);
         HttpSession session = request.getSession();
         String tenantId = (String) session.getAttribute(GlobalConstants.TENANT);
         if (tenantId == null) {
             return null;
         }
+        EntityConvertor convertor = EntityConvertor.getInstance();
+        List<PropertyMeta> entityMeta = service.getEntityMeta(objectType, tenantId);
+        DynamicEntity dynamicEntity = convertor.convertEntity(new DynamicEntity(objectType, entity), entityMeta);
         return service.create(dynamicEntity, tenantId);
     }
 
@@ -50,12 +54,14 @@ public class EntityController {
             return null;
         }
 
-        DynamicEntity dynamicEntity = new DynamicEntity(objectType, entity);
         HttpSession session = request.getSession();
         String tenantId = (String) session.getAttribute(GlobalConstants.TENANT);
         if (tenantId == null) {
             return null;
         }
+        EntityConvertor convertor = EntityConvertor.getInstance();
+        List<PropertyMeta> entityMeta = service.getEntityMeta(objectType, tenantId);
+        DynamicEntity dynamicEntity = convertor.convertEntity(new DynamicEntity(objectType, entity), entityMeta);
         return service.update(dynamicEntity, tenantId);
     }
 
