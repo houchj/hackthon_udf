@@ -1,13 +1,21 @@
-var customerManagerModule = angular.module('indexApp', ['ngAnimate']);
+var orderManagerModule = angular.module('orderApp', []);
 
-customerManagerModule.controller('customerController', function ($scope,$http) {
+orderManagerModule.controller('orderController', function ($scope,$http) {
 	
 	var urlBase="";
 	$scope.toggle=true;
-	$scope.selection = [];
-//	$scope.statuses=['ACTIVE','COMPLETED'];
-//	$scope.priorities=['HIGH','LOW','MEDIUM'];
+	$scope.na="AAA";
+	$scope.metaArray = [];
 	$http.defaults.headers.post["Content-Type"] = "application/json";
+
+    function findMetas() {
+        $http.post(urlBase + '/propertiesMeta/getByTenantIdAndObjectName?objectName=T_ORDER').
+            success(function (data) {
+                    $scope.metaArray = data;
+            });
+    }
+    
+    findMetas();
 
     function findAllTasks() {
         //get all tasks and display initially
@@ -21,7 +29,7 @@ customerManagerModule.controller('customerController', function ($scope,$http) {
             });
     }
 
-    findAllTasks();
+//    findAllTasks();
 
 	//add a new task
 	$scope.addTask = function addTask() {
@@ -87,19 +95,3 @@ customerManagerModule.controller('customerController', function ($scope,$http) {
 	  };
 	
 });
-
-//Angularjs Directive for confirm dialog box
-customerManagerModule.directive('ngConfirmClick', [
-	function(){
-         return {
-             link: function (scope, element, attr) {
-                 var msg = attr.ngConfirmClick || "Are you sure?";
-                 var clickAction = attr.confirmedClick;
-                 element.bind('click',function (event) {
-                     if ( window.confirm(msg) ) {
-                         scope.$eval(clickAction);
-                     }
-                 });
-             }
-         };
- }]);

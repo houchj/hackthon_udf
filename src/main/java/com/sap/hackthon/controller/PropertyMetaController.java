@@ -2,6 +2,9 @@ package com.sap.hackthon.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sap.hackthon.entity.PropertyMeta;
 import com.sap.hackthon.services.PropertyMetaService;
+import com.sap.hackthon.utils.GlobalConstants;
 
 @Controller
 @RequestMapping("/propertiesMeta")
@@ -22,8 +26,12 @@ public class PropertyMetaController {
 	private PropertyMetaService service;
 
 	@RequestMapping(value = "/getByTenantIdAndObjectName", method = RequestMethod.POST)
-	public @ResponseBody List<PropertyMeta> getByTenantIdAndObjectName(
-			@RequestParam String tenantId, @RequestParam String objectName) {
+	public @ResponseBody List<PropertyMeta> getByTenantIdAndObjectName(@RequestParam String objectName, HttpServletRequest request) {
+		 HttpSession session = request.getSession();
+         String tenantId = (String) session.getAttribute(GlobalConstants.TENANT);
+         if (tenantId == null) {
+            return null;
+        }
 		return service.getByTenantIdAndObjectName(tenantId, objectName);
 	}
 
