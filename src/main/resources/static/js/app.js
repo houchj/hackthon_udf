@@ -111,6 +111,7 @@ appModule.controller('udfController', function ($scope,$http) {
 	$scope.propertyMeta.displayName="ds";
 	
 	$scope.metaArray = [];
+	$scope.meta2Array = [];
 	$http.defaults.headers.post["Content-Type"] = "application/json";
 
     function findMetas() {
@@ -118,6 +119,12 @@ appModule.controller('udfController', function ($scope,$http) {
             success(function (data) {
                     $scope.metaArray = data;
             });
+
+        $http.post(urlBase + '/propertiesMeta/getByTenantIdAndObjectName?objectName=T_ORDER_LINE').
+        success(function (data) {
+                $scope.meta2Array = data;
+        });
+        
         $scope.showList=true;
     }
     

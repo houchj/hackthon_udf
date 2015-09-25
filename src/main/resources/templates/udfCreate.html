@@ -11,7 +11,8 @@
 
 <div ng-controller="udfController">
 	<div class="dispDiv" ng-show="showList">
-		<table class="table">
+		<h3>Order Table</h3>
+		<table class="table1">
 			<thead>
 				<tr>
 					<th>#</th>
@@ -33,6 +34,31 @@
 				</tr>
 			</tbody>
 		</table>	
+		<br/>
+		<h3>Order Line Table</h3>
+		<table class="table2">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Column Name</th>
+					<th>User Defined</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="meta in meta2Array">
+					<td>
+						{{ $index + 1 }}
+					</td>
+					<td>
+						{{meta.displayName}}
+					</td>
+					<td>
+						{{!meta.systemField}}
+					</td>
+				</tr>
+			</tbody>
+		</table>	
+		<br/>		
 		<button ng-click="showAddDiv()">Add UDF</button>
 	</div>
 <!-- 	<div>
