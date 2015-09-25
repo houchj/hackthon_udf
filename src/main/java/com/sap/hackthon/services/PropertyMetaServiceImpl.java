@@ -23,32 +23,72 @@ public class PropertyMetaServiceImpl implements PropertyMetaService {
 	
 	@Override
 	public boolean create(PropertyMeta propertyMeta) {
-		
 		propertyMetaRepository.saveAndFlush(propertyMeta);
-		
+		jdbcTemplate.execute(this.addColumn(propertyMeta.getObjectName(), propertyMeta.getInternalName(), propertyMeta.getType()));
+		try{
+			jdbcTemplate.execute(this.dropView(propertyMeta.getTenantId(), propertyMeta.getObjectName()));
+		}
+		catch(Exception e) {
+		}
+		jdbcTemplate.execute(this.createView(propertyMeta.getTenantId(), propertyMeta.getObjectName()));
+		return true;
+	}
+	
+	// drop view T_ORDER_TENANT1005_VIEW
+	private String dropView(String tenantId, String objectName) {
+		StringBuffer dropView = new StringBuffer();
+		dropView
+		.append("drop view ")
+		.append(objectName)
+		.append("_")
+		.append(tenantId)
+		.append("_")
+		.append("VIEW");
+		return dropView.toString();
+	}
+
+	// create view T_ORDER_TENANT1005_VIEW as select order_id from T_ORDER
+	private String createView(String tenantId, String objectName) {
+		List<PropertyMeta> propertiesMeta = propertyMetaRepository.findByTenantIdAndObjectName(tenantId, objectName);
+		StringBuffer createView = new StringBuffer();
+		createView.append("create view ").append(objectName).append("_").append(tenantId).append("_").append("VIEW as select ");
+		for(PropertyMeta propertyMeta : propertiesMeta) {
+			createView.append(" ").append(propertyMeta.getInternalName()).append(" as ").append(propertyMeta.getDisplayName()).append(", ");
+		}
+		createView.deleteCharAt(createView.lastIndexOf(","));
+		createView.append(" from ").append(objectName);
+		return createView.toString();
+	}
+	
+	private String addColumn(String objectName, String internalName, UDFTypeEnum type) {
 		StringBuffer alterTableAddColumn = new StringBuffer();
-		
 		alterTableAddColumn
 		.append("alter table ")
-		.append(propertyMeta.getObjectName())
+		.append(objectName)
 		.append(" add(")
-		.append(propertyMeta.getInternalName())
+		.append(internalName)
 		.append(" ")
-		.append(propertyMeta.getType().equals(UDFTypeEnum.NVARCHAR) ? propertyMeta.getType() + "(200)" : propertyMeta.getType())
+		.append(type.equals(UDFTypeEnum.NVARCHAR) ? type + "(200)" : type)
 		.append(")");
-		
-		jdbcTemplate.execute(alterTableAddColumn.toString());
-		
-		return true;
+		return alterTableAddColumn.toString();
 	}
 
 	@Override
 	public boolean delete(Long id) {
-		
 		PropertyMeta propertyMeta = propertyMetaRepository.findOne(id);
-		
+		jdbcTemplate.execute(this.dropColumn(propertyMeta));
+		propertyMetaRepository.delete(propertyMeta);
+		try{
+			jdbcTemplate.execute(this.dropView(propertyMeta.getTenantId(), propertyMeta.getObjectName()));
+		}
+		catch(Exception e) {
+		}
+		jdbcTemplate.execute(this.createView(propertyMeta.getTenantId(), propertyMeta.getObjectName()));
+		return true;
+	}
+	
+	private String dropColumn(PropertyMeta propertyMeta) {
 		StringBuffer alterTableDropColumn = new StringBuffer();
-		
 		alterTableDropColumn
 		.append("alter table ")
 		.append(propertyMeta.getObjectName())
@@ -56,19 +96,18 @@ public class PropertyMetaServiceImpl implements PropertyMetaService {
 		.append(propertyMeta.getInternalName())
 		.append(" ")
 		.append(")");
-		
-		jdbcTemplate.execute(alterTableDropColumn.toString());
-		
-		propertyMetaRepository.delete(propertyMeta);
-		
-		return true;
+		return alterTableDropColumn.toString();
 	}
 
 	@Override
 	public boolean update(PropertyMeta propertyMeta) {
-		
 		propertyMetaRepository.saveAndFlush(propertyMeta);
-		
+		try{
+			jdbcTemplate.execute(this.dropView(propertyMeta.getTenantId(), propertyMeta.getObjectName()));
+		}
+		catch(Exception e) {
+		}
+		jdbcTemplate.execute(this.createView(propertyMeta.getTenantId(), propertyMeta.getObjectName()));
 		return true;
 	}
 
@@ -80,8 +119,6 @@ public class PropertyMetaServiceImpl implements PropertyMetaService {
 
 	@Override
 	public PropertyMeta get(Long id) {
-		
 		return propertyMetaRepository.findOne(id);
 	}
-
 }
