@@ -119,7 +119,7 @@ public class EntityServiceImpl implements EntityService {
 
         String selectStr = this.buildSelectClause(objectType, internalNameDisplayNameMap, conditionMap);
         System.out.println(selectStr);
-        List<Object[]> reslt = entityManager.createNativeQuery(selectStr).getResultList();
+        List<Object[]> reslt = entityManager.createNativeQuery(selectStr).setMaxResults(10).getResultList();
         String[] keys = internalNameDisplayNameMap.keySet().toArray(new String[] {});
         String[] labels = internalNameDisplayNameMap.values().toArray(new String[] {});
         for (Object rslt : reslt) {
@@ -244,6 +244,7 @@ public class EntityServiceImpl implements EntityService {
         builder.append("WHERE ");
         builder.append(whereBuilder.toString());
         builder.append(" ");
+        builder.append("ORDER BY ID DESC");
 
         return builder.toString();
     }
