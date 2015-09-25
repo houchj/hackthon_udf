@@ -202,6 +202,7 @@ public class EntityServiceImpl implements EntityService {
 
     private Map<String, String> getInternalNameDisplayNameMap(List<PropertyMeta> metas) {
         Map<String, String> internalNameDisplayNameMap = new HashMap<String, String>();
+        internalNameDisplayNameMap.put("ID", "ID");
         for (PropertyMeta propertyMeta : metas) {
             internalNameDisplayNameMap.put(propertyMeta.getInternalName(), propertyMeta.getDisplayName());
         }
