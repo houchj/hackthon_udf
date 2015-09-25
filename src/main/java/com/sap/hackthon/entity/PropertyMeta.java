@@ -12,13 +12,11 @@ import javax.persistence.Table;
 import com.sap.hackthon.enumeration.UDFTypeEnum;
 
 @Entity
-@Table(name = "T_PROPERTYMETA2")
+@Table(name = "T_PROPERTY_META")
 public class PropertyMeta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    // @GeneratedValue(generator = "PropertyMetaSeq")
-    // @SequenceGenerator(name = "PropertyMetaSeq", sequenceName = "PROPERTYMETA_SEQ", allocationSize = 100)
     @Column
     private Long id;
 
