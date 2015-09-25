@@ -99,10 +99,11 @@ public class EntityController {
 
     @RequestMapping(value = "/test/gt", method = RequestMethod.GET)
     public String gt() {
-        DynamicEntity entity = new DynamicEntity("T_ORDER");
-        entity.setProperty("ORDER_ID", "orderid1009291");
-        entity.setProperty("PRICE_UDF", "aa");
-        service.update(entity, "TN001");
+//        DynamicEntity entity = new DynamicEntity("T_ORDER");
+//        entity.setProperty("ORDER_ID", "orderid1009291");
+//        entity.setProperty("PRICE_UDF", "aa");
+//        service.update(entity, "TN001");
+    	service.list("T_ORDER", "Tenant004");
         return "home";
     }
 }

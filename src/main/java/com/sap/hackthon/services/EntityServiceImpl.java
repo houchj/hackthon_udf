@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -66,10 +65,22 @@ public class EntityServiceImpl implements EntityService {
 
     @Override
     public List<DynamicEntity> list(String objectType, String tanentId) {
+        return this.listSingle(objectType, tanentId);
+    }
+
+    @Override
+    public List<PropertyMeta> getEntityMeta(String objectType, String tanentId) {
+        return null;
+    }
+    
+    public List<DynamicEntity> listSingle(String objectType, String tanentId, String orderId) {
     	List<PropertyMeta> metas=this.getMetas(objectType, tanentId);
     	Map<String,String> internalNameDisplayNameMap=this.getInternalNameDisplayNameMap(metas);
     	Map<String,String> conditionMap=new HashMap<String, String>();
     	conditionMap.put("TENANT_ID", tanentId);
+    	if(orderId!=null){
+        	conditionMap.put("ORDER_ID", orderId);
+    	}
     	
     	List<DynamicEntity> entities=new ArrayList<DynamicEntity>();
     	
@@ -90,10 +101,8 @@ public class EntityServiceImpl implements EntityService {
     	
         return entities;
     }
-
-    @Override
-    public List<PropertyMeta> getEntityMeta(String objectType, String tanentId) {
-        return null;
+    public List<DynamicEntity> listSingle(String objectType, String tanentId) {
+    	return listSingle(objectType, tanentId, null);
     }
 
     private Map<String, String> getInternalNameDisplayNameMap(List<PropertyMeta> metas){
