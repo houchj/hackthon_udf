@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sap.hackthon.dto.EntityListParam;
 import com.sap.hackthon.entity.DynamicEntity;
-import com.sap.hackthon.entity.PropertyMeta;
 import com.sap.hackthon.services.EntityService;
-import com.sap.hackthon.utils.EntityConvertor;
 import com.sap.hackthon.utils.GlobalConstants;
 
 @Controller
@@ -36,10 +34,7 @@ public class EntityController {
         if (tenantId == null) {
             return null;
         }
-        EntityConvertor convertor = EntityConvertor.getInstance();
-        List<PropertyMeta> entityMeta = service.getEntityMeta(entity.getObjectType(), tenantId);
-        DynamicEntity dynamicEntity = convertor.convertEntity(entity, entityMeta);
-        return service.create(dynamicEntity, tenantId);
+        return service.create(entity, tenantId);
     }
 
     @RequestMapping(value = "/entity", method = RequestMethod.PUT)
@@ -56,10 +51,7 @@ public class EntityController {
         if (tenantId == null) {
             return null;
         }
-        EntityConvertor convertor = EntityConvertor.getInstance();
-        List<PropertyMeta> entityMeta = service.getEntityMeta(entity.getObjectType(), tenantId);
-        DynamicEntity dynamicEntity = convertor.convertEntity(entity, entityMeta);
-        return service.update(dynamicEntity, tenantId);
+        return service.update(entity, tenantId);
     }
 
     @RequestMapping(value = "/entity/{id}", method = RequestMethod.DELETE)
