@@ -1,6 +1,6 @@
-var orderManagerModule = angular.module('orderApp', []);
+var appModule = angular.module('myApp', []);
 
-orderManagerModule.controller('orderController', function ($scope,$http) {
+appModule.controller('orderController', function ($scope,$http) {
 	
 	var urlBase="";
 	$scope.toggle=true;
@@ -94,4 +94,25 @@ orderManagerModule.controller('orderController', function ($scope,$http) {
           findAllTasks();
 	  };
 	
+});
+
+appModule.controller('udfController', function ($scope,$http) {
+	
+	var urlBase="";
+	
+	$scope.propertyMeta={};
+	$scope.propertyMeta.objectName="T_ORDER";
+	$scope.propertyMeta.type="NVARCHAR";
+	$scope.propertyMeta.displayName="ds";
+	
+	
+	$scope.metaArray = [];
+	$http.defaults.headers.post["Content-Type"] = "application/json";
+
+	$scope.addMeta = function addMeta() {
+		 $http.post(urlBase + '/propertiesMeta',$scope.propertyMeta).
+		  success(function(data, status, headers) {
+			 alert("Task added");
+		});
+	};
 });

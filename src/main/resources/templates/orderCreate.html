@@ -6,12 +6,12 @@
 
 <title>Order List Page</title>
 </head>
-<body ng-app="orderApp">
+<body ng-app="myApp">
 <h2 class="page-title">This is Order List page</h2>
 
 <div ng-controller="orderController">
 	<div ng-repeat="meta in metaArray">
- 		<div>{{meta.displayName}}</div>
+ 		<div ng-show="!{{meta.systemField}}">{{meta.displayName}}</div>
  	</div>
 </div>
 

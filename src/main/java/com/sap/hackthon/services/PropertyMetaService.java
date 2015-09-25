@@ -19,5 +19,5 @@ public interface PropertyMetaService {
 
 	public List<PropertyMeta> getByTenantIdAndObjectName(String tenantId, String objectName);
 
-	public Long getMaxParamIndexByTenantIdAndObjectNameAndType(String tenantId, String objectName, UDFTypeEnum type);
+	public int getMaxParamIndexByTenantIdAndObjectNameAndType(String tenantId, String objectName, UDFTypeEnum type);
 }

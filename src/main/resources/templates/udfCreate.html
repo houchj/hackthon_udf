@@ -1,10 +1,29 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="../js/angular.min.js" type="text/javascript"></script>
+<script src="../js/app.js" type="text/javascript"></script>
 <title>UDF List Page</title>
 </head>
-<body>
+<body ng-app="myApp">
 
 <h2 class="page-title">This is UDF List page</h2>
+
+<div ng-controller="udfController">
+	<div>
+		<span>objectName: </span>
+		<input type="text" ng-model="propertyMeta.objectName"/>	
+	</div>
+	<div>
+		<span>Type: </span>
+		<input type="text" ng-model="propertyMeta.type"/>	
+	</div>
+	<div>
+		<span>displayName: </span>
+		<input type="text" ng-model="propertyMeta.displayName"/>	
+	</div>
+	<button ng-click="addMeta()">Add</button>
+</div>
+
 </body>
 </html>

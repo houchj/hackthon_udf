@@ -46,8 +46,9 @@ public class PropertyMetaController {
 		}
 		if (propertyMeta != null) {
 			propertyMeta.setTenantId(tenantId);
-			long nextParamIndex = service.getMaxParamIndexByTenantIdAndObjectNameAndType(tenantId, propertyMeta.getObjectName(), propertyMeta.getType()) + 1;
-			String internalName = GlobalConstants.UDF + propertyMeta.getType() + nextParamIndex;
+			int nextParamIndex = service.getMaxParamIndexByTenantIdAndObjectNameAndType(tenantId, propertyMeta.getObjectName(), propertyMeta.getType()) + 1;
+			String internalName = GlobalConstants.UDF + "_" + propertyMeta.getType() + "_" + nextParamIndex;
+			propertyMeta.setParamIndex(nextParamIndex);
 			propertyMeta.setInternalName(internalName);
 			return service.create(propertyMeta);
 		}
