@@ -21,7 +21,7 @@ public class HtmlPageController {
 	@RequestMapping(value = "/page/home.html", method = RequestMethod.GET)
     public ModelAndView home(Model model, HttpServletRequest request) {
 
-        ModelAndView mv = new ModelAndView("home");
+        ModelAndView mv = new ModelAndView("home", "", model);
         String tenantId = (String)request.getSession().getAttribute(GlobalConstants.TENANT);
         
         model.addAttribute("tenant_id", tenantId);

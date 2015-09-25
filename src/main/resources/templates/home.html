@@ -11,13 +11,23 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	
-	var sessionId = '${tenant_id}';
-	$("#tenantName").text(sessionId);
-	
+	$.ajax({
+		  type: "GET",
+		  url: "/sessionInfo",
+		  dataType: "json",
+		  contentType : "application/json"
+		}).done(function(data) {
+			if(data) {
+				$("#tenantName").text(data.tenantName);
+				$("#username").text(data.username);
+			}
+	});
+
 });
 </script>
 
-<h2 class="page-title">Home page for Tenant : "<div id="tenantName" ></div>" </h2>
+<h2 class="page-title">Welcome <div id="username" ></div></h2>
+<h2 class="page-title">You are at Tenant : <div id="tenantName" ></div></h2>
 
 </body>
 </html>
