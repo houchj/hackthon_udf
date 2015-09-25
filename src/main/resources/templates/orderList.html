@@ -1,12 +1,40 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="./js/jquery-1.11.3.min.js" type="text/javascript">
+</script>
 <title>Order List Page</title>
 </head>
 <body>
-
 <h2 class="page-title">This is Order List page</h2>
 <div><a href="/page/orderCreate.html" >Create a new order</a></div>
-
+<table class="orderList"></table>
+<script type="text/javascript">
+$(document).ready(function() {
+    $("#loginButton").click(function( event ) {
+        var orderReqData = {
+            objectType: "T_ORDER"
+        }
+        $.ajax({
+              type: "POST",
+              url: "entities",
+              data: orderReqData,
+              dataType: "json",
+              contentType : "application/json"
+            }).done(function(data) {
+                var $tabDiv = $(".orderList");
+                $.each(data, function(index, entity){
+                  var $trDiv = $("<tr></tr>");
+                  for(var p in entity.prperties){
+                    var $tdDiv = $("<td></td>");
+                    $tdDiv.text(p);
+                    $trDiv.append($tdDiv);
+                  }
+                  $tabDiv.append($trDiv)
+                });
+            });
+    });
+});
+</script>
 </body>
 </html>
