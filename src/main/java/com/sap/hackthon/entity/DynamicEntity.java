@@ -6,8 +6,6 @@ package com.sap.hackthon.entity;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.sap.hackthon.enumeration.UDFTypeEnum;
-
 /**
  * @author I310717
  *
@@ -17,6 +15,10 @@ public class DynamicEntity {
     private Map<String, Object> propertities;
 
     private String objectType;
+
+    public DynamicEntity() {
+        super();
+    }
 
     public DynamicEntity(String objectType) {
         this.objectType = objectType;
