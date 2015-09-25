@@ -32,7 +32,7 @@ public class UserController {
             return false;
         }
         HttpSession session = request.getSession();
-        session.setAttribute(GlobalConstants.TENANT, user + "_Tenant");
+        session.setAttribute(GlobalConstants.TENANT, user.getUsername() + "_Tenant");
         return true;
     }
 }
