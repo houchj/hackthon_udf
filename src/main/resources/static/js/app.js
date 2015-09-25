@@ -100,19 +100,38 @@ appModule.controller('udfController', function ($scope,$http) {
 	
 	var urlBase="";
 	
+	$scope.ObjectNames=["T_ORDER","T_ORDER_LINE"];
+	$scope.ObjectTypes=["NVARCHAR","TIMESTAMP","DECIMAL"];
+	
+	$scope.propertyMeta={};
+
 	$scope.propertyMeta={};
 	$scope.propertyMeta.objectName="T_ORDER";
 	$scope.propertyMeta.type="NVARCHAR";
 	$scope.propertyMeta.displayName="ds";
 	
-	
 	$scope.metaArray = [];
 	$http.defaults.headers.post["Content-Type"] = "application/json";
+
+    function findMetas() {
+        $http.post(urlBase + '/propertiesMeta/getByTenantIdAndObjectName?objectName=T_ORDER').
+            success(function (data) {
+                    $scope.metaArray = data;
+            });
+        $scope.showList=true;
+    }
+    
+    findMetas();
+    
+    $scope.showAddDiv=function showAddDiv(){
+    	$scope.showList=!$scope.showList;
+    }
 
 	$scope.addMeta = function addMeta() {
 		 $http.post(urlBase + '/propertiesMeta',$scope.propertyMeta).
 		  success(function(data, status, headers) {
-			 alert("Task added");
+			 //alert("Task added");
+			 findMetas();
 		});
 	};
 });

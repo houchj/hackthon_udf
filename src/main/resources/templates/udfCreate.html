@@ -10,19 +10,52 @@
 <h2 class="page-title">This is UDF List page</h2>
 
 <div ng-controller="udfController">
-	<div>
-		<span>objectName: </span>
-		<input type="text" ng-model="propertyMeta.objectName"/>	
+	<div class="dispDiv" ng-show="showList">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Column Name</th>
+					<th>User Defined</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="meta in metaArray">
+					<td>
+						{{ $index + 1 }}
+					</td>
+					<td>
+						{{meta.displayName}}
+					</td>
+					<td>
+						{{!meta.systemField}}
+					</td>
+				</tr>
+			</tbody>
+		</table>	
+		<button ng-click="showAddDiv()">Add UDF</button>
 	</div>
-	<div>
-		<span>Type: </span>
-		<input type="text" ng-model="propertyMeta.type"/>	
+<!-- 	<div>
+		<tr ng-repeat="meta in metaArray">
+	 		<div ng-show="!{{meta.systemField}}">{{meta.displayName}}</div>
+	 	</tr>
+	</div> -->
+	<br/>
+	<div class="createDiv" ng-show="!showList">
+		<div>
+			<span>objectName: </span>
+			<select ng-model="propertyMeta.objectName" ng-options="name for name in ObjectNames"></select>	
+		</div>
+		<div>
+			<span>Type: </span>
+			<select ng-model="propertyMeta.type" ng-options="type for type in ObjectTypes"></select>	
+		</div>
+		<div>
+			<span>displayName: </span>
+			<input type="text" ng-model="propertyMeta.displayName"/>	
+		</div>
+		<button ng-click="addMeta()">Add</button>
 	</div>
-	<div>
-		<span>displayName: </span>
-		<input type="text" ng-model="propertyMeta.displayName"/>	
-	</div>
-	<button ng-click="addMeta()">Add</button>
 </div>
 
 </body>
