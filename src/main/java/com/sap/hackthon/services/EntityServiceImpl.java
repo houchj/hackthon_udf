@@ -75,9 +75,10 @@ public class EntityServiceImpl implements EntityService {
         DynamicEntity entity = new DynamicEntity(objectType);
         Map<String, Object> propertities = new HashMap<String, Object>();
         String[] keys = internalNameDisplayNameMap.keySet().toArray(new String[] {});
+        String[] labels = internalNameDisplayNameMap.values().toArray(new String[] {});
         Object[] objs = results.get(0);
         for (int i = 0; i < objs.length; i++) {
-            propertities.put(keys[i], objs[i]);
+            propertities.put(labels[i], objs[i]);
         }
         entity.setPropertities(propertities);
         if ("T_ORDER".equalsIgnoreCase(objectType)) {
@@ -120,13 +121,14 @@ public class EntityServiceImpl implements EntityService {
         System.out.println(selectStr);
         List<Object[]> reslt = entityManager.createNativeQuery(selectStr).getResultList();
         String[] keys = internalNameDisplayNameMap.keySet().toArray(new String[] {});
+        String[] labels = internalNameDisplayNameMap.values().toArray(new String[] {});
         for (Object rslt : reslt) {
             Object[] objs = (Object[]) rslt;
             DynamicEntity entity = new DynamicEntity(objectType);
             entities.add(entity);
             Map<String, Object> propertities = new HashMap<String, Object>();
             for (int i = 0; i < objs.length; i++) {
-                propertities.put(keys[i], objs[i]);
+                propertities.put(labels[i], objs[i]);
             }
             entity.setPropertities(propertities);
         }
@@ -224,7 +226,6 @@ public class EntityServiceImpl implements EntityService {
         }
 
         StringBuilder selectBuilder = new StringBuilder();
-        selectBuilder.append("ID AS ID");
         for (Entry<String, String> entry : internalNameDisplayNameMap.entrySet()) {
             if (selectBuilder.length() != 0) {
                 selectBuilder.append(", ");

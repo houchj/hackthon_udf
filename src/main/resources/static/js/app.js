@@ -4,18 +4,58 @@ appModule.controller('orderController', function ($scope,$http) {
 	
 	var urlBase="";
 	$scope.toggle=true;
-	$scope.na="AAA";
+	$scope.propertities={};
+	
+	$scope.orders={};
+	$scope.showList=true;
+	
 	$scope.metaArray = [];
+	$scope.names=[];
+	
 	$http.defaults.headers.post["Content-Type"] = "application/json";
 
+	$scope.entity={
+			objectType:"T_ORDER",
+			propertities: $scope.propertities};
+
+	$scope.showAddDiv=function showAddDiv(){
+    	$scope.showList=!$scope.showList;
+    }
+
+	
     function findMetas() {
         $http.post(urlBase + '/propertiesMeta/getByTenantIdAndObjectName?objectName=T_ORDER').
             success(function (data) {
                     $scope.metaArray = data;
+                    for(var i=0;i<data.length;i++){
+                    	$scope.names.push(data[i].displayName);
+                    }
             });
     }
     
     findMetas();
+
+    var orderReqData = {
+        objectType : "T_ORDER"
+    };
+    function listAllOrders() {
+        $http.post(urlBase + '/entities',orderReqData).
+            success(function (data) {
+                    $scope.orders = data;
+                    $scope.showList=true;
+            });
+    }
+    
+    listAllOrders();
+
+    $scope.addOrder = function addOrder() {
+		 $http.post(urlBase + '/entity',$scope.entity).
+		  success(function(data, status, headers) {
+			 //alert("Task added");
+			 findMetas();
+			 listAllOrders();
+		});
+	};
 
     function findAllTasks() {
         //get all tasks and display initially
@@ -134,6 +174,14 @@ appModule.controller('udfController', function ($scope,$http) {
     	$scope.showList=!$scope.showList;
     }
 
+    $scope.deleteUDF=function deleteUDF(id){
+		 $http.delete(urlBase + '/propertiesMeta'+id,$scope.propertyMeta).
+		  success(function(data, status, headers) {
+			 //alert("Task added");
+			 findMetas();
+		});
+    }
+    
 	$scope.addMeta = function addMeta() {
 		 $http.post(urlBase + '/propertiesMeta',$scope.propertyMeta).
 		  success(function(data, status, headers) {
