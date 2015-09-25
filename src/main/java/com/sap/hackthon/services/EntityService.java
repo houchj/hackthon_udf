@@ -21,7 +21,7 @@ public interface EntityService {
 
     public boolean delete(Long id, String objectType);
 
-    public DynamicEntity get(Long id, String objectType);
+    public DynamicEntity get(Long id, String tanentId, String objectType);
 
     public List<DynamicEntity> list(String objectType, String tanentId);
 

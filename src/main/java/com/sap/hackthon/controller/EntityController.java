@@ -71,11 +71,17 @@ public class EntityController {
     }
 
     @RequestMapping(value = "/entity/{id}", method = RequestMethod.GET)
-    public @ResponseBody DynamicEntity get(@RequestBody String objectType, @PathVariable("id") Long entityId) {
+    public @ResponseBody DynamicEntity get(@RequestBody String objectType, @PathVariable("id") Long entityId,
+            HttpServletRequest request) {
         if (objectType == null || entityId == null) {
             return null;
         }
-        return service.get(entityId, objectType);
+        HttpSession session = request.getSession();
+        String tenantId = (String) session.getAttribute(GlobalConstants.TENANT);
+        if (tenantId == null) {
+            return null;
+        }
+        return service.get(entityId, tenantId, objectType);
     }
 
     @RequestMapping(value = "/entities", method = RequestMethod.PATCH)
@@ -99,11 +105,11 @@ public class EntityController {
 
     @RequestMapping(value = "/test/gt", method = RequestMethod.GET)
     public String gt() {
-//        DynamicEntity entity = new DynamicEntity("T_ORDER");
-//        entity.setProperty("ORDER_ID", "orderid1009291");
-//        entity.setProperty("PRICE_UDF", "aa");
-//        service.update(entity, "TN001");
-    	service.list("T_ORDER", "Tenant004");
+        // DynamicEntity entity = new DynamicEntity("T_ORDER");
+        // entity.setProperty("ORDER_ID", "orderid1009291");
+        // entity.setProperty("PRICE_UDF", "aa");
+        // service.update(entity, "TN001");
+        service.list("T_ORDER", "Tenant004");
         return "home";
     }
 }
