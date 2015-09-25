@@ -11,12 +11,14 @@ import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sap.hackthon.entity.DynamicEntity;
 import com.sap.hackthon.entity.PropertyMeta;
 import com.sap.hackthon.repository.PropertyMetaRepository;
 
 @Service
+@Transactional
 public class EntityServiceImpl implements EntityService {
 
     @Autowired
@@ -34,7 +36,7 @@ public class EntityServiceImpl implements EntityService {
         String updateStr = this.buildUpdateClause(entity, tanentId, metas);
         entityManager.createNativeQuery(updateStr).executeUpdate();
 
-        return null;
+        return entity;
     }
 
     @Override
@@ -43,10 +45,12 @@ public class EntityServiceImpl implements EntityService {
         if (metas.isEmpty()) {
             throw new RuntimeException("No meta found for" + entity.getObjectType());
         }
-        String insertStr = this.buildInsertClause(entity, tanentId, metas);
+        String seqName = entity.getObjectType() + "_SEQ";
+        Long seqVal = this.getSequenceValue(seqName);
+        String insertStr = this.buildInsertClause(entity, tanentId, metas, seqVal);
         entityManager.createNativeQuery(insertStr).executeUpdate();
-
-        return null;
+        entity.setProperty("ID", seqVal);
+        return entity;
     }
 
     @Override
@@ -145,7 +149,14 @@ public class EntityServiceImpl implements EntityService {
         return metas;
     }
 
-    private String buildInsertClause(DynamicEntity dynamicEntity, String tanentId, List<PropertyMeta> metas) {
+    private Long getSequenceValue(String seqName) {
+        String seqSql = "SELECT " + seqName + ".NEXTVAL FROM DUMMY";
+        Long seq = (Long) entityManager.createNamedQuery(seqSql).getSingleResult();
+        return seq;
+    }
+
+    private String buildInsertClause(DynamicEntity dynamicEntity, String tanentId, List<PropertyMeta> metas,
+            Long seqCurVal) {
         String tbName = dynamicEntity.getObjectType();
         String seqName = tbName + "_SEQ";
 

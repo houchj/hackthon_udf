@@ -103,13 +103,30 @@ public class EntityController {
         return "home";
     }
 
-    @RequestMapping(value = "/test/gt", method = RequestMethod.GET)
+    @RequestMapping(value = "/test/yu", method = RequestMethod.GET)
     public String gt() {
-        // DynamicEntity entity = new DynamicEntity("T_ORDER");
-        // entity.setProperty("ORDER_ID", "orderid1009291");
-        // entity.setProperty("PRICE_UDF", "aa");
-        // service.update(entity, "TN001");
+        DynamicEntity entity = new DynamicEntity("T_ORDER");
+        entity.setProperty("ORDER_ID", "orderid10092914");
+        entity.setProperty("PRICE_UDF", "hh");
+        service.create(entity, "TN001");
+
+        DynamicEntity subEntity = new DynamicEntity("T_ORDER_LINE");
+        entity.setProperty("ORDER_ID", "orderid10092914");
+        entity.setProperty("ada", "hh");
+        service.create(subEntity, "TN001");
+
+        service.get((Long) entity.getProperty("ID"), "T_ORDER", "TN001");
+        return "home";
+    }
+
+    @RequestMapping(value = "/test/gt", method = RequestMethod.GET)
+    public String qr() {
+        DynamicEntity entity = new DynamicEntity("T_ORDER");
+        entity.setProperty("ORDER_ID", "orderid1009291");
+        entity.setProperty("PRICE_UDF", "aa");
+        service.update(entity, "TN001");
         service.list("T_ORDER", "Tenant004");
         return "home";
     }
+
 }

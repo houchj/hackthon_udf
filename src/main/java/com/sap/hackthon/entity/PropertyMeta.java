@@ -7,106 +7,105 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.sap.hackthon.enumeration.UDFTypeEnum;
 
 @Entity
-@Table(name="T_PROPERTYMETA")
+@Table(name = "T_PROPERTYMETA2")
 public class PropertyMeta {
 
-	    @Id
-	    @GeneratedValue(strategy = GenerationType.AUTO)
-//	    @GeneratedValue(generator = "PropertyMetaSeq")
-//	    @SequenceGenerator(name = "PropertyMetaSeq", sequenceName = "PROPERTYMETA_SEQ", allocationSize = 100)
-	    @Column
-	    private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    // @GeneratedValue(generator = "PropertyMetaSeq")
+    // @SequenceGenerator(name = "PropertyMetaSeq", sequenceName = "PROPERTYMETA_SEQ", allocationSize = 100)
+    @Column
+    private Long id;
 
-	    @Column
-	    private String tenantId;
+    @Column
+    private String tenantId;
 
-	    @Column
-	    private String objectName;
+    @Column
+    private String objectName;
 
-	    @Column
-	    @Enumerated(EnumType.STRING)
-	    private UDFTypeEnum type;
+    @Column
+    @Enumerated(EnumType.STRING)
+    private UDFTypeEnum type;
 
-	    @Column
-	    private String internalName;
+    @Column
+    private String internalName;
 
-	    @Column
-	    private String displayName;
+    @Column
+    private String displayName;
 
-	    @Column
-	    private Integer paramIndex;
+    @Column
+    private Integer paramIndex;
 
-	    @Column
-	    private boolean systemField;
+    @Column
+    private boolean systemField;
 
-		public Long getId() {
-			return id;
-		}
+    public Long getId() {
+        return id;
+    }
 
-		public void setId(Long id) {
-			this.id = id;
-		}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-		public String getTenantId() {
-			return tenantId;
-		}
+    public String getTenantId() {
+        return tenantId;
+    }
 
-		public void setTenantId(String tenantId) {
-			this.tenantId = tenantId;
-		}
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
 
-		public String getObjectName() {
-			return objectName;
-		}
+    public String getObjectName() {
+        return objectName;
+    }
 
-		public void setObjectName(String objectName) {
-			this.objectName = objectName;
-		}
+    public void setObjectName(String objectName) {
+        this.objectName = objectName;
+    }
 
-		public UDFTypeEnum getType() {
-			return type;
-		}
+    public UDFTypeEnum getType() {
+        return type;
+    }
 
-		public void setType(UDFTypeEnum type) {
-			this.type = type;
-		}
+    public void setType(UDFTypeEnum type) {
+        this.type = type;
+    }
 
-		public String getInternalName() {
-			return internalName;
-		}
+    public String getInternalName() {
+        return internalName;
+    }
 
-		public void setInternalName(String internalName) {
-			this.internalName = internalName;
-		}
+    public void setInternalName(String internalName) {
+        this.internalName = internalName;
+    }
 
-		public String getDisplayName() {
-			return displayName;
-		}
+    public String getDisplayName() {
+        return displayName;
+    }
 
-		public void setDisplayName(String displayName) {
-			this.displayName = displayName;
-		}
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
 
-		public Integer getParamIndex() {
-			return paramIndex;
-		}
+    public Integer getParamIndex() {
+        return paramIndex;
+    }
 
-		public void setParamIndex(Integer paramIndex) {
-			this.paramIndex = paramIndex;
-		}
+    public void setParamIndex(Integer paramIndex) {
+        this.paramIndex = paramIndex;
+    }
 
-		public boolean isSystemField() {
-			return systemField;
-		}
+    public boolean isSystemField() {
+        return systemField;
+    }
 
-		public void setSystemField(boolean systemField) {
-			this.systemField = systemField;
-		}
+    public void setSystemField(boolean systemField) {
+        this.systemField = systemField;
+    }
 
-	}
+}
