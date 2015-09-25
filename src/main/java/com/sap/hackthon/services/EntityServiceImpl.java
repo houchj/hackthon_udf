@@ -1,5 +1,6 @@
 package com.sap.hackthon.services;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -150,8 +151,11 @@ public class EntityServiceImpl implements EntityService {
 
     private Long getSequenceValue(String seqName) {
         String seqSql = "SELECT " + seqName + ".NEXTVAL FROM DUMMY";
-        Long seq = (Long) entityManager.createNativeQuery(seqSql).getSingleResult();
-        return seq;
+        BigInteger seq = (BigInteger) entityManager.createNativeQuery(seqSql).getSingleResult();
+        if (seq == null) {
+            return null;
+        }
+        return seq.longValue();
     }
 
     private String buildInsertClause(DynamicEntity dynamicEntity, String tanentId, List<PropertyMeta> metas,
@@ -175,10 +179,9 @@ public class EntityServiceImpl implements EntityService {
                 colNameBuilder.append(",");
                 colValueBuilder.append(",");
             }
-            String colName = propertyMeta.getDisplayName();
-            colNameBuilder.append(colName);
+            colNameBuilder.append(propertyMeta.getInternalName());
             colValueBuilder.append("'");
-            colValueBuilder.append(dynamicEntity.getProperty(colName));
+            colValueBuilder.append(dynamicEntity.getProperty(propertyMeta.getDisplayName()));
             colValueBuilder.append("'");
         }
 
@@ -260,7 +263,7 @@ public class EntityServiceImpl implements EntityService {
             if (setBuilder.length() != 0) {
                 setBuilder.append(",");
             }
-            setBuilder.append(colName);
+            setBuilder.append(propertyMeta.getInternalName());
             setBuilder.append("=");
             setBuilder.append("'");
             setBuilder.append(dynamicEntity.getProperty(colName));
