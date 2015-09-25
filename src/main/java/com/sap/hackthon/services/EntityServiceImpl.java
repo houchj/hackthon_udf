@@ -76,6 +76,16 @@ public class EntityServiceImpl implements EntityService {
             propertities.put(keys[i], objs[i]);
         }
         entity.setPropertities(propertities);
+        if ("T_ORDER".equalsIgnoreCase(objectType)) {
+            Map<String, String> subFilter = new HashMap<String, String>();
+            Object orderId = entity.getProperty(internalNameDisplayNameMap.get("ORDER_ID"));
+            if (orderId == null) {
+                return entity;
+            }
+            subFilter.put("ITEM_ID", orderId.toString());
+            List<DynamicEntity> link = this.listSingle("T_ORDER_LINE", tanentId, subFilter);
+            entity.setProperty("lines", link);
+        }
         return entity;
     }
 
@@ -89,13 +99,15 @@ public class EntityServiceImpl implements EntityService {
         return this.getMetas(objectType, tanentId);
     }
 
-    public List<DynamicEntity> listSingle(String objectType, String tanentId, String orderId) {
+    public List<DynamicEntity> listSingle(String objectType, String tanentId, Map<String, String> filters) {
         List<PropertyMeta> metas = this.getMetas(objectType, tanentId);
         Map<String, String> internalNameDisplayNameMap = this.getInternalNameDisplayNameMap(metas);
         Map<String, String> conditionMap = new HashMap<String, String>();
         conditionMap.put("TENANT_ID", tanentId);
-        if (orderId != null) {
-            conditionMap.put("ORDER_ID", orderId);
+        if (filters != null) {
+            for (Entry<String, String> entry : filters.entrySet()) {
+                conditionMap.put(entry.getKey(), entry.getValue());
+            }
         }
 
         List<DynamicEntity> entities = new ArrayList<DynamicEntity>();
@@ -198,6 +210,7 @@ public class EntityServiceImpl implements EntityService {
         }
 
         StringBuilder selectBuilder = new StringBuilder();
+        selectBuilder.append("ID AS ID");
         for (Entry<String, String> entry : internalNameDisplayNameMap.entrySet()) {
             if (selectBuilder.length() != 0) {
                 selectBuilder.append(", ");
