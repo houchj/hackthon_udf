@@ -2,7 +2,9 @@ package com.sap.hackthon.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -25,14 +27,14 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST, value = "login")
     public @ResponseBody boolean login(@RequestBody User user, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<String> validUsers = new ArrayList<String>();
-        validUsers.add("A");
-        validUsers.add("B");
-        if (!validUsers.contains(user.getUsername())) {
+        Map<String, String> validUsers = new HashMap<String, String>();
+        validUsers.put("A", "Tenant012");
+        validUsers.put("B", "Tenant004");
+        if (!validUsers.containsKey(user.getUsername())) {
             return false;
         }
         HttpSession session = request.getSession();
-        session.setAttribute(GlobalConstants.TENANT, user.getUsername() + "_Tenant");
+        session.setAttribute(GlobalConstants.TENANT, validUsers.get(user.getUsername()));
         session.setAttribute(GlobalConstants.USERNAME, user.getUsername());
 
         return true;
