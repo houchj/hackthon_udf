@@ -7,6 +7,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.sap.hackthon.enumeration.UDFTypeEnum;
@@ -16,7 +17,8 @@ import com.sap.hackthon.enumeration.UDFTypeEnum;
 public class PropertyMeta {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="PropertyMetaSeq")
+    @SequenceGenerator(name = "PropertyMetaSeq", sequenceName = "T_PROPERTY_META_SEQ", allocationSize = 100)
     @Column
     private Long id;
 

@@ -44,10 +44,13 @@ public class PropertyMetaController {
 		if (tenantId == null) {
 			return false;
 		}
+		if(service.getByTenantIdAndObjectNameAndDisplayName(tenantId, propertyMeta.getObjectName(), propertyMeta.getDisplayName())) {
+			return false;
+		}
 		if (propertyMeta != null) {
 			propertyMeta.setTenantId(tenantId);
 			int nextParamIndex = service.getMaxParamIndexByTenantIdAndObjectNameAndType(tenantId, propertyMeta.getObjectName(), propertyMeta.getType()) + 1;
-			String internalName = GlobalConstants.UDF + "_" + propertyMeta.getType() + "_" + nextParamIndex;
+			String internalName = GlobalConstants.UDF + "_" + propertyMeta.getTenantId() + "_" + propertyMeta.getType() + "_" + nextParamIndex;
 			propertyMeta.setParamIndex(nextParamIndex);
 			propertyMeta.setInternalName(internalName);
 			return service.create(propertyMeta);
@@ -61,6 +64,9 @@ public class PropertyMetaController {
 		HttpSession session = request.getSession();
 		String tenantId = (String) session.getAttribute(GlobalConstants.TENANT);
 		if (tenantId == null) {
+			return false;
+		}
+		if(service.getByTenantIdAndObjectNameAndDisplayName(tenantId, propertyMeta.getObjectName(), propertyMeta.getDisplayName())) {
 			return false;
 		}
 		if (propertyMeta != null) {

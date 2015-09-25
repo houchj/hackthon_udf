@@ -12,7 +12,7 @@ import com.sap.hackthon.enumeration.UDFTypeEnum;
 import com.sap.hackthon.repository.PropertyMetaRepository;
 
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class PropertyMetaServiceImpl implements PropertyMetaService {
 
 	@Autowired
@@ -126,5 +126,16 @@ public class PropertyMetaServiceImpl implements PropertyMetaService {
 	public int getMaxParamIndexByTenantIdAndObjectNameAndType(String tenantId,
 			String objectName, UDFTypeEnum type) {
 		return propertyMetaRepository.findMaxParamIndexByTenantIdAndObjectNameAndType(tenantId, objectName, type);
+	}
+
+	@Override
+	public boolean getByTenantIdAndObjectNameAndDisplayName(
+			String tenantId, String objectName, String displayName) {
+		List<PropertyMeta> propertiesMeta = propertyMetaRepository.findByTenantIdAndObjectNameAndDisplayName(tenantId, objectName, displayName);
+		
+		if(propertiesMeta != null && propertiesMeta.size() > 0) {
+			return true;
+		}
+		return false;
 	}
 }
