@@ -150,7 +150,7 @@ public class EntityServiceImpl implements EntityService {
 
     private Long getSequenceValue(String seqName) {
         String seqSql = "SELECT " + seqName + ".NEXTVAL FROM DUMMY";
-        Long seq = (Long) entityManager.createNamedQuery(seqSql).getSingleResult();
+        Long seq = (Long) entityManager.createNativeQuery(seqSql).getSingleResult();
         return seq;
     }
 
