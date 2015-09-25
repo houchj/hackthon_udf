@@ -33,9 +33,8 @@ public class EntityServiceImpl implements EntityService {
         if (metas.isEmpty()) {
             throw new RuntimeException("No meta found for" + entity.getObjectType());
         }
-        String updateStr = this.buildUpdateClause(entity, tanentId, metas);
+        String updateStr = this.buildUpdateClause(entity, metas);
         entityManager.createNativeQuery(updateStr).executeUpdate();
-
         return entity;
     }
 
@@ -244,35 +243,20 @@ public class EntityServiceImpl implements EntityService {
         return builder.toString();
     }
 
-    private String buildUpdateClause(DynamicEntity dynamicEntity, String tanentId, List<PropertyMeta> metas) {
+    private String buildUpdateClause(DynamicEntity dynamicEntity, List<PropertyMeta> metas) {
         String tbName = dynamicEntity.getObjectType();
-        String orderIdColumnName = "ORDER_ID";
-
-        StringBuilder whereBuilder = new StringBuilder();
-        whereBuilder.append("TENANT_ID");
-        whereBuilder.append("=");
-        whereBuilder.append("'");
-        whereBuilder.append(tanentId);
-        whereBuilder.append("'");
-
-        whereBuilder.append(" AND ");
-
-        Object oi = dynamicEntity.getProperty(orderIdColumnName);
-        if (oi == null) {
-            throw new RuntimeException("No order id!");
+        Object id = dynamicEntity.getProperty("ID");
+        if (id == null) {
+            throw new RuntimeException("No id!");
         }
-        whereBuilder.append(orderIdColumnName);
+        StringBuilder whereBuilder = new StringBuilder();
+        whereBuilder.append("ID");
         whereBuilder.append("=");
-        whereBuilder.append("'");
-        whereBuilder.append(oi.toString());
-        whereBuilder.append("'");
+        whereBuilder.append(id);
 
         StringBuilder setBuilder = new StringBuilder();
         for (PropertyMeta propertyMeta : metas) {
             String colName = propertyMeta.getDisplayName();
-            if (colName.trim().equalsIgnoreCase(orderIdColumnName)) {
-                continue;
-            }
             if (setBuilder.length() != 0) {
                 setBuilder.append(",");
             }
