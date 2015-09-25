@@ -11,17 +11,32 @@
 
 <h1>Welcome to Aristotle team UDF demo</h1>
 <h2 class="page-title">Please enter you user name and password to login</h2>
+<h3>user name "A" for tenant "A_Tenant", user name "B" for tenant "B_Tenant"</h3>
 
 <label>User Name:</label>
 <input type="text" id="username"/><p></p>
 <label>Password:</label>
-<input type="text" id="password"/><p></p>
+<input type="password" id="password"/><p></p>
 <input type="button" id="loginButton" value="Login" />
 
 <script type="text/javascript">
 $(document).ready(function() {
     $("#loginButton").click(function( event ) {
-		alert( "test Login!" );
+    	var username = $("#username").val();
+		var loginData = JSON.stringify({"username":username, "password":""});
+    	$.ajax({
+    		  type: "POST",
+    		  url: "login",
+    		  data: loginData,
+    		  dataType: "json",
+    		  contentType : "application/json"
+    		}).done(function(data) {
+    			if(data === true) {
+    				document.location = "/page/home.html";    				
+    			} else {
+    				window.alert("invalid user name or password!");
+    			}
+    		});
     });
 });
 </script>
