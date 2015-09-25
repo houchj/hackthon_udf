@@ -121,4 +121,10 @@ public class PropertyMetaServiceImpl implements PropertyMetaService {
 	public PropertyMeta get(Long id) {
 		return propertyMetaRepository.findOne(id);
 	}
+
+	@Override
+	public Long getMaxParamIndexByTenantIdAndObjectNameAndType(String tenantId,
+			String objectName, UDFTypeEnum type) {
+		return propertyMetaRepository.findMaxParamIndexByTenantIdAndObjectNameAndType(tenantId, objectName, type);
+	}
 }

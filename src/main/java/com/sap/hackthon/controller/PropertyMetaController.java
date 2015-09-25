@@ -26,25 +26,42 @@ public class PropertyMetaController {
 	private PropertyMetaService service;
 
 	@RequestMapping(value = "/getByTenantIdAndObjectName", method = RequestMethod.POST)
-	public @ResponseBody List<PropertyMeta> getByTenantIdAndObjectName(@RequestParam String objectName, HttpServletRequest request) {
-		 HttpSession session = request.getSession();
-         String tenantId = (String) session.getAttribute(GlobalConstants.TENANT);
-         if (tenantId == null) {
-            return null;
-        }
+	public @ResponseBody List<PropertyMeta> getByTenantIdAndObjectName(
+			@RequestParam String objectName, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		String tenantId = (String) session.getAttribute(GlobalConstants.TENANT);
+		if (tenantId == null) {
+			return null;
+		}
 		return service.getByTenantIdAndObjectName(tenantId, objectName);
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public @ResponseBody boolean create(@RequestBody PropertyMeta propertyMeta) {
+	public @ResponseBody boolean create(@RequestBody PropertyMeta propertyMeta,
+			HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		String tenantId = (String) session.getAttribute(GlobalConstants.TENANT);
+		if (tenantId == null) {
+			return false;
+		}
 		if (propertyMeta != null) {
+			propertyMeta.setTenantId(tenantId);
+			long nextParamIndex = service.getMaxParamIndexByTenantIdAndObjectNameAndType(tenantId, propertyMeta.getObjectName(), propertyMeta.getType()) + 1;
+			String internalName = GlobalConstants.UDF + propertyMeta.getType() + nextParamIndex;
+			propertyMeta.setInternalName(internalName);
 			return service.create(propertyMeta);
 		}
 		return false;
 	}
 
 	@RequestMapping(method = RequestMethod.PUT)
-	public @ResponseBody boolean update(@RequestBody PropertyMeta propertyMeta) {
+	public @ResponseBody boolean update(@RequestBody PropertyMeta propertyMeta,
+			HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		String tenantId = (String) session.getAttribute(GlobalConstants.TENANT);
+		if (tenantId == null) {
+			return false;
+		}
 		if (propertyMeta != null) {
 			return service.update(propertyMeta);
 		}
@@ -59,9 +76,14 @@ public class PropertyMetaController {
 		return service.get(id);
 	}
 
-	
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public @ResponseBody boolean delete(@PathVariable("id") Long id) {
+	public @ResponseBody boolean delete(@PathVariable("id") Long id,
+			HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		String tenantId = (String) session.getAttribute(GlobalConstants.TENANT);
+		if (tenantId == null) {
+			return false;
+		}
 		if (id == null) {
 			return false;
 		}
