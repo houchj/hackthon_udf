@@ -40,7 +40,7 @@
 	<div class="addDiv" ng-show="!showList">
 		<div ng-repeat="metaName in names">
 	 		<span>{{metaName}}</span>
-		    <input type="text" ng-model="propertities[metaName]"/>
+		    <input type="text" ng-model="propertities[metaName]" ng-show="hideMe(metaName)"/>
 	 	</div>
 		<button ng-click="addOrder()">Add</button>
 	</div>

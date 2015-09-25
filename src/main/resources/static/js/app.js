@@ -4,7 +4,7 @@ appModule.controller('orderController', function ($scope,$http) {
 	
 	var urlBase="";
 	$scope.toggle=true;
-	$scope.propertities={};
+	$scope.propertities={ORDER_ID:"Order012000142199",TENANT_ID:"Tenant012",ORDER_DATE:"2015-09-25"};
 	
 	$scope.orders={};
 	$scope.showList=true;
@@ -21,7 +21,20 @@ appModule.controller('orderController', function ($scope,$http) {
 	$scope.showAddDiv=function showAddDiv(){
     	$scope.showList=!$scope.showList;
     }
-
+	$scope.hideMe=function hideMe(name){
+//		if(name=="ORDER_ID"){
+//			return false;
+//		}
+		if(name=="TENANT_ID"){
+			return false;
+		}
+		if(name=="ORDER_DATE"){
+			return false;
+		}
+		
+		return true;
+    }
+	
 	
     function findMetas() {
         $http.post(urlBase + '/propertiesMeta/getByTenantIdAndObjectName?objectName=T_ORDER').
