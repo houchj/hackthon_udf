@@ -111,11 +111,11 @@ public class EntityController {
         service.create(entity, "TN001");
 
         DynamicEntity subEntity = new DynamicEntity("T_ORDER_LINE");
-        entity.setProperty("ORDER_ID", "orderid10092914");
-        entity.setProperty("ada", "hh");
+        subEntity.setProperty("ORDER_ID", "orderid10092914");
+        subEntity.setProperty("ada", "hh");
         service.create(subEntity, "TN001");
 
-        service.get((Long) entity.getProperty("ID"), "T_ORDER", "TN001");
+        service.get((Long) entity.getProperty("ID"), "TN001", "T_ORDER");
         return "home";
     }
 
