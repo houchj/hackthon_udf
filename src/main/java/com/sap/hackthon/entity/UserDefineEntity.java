@@ -10,17 +10,12 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
-import org.eclipse.persistence.annotations.Multitenant;
-import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
-
 /**
  * @author I310717
  *
  */
 @MappedSuperclass
-@Multitenant
-@TenantDiscriminatorColumn(name = "TENANT_ID", contextProperty = "multi-tenant.id")
-public abstract class UserDefineEntity {
+public abstract class UserDefineEntity implements BasicEntity{
 
 	@Column(name = "OBJECT_TYPE", insertable = false, updatable = false)
 	protected String objectType; 

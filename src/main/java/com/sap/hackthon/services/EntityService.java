@@ -1,9 +1,10 @@
 package com.sap.hackthon.services;
 
 import java.util.List;
+import java.util.Map;
 
+import com.sap.hackthon.entity.BasicEntity;
 import com.sap.hackthon.entity.UserDefineEntity;
-import com.sap.hackthon.entity.PropertyMeta;
 
 /**
  * 
@@ -15,15 +16,15 @@ import com.sap.hackthon.entity.PropertyMeta;
  */
 public interface EntityService {
 
-    public UserDefineEntity create(UserDefineEntity entity, String tanentId);
+    public BasicEntity create(BasicEntity entity);
 
-    public UserDefineEntity update(UserDefineEntity entity, String tanentId);
+    public BasicEntity update(BasicEntity entity);
 
-    public boolean delete(Long id, String objectType);
+    public void delete(Long id, String objectType);
 
-    public UserDefineEntity get(Long id, String tanentId, String objectType);
+    public <T extends BasicEntity> T get(Long id, String objectType);
 
-    public List<UserDefineEntity> list(String objectType, String tanentId);
+    public <T extends BasicEntity> List<T> list(String objectType);
 
-    public List<UserDefineEntity> find(String query);
+    public <T extends BasicEntity> List<T> find(String query, Map<String, Object> params, String objectType);
 }

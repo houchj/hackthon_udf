@@ -1,9 +1,7 @@
 package com.sap.hackthon.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -11,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,11 +19,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sap.hackthon.dto.SessionInfo;
 import com.sap.hackthon.dto.User;
+import com.sap.hackthon.entity.GlobalSettings;
 import com.sap.hackthon.utils.GlobalConstants;
 
 @Controller
 public class UserController {
 
+	@Autowired	
+	private GlobalSettings settings;
+	
     @RequestMapping(method = RequestMethod.POST, value = "login")
     public @ResponseBody boolean login(@RequestBody User user, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -34,7 +38,7 @@ public class UserController {
             return false;
         }
         HttpSession session = request.getSession();
-        session.setAttribute(GlobalConstants.TENANT, validUsers.get(user.getUsername()));
+        settings.setVariable(GlobalConstants.TENANT, validUsers.get(user.getUsername()));
         session.setAttribute(GlobalConstants.USERNAME, user.getUsername());
 
         return true;
@@ -45,7 +49,7 @@ public class UserController {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         String tenantName = (String) session.getAttribute(GlobalConstants.TENANT);
-        String username = (String) session.getAttribute(GlobalConstants.USERNAME);
+        String username = (String) settings.getVariable(GlobalConstants.TENANT);
         SessionInfo si = new SessionInfo();
         si.setTenantName(tenantName);
         si.setUsername(username);

@@ -55,17 +55,13 @@ public class TestMain {
     	descriptor.addMapping(udfMapping);
     	udfMapping.initialize((AbstractSession)dbSession);
     	descriptor.getObjectBuilder().initialize((AbstractSession)dbSession);
-    	DirectQueryKey queryKey = new DirectQueryKey();
-    	queryKey.setFieldName("A_ID");
-    	queryKey.setName("abc");
     	
         TestEntityB b1 = new TestEntityB();
         b1.setObjectType("testB");
-        b1.setUserDefinedField("abc", 500);
+        b1.setUserDefinedField("abc", 500L);
         b1.setName("B1");
         em.persist(b1);
-        em.flush();
-		List<Object[]> res = em.createQuery("select b from TestEntityB b where b.abc = :u").setParameter("u", 500).getResultList();
+		List<Object[]> res = em.createQuery("select b from TestEntityB b where b.abc = :u").setParameter("u", 500L).getResultList();
         res.size();
         
     }
