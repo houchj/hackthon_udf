@@ -2,7 +2,7 @@ package com.sap.hackthon.services;
 
 import java.util.List;
 
-import com.sap.hackthon.entity.DynamicEntity;
+import com.sap.hackthon.entity.UserDefineEntity;
 import com.sap.hackthon.entity.PropertyMeta;
 
 /**
@@ -15,16 +15,15 @@ import com.sap.hackthon.entity.PropertyMeta;
  */
 public interface EntityService {
 
-    public DynamicEntity create(DynamicEntity entity, String tanentId);
+    public UserDefineEntity create(UserDefineEntity entity, String tanentId);
 
-    public DynamicEntity update(DynamicEntity entity, String tanentId);
+    public UserDefineEntity update(UserDefineEntity entity, String tanentId);
 
     public boolean delete(Long id, String objectType);
 
-    public DynamicEntity get(Long id, String tanentId, String objectType);
+    public UserDefineEntity get(Long id, String tanentId, String objectType);
 
-    public List<DynamicEntity> list(String objectType, String tanentId);
+    public List<UserDefineEntity> list(String objectType, String tanentId);
 
-    public List<PropertyMeta> getEntityMeta(String objectType, String tanentId);
-
+    public List<UserDefineEntity> find(String query);
 }

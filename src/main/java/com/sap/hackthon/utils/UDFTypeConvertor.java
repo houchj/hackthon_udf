@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.springframework.util.NumberUtils;
 
-import com.sap.hackthon.entity.DynamicEntity;
+import com.sap.hackthon.entity.UserDefineEntity;
 import com.sap.hackthon.entity.PropertyMeta;
 import com.sap.hackthon.enumeration.UDFTypeEnum;
 
@@ -17,26 +17,18 @@ import com.sap.hackthon.enumeration.UDFTypeEnum;
  * @author I310717
  *
  */
-public class EntityConvertor {
+public class UDFTypeConvertor {
 
-    private EntityConvertor() {
+    private UDFTypeConvertor() {
 
     }
 
-    public synchronized static EntityConvertor getInstance() {
-        return new EntityConvertor();
+    public synchronized static UDFTypeConvertor getInstance() {
+        return new UDFTypeConvertor();
     }
 
-    public DynamicEntity convertEntity(DynamicEntity rawEntity, List<PropertyMeta> entityMeta) {
-        for (PropertyMeta proMeta : entityMeta) {
-            String proName = proMeta.getInternalName();
-            Object transValue = convertProperty(proMeta, rawEntity.getProperty(proName));
-            rawEntity.setProperty(proName, transValue);
-        }
-        return rawEntity;
-    }
 
-    private Object convertProperty(PropertyMeta proMeta, Object value) {
+    public Object convert(PropertyMeta proMeta, Object value) {
         if (proMeta == null || value == null) {
             return null;
         }
