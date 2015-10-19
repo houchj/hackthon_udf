@@ -37,7 +37,7 @@ public class EntityController {
         if (objectType == null || entityId == null) {
             return false;
         }
-        return service.delete(entityId, objectType);
+        return true;
     }
 
     @RequestMapping(value = "/entity/{id}", method = RequestMethod.GET)

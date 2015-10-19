@@ -25,9 +25,6 @@ import com.sap.hackthon.utils.GlobalConstants;
 @Controller
 public class UserController {
 
-	@Autowired	
-	private GlobalSettings settings;
-	
     @RequestMapping(method = RequestMethod.POST, value = "login")
     public @ResponseBody boolean login(@RequestBody User user, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
