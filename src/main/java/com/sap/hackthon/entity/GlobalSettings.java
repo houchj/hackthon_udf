@@ -5,13 +5,20 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Stream;
 
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
-@Scope("global session")
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class GlobalSettings {
 	
 	private Map<String, Object> settings = new HashMap<String, Object>();
 	
+	public GlobalSettings() {
+		super();
+	}
+
 	public void setVariable(String name, Object value){
 		settings.put(name, value);
 	}

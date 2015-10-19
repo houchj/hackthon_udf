@@ -14,19 +14,13 @@ import com.sap.hackthon.enumeration.UDFTypeEnum;
 
 @Entity
 @Table(name = "T_PROPERTY_META")
-public class PropertyMeta {
+public class PropertyMeta extends BasicEntityAdapter{
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="PropertyMetaSeq")
     @SequenceGenerator(name = "PropertyMetaSeq", sequenceName = "T_PROPERTY_META_SEQ", allocationSize = 100)
     @Column
     private Long id;
-
-    @Column
-    private String tenantId;
-
-    @Column
-    private String objectName;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -58,14 +52,6 @@ public class PropertyMeta {
 
     public void setTenantId(String tenantId) {
         this.tenantId = tenantId;
-    }
-
-    public String getObjectName() {
-        return objectName;
-    }
-
-    public void setObjectName(String objectName) {
-        this.objectName = objectName;
     }
 
     public UDFTypeEnum getType() {

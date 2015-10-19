@@ -2,12 +2,8 @@ package com.sap.hackthon.services;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.persistence.metamodel.EntityType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,13 +14,10 @@ import com.sap.hackthon.repository.PropertyMetaRepository;
 
 @Service
 @Transactional
-public class EntityServiceImpl implements EntityService {
+public class EntityServiceImpl extends DataService implements EntityService {
 
     @Autowired
-    PropertyMetaRepository propertyMetaRepository;
-
-    @PersistenceContext
-    EntityManager entityManager;
+    protected PropertyMetaRepository propertyMetaRepository;
 
 	@Override
 	public BasicEntity create(BasicEntity entity) {
@@ -65,13 +58,6 @@ public class EntityServiceImpl implements EntityService {
 		TypedQuery<T> typedQuery =  entityManager.createQuery(query, eCls);
 		params.entrySet().stream().forEach(e -> typedQuery.setParameter(e.getKey(), e.getValue()));
 		return typedQuery.getResultList();
-	}
-	
-	@SuppressWarnings("unchecked")
-	private <T extends BasicEntity> EntityType<T> retrieveEntityType(String objectType){
-		Optional<EntityType<?>> res = entityManager.getMetamodel().getEntities().stream().
-				filter(e -> e.getJavaType().isAssignableFrom(BasicEntity.class) && objectType.equals(e.getName())).findFirst();
-		return (EntityType<T>) res.get();
 	}
 	
 

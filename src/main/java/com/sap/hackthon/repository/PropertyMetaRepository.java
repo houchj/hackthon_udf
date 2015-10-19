@@ -11,10 +11,10 @@ import com.sap.hackthon.enumeration.UDFTypeEnum;
 
 public interface PropertyMetaRepository extends JpaRepository<PropertyMeta, Long> {
 	
-	List<PropertyMeta> findByTenantIdAndObjectName(String tenantId, String objectName);
+	List<PropertyMeta> findByObjectType(String objectType);
 	
-	List<PropertyMeta> findByTenantIdAndObjectNameAndDisplayName(String tenantId, String objectName, String displayName);
+	List<PropertyMeta> findByObjectTypeAndDisplayName(String objectType, String displayName);
 	
-	@Query("select max(pm.paramIndex) from PropertyMeta pm where pm.tenantId = ?1 and pm.objectName = ?2 and pm.type = ?3")
-	int findMaxParamIndexByTenantIdAndObjectNameAndType(String tenantId, String objectName, UDFTypeEnum type);
+	@Query("select max(pm.paramIndex) from PropertyMeta pm where pm.objectType = ?1 and pm.type = ?2")
+	int findMaxParamIndexByObjectTypeAndType(String objectType, UDFTypeEnum type);
 }

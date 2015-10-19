@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sap.hackthon.entity.GlobalSettings;
 import com.sap.hackthon.entity.PropertyMeta;
 import com.sap.hackthon.services.PropertyMetaService;
 import com.sap.hackthon.utils.GlobalConstants;
@@ -25,54 +26,41 @@ public class PropertyMetaController {
 	@Autowired
 	private PropertyMetaService service;
 
+	@Autowired
+	private GlobalSettings settings;
+
 	@RequestMapping(value = "/getByTenantIdAndObjectName", method = RequestMethod.POST)
 	public @ResponseBody List<PropertyMeta> getByTenantIdAndObjectName(
 			@RequestParam String objectName, HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		String tenantId = (String) session.getAttribute(GlobalConstants.TENANT);
-		if (tenantId == null) {
-			return null;
-		}
-		return service.getByTenantIdAndObjectName(tenantId, objectName);
+		return service.getByObjectType(objectName);
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody boolean create(@RequestBody PropertyMeta propertyMeta,
 			HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		String tenantId = (String) session.getAttribute(GlobalConstants.TENANT);
-		if (tenantId == null) {
+		if(service.getByObjectTypeAndDisplayName(propertyMeta.getObjectType(), propertyMeta.getDisplayName())) {
 			return false;
 		}
-		if(service.getByTenantIdAndObjectNameAndDisplayName(tenantId, propertyMeta.getObjectName(), propertyMeta.getDisplayName())) {
-			return false;
-		}
-		if (propertyMeta != null) {
-			propertyMeta.setTenantId(tenantId);
-			int nextParamIndex = service.getMaxParamIndexByTenantIdAndObjectNameAndType(tenantId, propertyMeta.getObjectName(), propertyMeta.getType()) + 1;
-			String internalName = GlobalConstants.UDF + "_" + propertyMeta.getTenantId() + "_" + propertyMeta.getType() + "_" + nextParamIndex;
-			propertyMeta.setParamIndex(nextParamIndex);
-			propertyMeta.setInternalName(internalName);
-			return service.create(propertyMeta);
-		}
-		return false;
+		String tenantId = settings.getVariable(GlobalConstants.TENANT).toString();
+		propertyMeta.setTenantId(tenantId);
+		int nextParamIndex = service.getMaxParamIndexByObjectTypeAndType(propertyMeta.getObjectType(), propertyMeta.getType()) + 1;
+		String internalName = GlobalConstants.UDF + "_" + propertyMeta.getTenantId() + "_" + propertyMeta.getType() + "_" + nextParamIndex;
+		propertyMeta.setParamIndex(nextParamIndex);
+		propertyMeta.setInternalName(internalName);
+		return service.create(propertyMeta);
 	}
 
 	@RequestMapping(method = RequestMethod.PUT)
 	public @ResponseBody boolean update(@RequestBody PropertyMeta propertyMeta,
 			HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		String tenantId = (String) session.getAttribute(GlobalConstants.TENANT);
+		String tenantId = settings.getVariable(GlobalConstants.TENANT).toString();
 		if (tenantId == null) {
 			return false;
 		}
-		if(service.getByTenantIdAndObjectNameAndDisplayName(tenantId, propertyMeta.getObjectName(), propertyMeta.getDisplayName())) {
+		if(service.getByObjectTypeAndDisplayName(propertyMeta.getObjectType(), propertyMeta.getDisplayName())) {
 			return false;
 		}
-		if (propertyMeta != null) {
-			return service.update(propertyMeta);
-		}
-		return false;
+		return service.update(propertyMeta);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -86,8 +74,7 @@ public class PropertyMetaController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public @ResponseBody boolean delete(@PathVariable("id") Long id,
 			HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		String tenantId = (String) session.getAttribute(GlobalConstants.TENANT);
+		String tenantId = settings.getVariable(GlobalConstants.TENANT).toString();
 		if (tenantId == null) {
 			return false;
 		}

@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +24,9 @@ import com.sap.hackthon.utils.GlobalConstants;
 @Controller
 public class UserController {
 
+	@Autowired
+	private GlobalSettings settings;
+	
     @RequestMapping(method = RequestMethod.POST, value = "login")
     public @ResponseBody boolean login(@RequestBody User user, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

@@ -1,4 +1,4 @@
-package com.sap.hackthon.orm;
+package com.sap.hackthon.services;
 
 import org.eclipse.persistence.exceptions.DescriptorException;
 import org.eclipse.persistence.mappings.AttributeAccessor;

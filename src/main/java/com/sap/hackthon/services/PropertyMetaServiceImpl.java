@@ -1,36 +1,48 @@
 package com.sap.hackthon.services;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.persistence.metamodel.EntityType;
+
+import org.eclipse.persistence.descriptors.ClassDescriptor;
+import org.eclipse.persistence.internal.sessions.AbstractSession;
+import org.eclipse.persistence.jpa.JpaEntityManager;
+import org.eclipse.persistence.jpa.JpaHelper;
+import org.eclipse.persistence.mappings.AttributeAccessor;
+import org.eclipse.persistence.mappings.DirectToFieldMapping;
+import org.eclipse.persistence.sessions.DatabaseSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sap.hackthon.entity.BasicEntity;
 import com.sap.hackthon.entity.PropertyMeta;
 import com.sap.hackthon.enumeration.UDFTypeEnum;
 import com.sap.hackthon.repository.PropertyMetaRepository;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
-public class PropertyMetaServiceImpl implements PropertyMetaService {
+public class PropertyMetaServiceImpl extends DataService implements PropertyMetaService {
 
 	@Autowired
-	PropertyMetaRepository propertyMetaRepository;
+	private PropertyMetaRepository propertyMetaRepository;
 
 	@Autowired
-    JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 	
 	@Override
 	public boolean create(PropertyMeta propertyMeta) {
 		propertyMetaRepository.saveAndFlush(propertyMeta);
-		jdbcTemplate.execute(this.addColumn(propertyMeta.getObjectName(), propertyMeta.getInternalName(), propertyMeta.getType()));
+		jdbcTemplate.execute(this.addColumn(propertyMeta.getObjectType(), propertyMeta.getInternalName(), propertyMeta.getType()));
 		try{
-			jdbcTemplate.execute(this.dropView(propertyMeta.getTenantId(), propertyMeta.getObjectName()));
+			jdbcTemplate.execute(this.dropView(propertyMeta.getTenantId(), propertyMeta.getObjectType()));
 		}
 		catch(Exception e) {
 		}
-		jdbcTemplate.execute(this.createView(propertyMeta.getTenantId(), propertyMeta.getObjectName()));
+		jdbcTemplate.execute(this.createView(propertyMeta.getTenantId(), propertyMeta.getObjectType()));
 		return true;
 	}
 	
@@ -48,15 +60,15 @@ public class PropertyMetaServiceImpl implements PropertyMetaService {
 	}
 
 	// create view T_ORDER_TENANT1005_VIEW as select order_id from T_ORDER
-	private String createView(String tenantId, String objectName) {
-		List<PropertyMeta> propertiesMeta = propertyMetaRepository.findByTenantIdAndObjectName(tenantId, objectName);
+	private String createView(String tenantId, String objectType) {
+		List<PropertyMeta> propertiesMeta = propertyMetaRepository.findByObjectType(objectType);
 		StringBuffer createView = new StringBuffer();
-		createView.append("create view ").append(objectName).append("_").append(tenantId).append("_").append("VIEW as select ");
+		createView.append("create view ").append(objectType).append("_").append(tenantId).append("_").append("VIEW as select ");
 		for(PropertyMeta propertyMeta : propertiesMeta) {
 			createView.append(" ").append(propertyMeta.getInternalName()).append(" as ").append(propertyMeta.getDisplayName()).append(", ");
 		}
 		createView.deleteCharAt(createView.lastIndexOf(","));
-		createView.append(" from ").append(objectName);
+		createView.append(" from ").append(objectType);
 		return createView.toString();
 	}
 	
@@ -79,11 +91,11 @@ public class PropertyMetaServiceImpl implements PropertyMetaService {
 		jdbcTemplate.execute(this.dropColumn(propertyMeta));
 		propertyMetaRepository.delete(propertyMeta);
 		try{
-			jdbcTemplate.execute(this.dropView(propertyMeta.getTenantId(), propertyMeta.getObjectName()));
+			jdbcTemplate.execute(this.dropView(propertyMeta.getTenantId(), propertyMeta.getObjectType()));
 		}
 		catch(Exception e) {
 		}
-		jdbcTemplate.execute(this.createView(propertyMeta.getTenantId(), propertyMeta.getObjectName()));
+		jdbcTemplate.execute(this.createView(propertyMeta.getTenantId(), propertyMeta.getObjectType()));
 		return true;
 	}
 	
@@ -91,7 +103,7 @@ public class PropertyMetaServiceImpl implements PropertyMetaService {
 		StringBuffer alterTableDropColumn = new StringBuffer();
 		alterTableDropColumn
 		.append("alter table ")
-		.append(propertyMeta.getObjectName())
+		.append(propertyMeta.getObjectType())
 		.append(" drop(")
 		.append(propertyMeta.getInternalName())
 		.append(" ")
@@ -103,18 +115,17 @@ public class PropertyMetaServiceImpl implements PropertyMetaService {
 	public boolean update(PropertyMeta propertyMeta) {
 		propertyMetaRepository.saveAndFlush(propertyMeta);
 		try{
-			jdbcTemplate.execute(this.dropView(propertyMeta.getTenantId(), propertyMeta.getObjectName()));
+			jdbcTemplate.execute(this.dropView(propertyMeta.getTenantId(), propertyMeta.getObjectType()));
 		}
 		catch(Exception e) {
 		}
-		jdbcTemplate.execute(this.createView(propertyMeta.getTenantId(), propertyMeta.getObjectName()));
+		jdbcTemplate.execute(this.createView(propertyMeta.getTenantId(), propertyMeta.getObjectType()));
 		return true;
 	}
 
 	@Override
-	public List<PropertyMeta> getByTenantIdAndObjectName(String tenantId,
-			String objectName) {
-		return propertyMetaRepository.findByTenantIdAndObjectName(tenantId, objectName);
+	public List<PropertyMeta> getByObjectType(String objectType) {
+		return propertyMetaRepository.findByObjectType(objectType);
 	}
 
 	@Override
@@ -123,19 +134,39 @@ public class PropertyMetaServiceImpl implements PropertyMetaService {
 	}
 
 	@Override
-	public int getMaxParamIndexByTenantIdAndObjectNameAndType(String tenantId,
-			String objectName, UDFTypeEnum type) {
-		return propertyMetaRepository.findMaxParamIndexByTenantIdAndObjectNameAndType(tenantId, objectName, type);
+	public int getMaxParamIndexByObjectTypeAndType(String objectType, UDFTypeEnum type) {
+		return propertyMetaRepository.findMaxParamIndexByObjectTypeAndType(objectType, type);
 	}
 
 	@Override
-	public boolean getByTenantIdAndObjectNameAndDisplayName(
-			String tenantId, String objectName, String displayName) {
-		List<PropertyMeta> propertiesMeta = propertyMetaRepository.findByTenantIdAndObjectNameAndDisplayName(tenantId, objectName, displayName);
-		
+	public boolean getByObjectTypeAndDisplayName(String objectType, String displayName) {
+		List<PropertyMeta> propertiesMeta = propertyMetaRepository.findByObjectTypeAndDisplayName(objectType, displayName);
 		if(propertiesMeta != null && propertiesMeta.size() > 0) {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void scanAndInstallProperties() {
+		
+		JpaEntityManager jpaEntityManager = JpaHelper.getEntityManager(entityManager);
+		DatabaseSession dbSession = jpaEntityManager.getDatabaseSession();
+		List<PropertyMeta> propertyMetas = propertyMetaRepository.findAll();
+		Map<Class<? extends BasicEntity>, ClassDescriptor> descriptors = new HashMap<Class<? extends BasicEntity>, ClassDescriptor>();
+		propertyMetas.forEach(meta -> {
+			EntityType<? extends BasicEntity> eType = retrieveEntityType(meta.getObjectType());
+			ClassDescriptor descriptor = dbSession.getDescriptor(eType.getJavaType());
+			AttributeAccessor accessor = new UDFAttributeAccessor();
+			accessor.setAttributeName(meta.getDisplayName());
+			DirectToFieldMapping udfMapping = new DirectToFieldMapping();
+			udfMapping.setFieldName(meta.getInternalName());
+			udfMapping.setAttributeAccessor(accessor);
+			descriptor.addMapping(udfMapping);
+			udfMapping.initialize((AbstractSession)dbSession);
+			descriptors.put(eType.getJavaType(), descriptor);
+			;
+		});
+		descriptors.values().stream().forEach(descriptor -> descriptor.getObjectBuilder().initialize((AbstractSession)dbSession));
 	}
 }
