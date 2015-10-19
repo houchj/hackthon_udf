@@ -23,7 +23,7 @@ public class Application{
 			System.setProperty("app.env", "local");
 		}
 		
-		ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
+		SpringApplication.run(Application.class, args);
     }
 
 }

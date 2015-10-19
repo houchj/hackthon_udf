@@ -46,14 +46,6 @@ public class PropertyMeta extends BasicEntityAdapter{
         this.id = id;
     }
 
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
-    }
-
     public UDFTypeEnum getType() {
         return type;
     }

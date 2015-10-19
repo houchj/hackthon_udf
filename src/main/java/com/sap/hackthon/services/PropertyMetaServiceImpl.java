@@ -19,9 +19,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sap.hackthon.entity.BasicEntity;
+import com.sap.hackthon.entity.GlobalSettings;
 import com.sap.hackthon.entity.PropertyMeta;
 import com.sap.hackthon.enumeration.UDFTypeEnum;
 import com.sap.hackthon.repository.PropertyMetaRepository;
+import com.sap.hackthon.utils.GlobalConstants;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -31,6 +33,9 @@ public class PropertyMetaServiceImpl extends DataService implements PropertyMeta
 	private PropertyMetaRepository propertyMetaRepository;
 
 	@Autowired
+	private GlobalSettings settings;
+	
+	@Autowired
     private JdbcTemplate jdbcTemplate;
 	
 	@Override
@@ -38,17 +43,18 @@ public class PropertyMetaServiceImpl extends DataService implements PropertyMeta
 		propertyMetaRepository.saveAndFlush(propertyMeta);
 		jdbcTemplate.execute(this.addColumn(propertyMeta.getObjectType(), propertyMeta.getInternalName(), propertyMeta.getType()));
 		try{
-			jdbcTemplate.execute(this.dropView(propertyMeta.getTenantId(), propertyMeta.getObjectType()));
+			jdbcTemplate.execute(this.dropView(propertyMeta.getObjectType()));
 		}
 		catch(Exception e) {
 		}
-		jdbcTemplate.execute(this.createView(propertyMeta.getTenantId(), propertyMeta.getObjectType()));
+		jdbcTemplate.execute(this.createView(propertyMeta.getObjectType()));
 		return true;
 	}
 	
 	// drop view T_ORDER_TENANT1005_VIEW
-	private String dropView(String tenantId, String objectName) {
+	private String dropView(String objectName) {
 		StringBuffer dropView = new StringBuffer();
+		String tenantId = settings.getVariable(GlobalConstants.TENANT).toString();
 		dropView
 		.append("drop view ")
 		.append(objectName)
@@ -60,8 +66,9 @@ public class PropertyMetaServiceImpl extends DataService implements PropertyMeta
 	}
 
 	// create view T_ORDER_TENANT1005_VIEW as select order_id from T_ORDER
-	private String createView(String tenantId, String objectType) {
+	private String createView(String objectType) {
 		List<PropertyMeta> propertiesMeta = propertyMetaRepository.findByObjectType(objectType);
+		String tenantId = settings.getVariable(GlobalConstants.TENANT).toString();
 		StringBuffer createView = new StringBuffer();
 		createView.append("create view ").append(objectType).append("_").append(tenantId).append("_").append("VIEW as select ");
 		for(PropertyMeta propertyMeta : propertiesMeta) {
@@ -91,11 +98,11 @@ public class PropertyMetaServiceImpl extends DataService implements PropertyMeta
 		jdbcTemplate.execute(this.dropColumn(propertyMeta));
 		propertyMetaRepository.delete(propertyMeta);
 		try{
-			jdbcTemplate.execute(this.dropView(propertyMeta.getTenantId(), propertyMeta.getObjectType()));
+			jdbcTemplate.execute(this.dropView(propertyMeta.getObjectType()));
 		}
 		catch(Exception e) {
 		}
-		jdbcTemplate.execute(this.createView(propertyMeta.getTenantId(), propertyMeta.getObjectType()));
+		jdbcTemplate.execute(this.createView( propertyMeta.getObjectType()));
 		return true;
 	}
 	
@@ -115,11 +122,11 @@ public class PropertyMetaServiceImpl extends DataService implements PropertyMeta
 	public boolean update(PropertyMeta propertyMeta) {
 		propertyMetaRepository.saveAndFlush(propertyMeta);
 		try{
-			jdbcTemplate.execute(this.dropView(propertyMeta.getTenantId(), propertyMeta.getObjectType()));
+			jdbcTemplate.execute(this.dropView(propertyMeta.getObjectType()));
 		}
 		catch(Exception e) {
 		}
-		jdbcTemplate.execute(this.createView(propertyMeta.getTenantId(), propertyMeta.getObjectType()));
+		jdbcTemplate.execute(this.createView(propertyMeta.getObjectType()));
 		return true;
 	}
 
