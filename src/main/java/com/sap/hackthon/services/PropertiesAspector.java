@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.sap.hackthon.entity.GlobalSettings;
+import com.sap.hackthon.services.meta.PropertyMetaService;
 import com.sap.hackthon.utils.GlobalConstants;
 
 @Aspect
@@ -34,7 +35,7 @@ public class PropertiesAspector {
 		entityManager.setProperty("multi-tenant.id", tenantId);
 	}
 	
-	@Before("execution(public * com.sap.hackthon.services.EntityService.*(..))")
+	@Before("execution(public * com.sap.hackthon.services.biz..*(..))")
 	public void injectUDFMapping(){
 		metaService.scanAndInstallProperties();
 	}
