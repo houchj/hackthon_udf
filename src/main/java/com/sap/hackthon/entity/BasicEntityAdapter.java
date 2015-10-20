@@ -11,7 +11,7 @@ import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 @TenantDiscriminatorColumn(name = "TENANT_ID", contextProperty = "multi-tenant.id")
 public abstract class BasicEntityAdapter implements BasicEntity{
 
-	@Column(name = "OBJECT_TYPE", insertable = false, updatable = false)
+	@Column(name = "OBJECT_TYPE")
 	protected String objectType; 
 	
 	@Column(name = "TENANT_ID", insertable = false, updatable = false)
