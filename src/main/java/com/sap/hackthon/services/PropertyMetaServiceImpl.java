@@ -77,7 +77,7 @@ public class PropertyMetaServiceImpl extends DataService implements PropertyMeta
 			createView.append(" ").append(propertyMeta.getInternalName()).append(" as ").append(propertyMeta.getDisplayName()).append(", ");
 		}
 		createView.deleteCharAt(createView.lastIndexOf(","));
-		createView.append(" from ").append(objectType);
+		createView.append(" from ").append(table);
 		return createView.toString();
 	}
 	
