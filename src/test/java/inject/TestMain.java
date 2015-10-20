@@ -3,6 +3,8 @@
  */
 package inject;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
@@ -61,17 +63,31 @@ public class TestMain {
 		udfMapping.setAttributeAccessor(accessor);
 		descriptor.addMapping(udfMapping);
 		udfMapping.initialize((AbstractSession)dbSession);
+		descriptor.getFields().addAll(udfMapping.getFields());
+		descriptor.getAllFields().addAll(udfMapping.getFields());
+		
+		AttributeAccessor accessor2 = new UDFAttributeAccessor();
+		accessor2.setAttributeName("GGG");
+		DirectToFieldMapping udfMapping2 = new DirectToFieldMapping();
+		udfMapping2.setFieldName("GGG_STR");
+		udfMapping2.setAttributeAccessor(accessor2);
+		descriptor.addMapping(udfMapping2);
+		udfMapping2.initialize((AbstractSession)dbSession);
+		descriptor.getFields().addAll(udfMapping2.getFields());
+		descriptor.getAllFields().addAll(udfMapping2.getFields());
 		descriptor.getObjectBuilder().initialize((AbstractSession)dbSession);
-    	descriptor.initialize(descriptor.getQueryManager(), (AbstractSession)dbSession);
-		descriptor.initialize((AbstractSession)dbSession);
-    	TestEntityB b = new TestEntityB();
-    	b.setName("Test B");
-    	b.setObjectType("TestEntityB");
-    	b.setUserDefinedField("ABC", 500L);
-    	entityManager.setProperty("multi-tenant.id", "tenant1");
-    	entityManager.persist(b);
-//    	entityManager.createQuery("SELECT b FROM TestEntityB b").getResultList();
-    	entityManager.flush();
+		descriptor.initialize(descriptor.getQueryManager(), (AbstractSession)dbSession);
+//    	((AbstractSession)dbSession).updateTablePerTenantDescriptors("multi-tenant.id", "tenant1");
+		entityManager.setProperty("multi-tenant.id", "tenant1");
+//    	TestEntityB b = new TestEntityB();
+//    	b.setName("TestB");
+//    	b.setObjectType("TestEntityB");
+//    	b.setUserDefinedField("ABC", 1002);
+//    	b.setUserDefinedField("GGG", "DGADE");
+//    	entityManager.persist(b);
+//    	entityManager.flush();
+    	List<TestEntityB> res = entityManager.createQuery("SELECT b FROM TestEntityB b where b.ABC = :p1 and b.GGG = :p2").setParameter("p1", 1003).setParameter("p2", "DGADE").getResultList();
+    	res.size();
     }
     
 }

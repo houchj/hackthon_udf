@@ -175,6 +175,8 @@ public class PropertyMetaServiceImpl extends DataService implements PropertyMeta
 			udfMapping.setAttributeAccessor(accessor);
 			descriptor.addMapping(udfMapping);
 			udfMapping.initialize((AbstractSession)dbSession);
+			descriptor.getFields().addAll(udfMapping.getFields());
+			descriptor.getAllFields().addAll(udfMapping.getFields());
 			descriptors.put(eType.getJavaType(), descriptor);
 		});
 		descriptors.values().stream().forEach(descriptor -> {
