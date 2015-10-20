@@ -18,7 +18,7 @@ public class PropertyMeta extends BasicEntityAdapter{
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="PropertyMetaSeq")
-    @SequenceGenerator(name = "PropertyMetaSeq", sequenceName = "T_PROPERTY_META_SEQ", allocationSize = 100)
+    @SequenceGenerator(name = "PropertyMetaSeq", sequenceName = "T_PROPERTY_META_SEQ", allocationSize = 1)
     @Column
     private Long id;
 
@@ -26,16 +26,16 @@ public class PropertyMeta extends BasicEntityAdapter{
     @Enumerated(EnumType.STRING)
     private UDFTypeEnum type;
 
-    @Column
+    @Column(name = "INTERNAL_NAME")
     private String internalName;
 
-    @Column
+    @Column(name = "DISPLAY_NAME")
     private String displayName;
 
-    @Column
+    @Column(name = "PARAM_INDEX")
     private Integer paramIndex;
 
-    @Column
+    @Column(name = "SYSTEM_FIELD")
     private boolean systemField;
 
     public Long getId() {

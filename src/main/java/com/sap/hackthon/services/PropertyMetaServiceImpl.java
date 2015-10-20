@@ -52,12 +52,13 @@ public class PropertyMetaServiceImpl extends DataService implements PropertyMeta
 	}
 	
 	// drop view T_ORDER_TENANT1005_VIEW
-	private String dropView(String objectName) {
+	private String dropView(String objectType) {
 		StringBuffer dropView = new StringBuffer();
 		String tenantId = settings.getVariable(GlobalConstants.TENANT).toString();
+		EntityType<? extends BasicEntity> entityType = retrieveEntityType(objectType);
 		dropView
 		.append("drop view ")
-		.append(objectName)
+		.append(objectType)
 		.append("_")
 		.append(tenantId)
 		.append("_")
