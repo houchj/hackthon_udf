@@ -17,7 +17,7 @@ public abstract class DataService {
 	@SuppressWarnings("unchecked")
 	protected <T extends BasicEntity> EntityType<T> retrieveEntityType(String objectType){
 		Optional<EntityType<?>> res = entityManager.getMetamodel().getEntities().stream().
-				filter(e -> e.getJavaType().isAssignableFrom(BasicEntity.class) && objectType.equals(e.getName())).findFirst();
+				filter(e -> BasicEntity.class.isAssignableFrom(e.getJavaType()) && objectType.equals(e.getName())).findFirst();
 		return (EntityType<T>) res.get();
 	}
 	

@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,13 +13,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sap.hackthon.dto.EntityListParam;
 import com.sap.hackthon.entity.UserDefineEntity;
-import com.sap.hackthon.services.EntityService;
 
 @Controller
 public class EntityController {
 
-    @Autowired
-    private EntityService service;
 
     @RequestMapping(value = "/entity", method = RequestMethod.POST)
     public @ResponseBody UserDefineEntity create(@RequestBody UserDefineEntity entity, HttpServletRequest request) {

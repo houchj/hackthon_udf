@@ -5,11 +5,9 @@ package com.sap.hackthon.utils;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.List;
 
 import org.springframework.util.NumberUtils;
 
-import com.sap.hackthon.entity.UserDefineEntity;
 import com.sap.hackthon.entity.PropertyMeta;
 import com.sap.hackthon.enumeration.UDFTypeEnum;
 
