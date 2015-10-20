@@ -13,7 +13,7 @@ import com.sap.hackthon.utils.GlobalConstants;
 
 @Aspect
 @Component	
-public class MultiTenantAspector {
+public class PropertiesAspector {
 
 	@PersistenceContext
 	private EntityManager entityManager;

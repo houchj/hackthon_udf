@@ -5,19 +5,15 @@ import java.util.Map;
 
 import javax.persistence.TypedQuery;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sap.hackthon.entity.BasicEntity;
-import com.sap.hackthon.repository.PropertyMetaRepository;
 
 @Service
 @Transactional
 public class EntityServiceImpl extends DataService implements EntityService {
 
-    @Autowired
-    protected PropertyMetaRepository propertyMetaRepository;
 
 	@Override
 	public <T extends BasicEntity> T create(T entity) {
