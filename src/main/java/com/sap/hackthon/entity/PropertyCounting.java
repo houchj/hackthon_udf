@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "T_PROPERTY_COUNTING")
-public class PropertyCounting {
+public class PropertyCounting extends BasicEntityAdapter{
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="PropertyCountingSeq")
