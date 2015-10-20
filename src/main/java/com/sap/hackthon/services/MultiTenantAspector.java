@@ -6,11 +6,13 @@ import javax.persistence.PersistenceContext;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.sap.hackthon.entity.GlobalSettings;
 import com.sap.hackthon.utils.GlobalConstants;
 
 @Aspect
+@Component	
 public class MultiTenantAspector {
 
 	@PersistenceContext
@@ -36,5 +38,5 @@ public class MultiTenantAspector {
 	public void injectUDFMapping(){
 		metaService.scanAndInstallProperties();
 	}
-
+	
 }
