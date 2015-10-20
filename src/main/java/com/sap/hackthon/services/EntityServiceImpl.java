@@ -20,20 +20,20 @@ public class EntityServiceImpl extends DataService implements EntityService {
     protected PropertyMetaRepository propertyMetaRepository;
 
 	@Override
-	public BasicEntity create(BasicEntity entity) {
+	public <T extends BasicEntity> T create(T entity) {
 		entityManager.persist(entity);
 		return entity;
 	}
 
 	@Override
-	public BasicEntity update(BasicEntity entity) {
+	public <T extends BasicEntity> T update(T entity) {
 		entityManager.merge(entity);
 		return entity;
 	}
 
 	@Override
-	public void delete(Long id, String objectType) {
-		BasicEntity entity = get(id, objectType);
+	public <T extends BasicEntity> void delete(Long id, String objectType) {
+		T entity = get(id, objectType);
 		if(entity == null){
 			return;
 		}

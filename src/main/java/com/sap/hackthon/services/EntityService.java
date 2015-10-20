@@ -15,11 +15,11 @@ import com.sap.hackthon.entity.BasicEntity;
  */
 public interface EntityService {
 
-    public BasicEntity create(BasicEntity entity);
+	public <T extends BasicEntity> T create(T entity);
+	
+	public <T extends BasicEntity> T update(T entity);
 
-    public BasicEntity update(BasicEntity entity);
-
-    public void delete(Long id, String objectType);
+	public <T extends BasicEntity> void delete(Long id, String objectType);
 
     public <T extends BasicEntity> T get(Long id, String objectType);
 
