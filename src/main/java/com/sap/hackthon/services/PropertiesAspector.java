@@ -35,7 +35,7 @@ public class PropertiesAspector {
 		entityManager.setProperty("multi-tenant.id", tenantId);
 	}
 	
-	@Before("execution(public * com.sap.hackthon.services.biz..*(..))")
+	@Before("execution(public * com.sap.hackthon.services.biz..*Service.*(..))")
 	public void injectUDFMapping(){
 		metaService.scanAndInstallProperties();
 	}
