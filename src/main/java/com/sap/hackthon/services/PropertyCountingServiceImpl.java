@@ -14,17 +14,17 @@ public class PropertyCountingServiceImpl extends DataService implements Property
 	PropertyCountingRepository propertyCountingRepository;
 	
 	@Override
-	public void addReferenceCounting(String objectName, String fieldName,
+	public void addReferenceCounting(String objectType, String fieldName,
 			Long counting) {
 		if(counting == 0) {
 			PropertyCounting propertyCounting = new PropertyCounting();
-			propertyCounting.setObjectName(objectName);
+			propertyCounting.setObjectType(objectType);
 			propertyCounting.setFieldName(fieldName);
 			propertyCounting.setCounting(counting);
 			
 			propertyCountingRepository.saveAndFlush(propertyCounting);
 		} else {
-			List<PropertyCounting> propertyCountings = propertyCountingRepository.findByObjectNameAndFieldName(objectName, fieldName);
+			List<PropertyCounting> propertyCountings = propertyCountingRepository.findByObjectTypeAndFieldName(objectType, fieldName);
 			if(!CollectionUtils.isEmpty(propertyCountings)) {
 				PropertyCounting propertyCounting = propertyCountings.get(0);
 				propertyCounting.setCounting(counting + 1);
@@ -34,9 +34,9 @@ public class PropertyCountingServiceImpl extends DataService implements Property
 	}
 
 	@Override
-	public void minusReferenceCounting(String objectName, String fieldName,
+	public void minusReferenceCounting(String objectType, String fieldName,
 			Long counting) {
-		List<PropertyCounting> propertyCountings = propertyCountingRepository.findByObjectNameAndFieldName(objectName, fieldName);
+		List<PropertyCounting> propertyCountings = propertyCountingRepository.findByObjectTypeAndFieldName(objectType, fieldName);
 		if(!CollectionUtils.isEmpty(propertyCountings)) {
 			PropertyCounting propertyCounting = propertyCountings.get(0);
 			propertyCounting.setCounting(counting - 1);

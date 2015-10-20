@@ -19,9 +19,6 @@ public class PropertyCounting extends BasicEntityAdapter{
     private Long id;
 
     @Column
-    private String objectName;
-
-    @Column
     private String fieldName;
     
     @Column
@@ -33,14 +30,6 @@ public class PropertyCounting extends BasicEntityAdapter{
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getObjectName() {
-		return objectName;
-	}
-
-	public void setObjectName(String objectName) {
-		this.objectName = objectName;
 	}
 
 	public String getFieldName() {

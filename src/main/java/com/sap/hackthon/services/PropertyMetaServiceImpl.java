@@ -55,10 +55,10 @@ public class PropertyMetaServiceImpl extends DataService implements PropertyMeta
 	private String dropView(String objectType) {
 		StringBuffer dropView = new StringBuffer();
 		String tenantId = settings.getVariable(GlobalConstants.TENANT).toString();
-		EntityType<? extends BasicEntity> entityType = retrieveEntityType(objectType);
+		String table = retrieveTableName(objectType);
 		dropView
 		.append("drop view ")
-		.append(objectType)
+		.append(table)
 		.append("_")
 		.append(tenantId)
 		.append("_")
@@ -70,8 +70,9 @@ public class PropertyMetaServiceImpl extends DataService implements PropertyMeta
 	private String createView(String objectType) {
 		List<PropertyMeta> propertiesMeta = propertyMetaRepository.findByObjectType(objectType);
 		String tenantId = settings.getVariable(GlobalConstants.TENANT).toString();
+		String table = retrieveTableName(objectType);
 		StringBuffer createView = new StringBuffer();
-		createView.append("create view ").append(objectType).append("_").append(tenantId).append("_").append("VIEW as select ");
+		createView.append("create view ").append(table).append("_").append(tenantId).append("_").append("VIEW as select ");
 		for(PropertyMeta propertyMeta : propertiesMeta) {
 			createView.append(" ").append(propertyMeta.getInternalName()).append(" as ").append(propertyMeta.getDisplayName()).append(", ");
 		}
@@ -80,11 +81,12 @@ public class PropertyMetaServiceImpl extends DataService implements PropertyMeta
 		return createView.toString();
 	}
 	
-	private String addColumn(String objectName, String internalName, UDFTypeEnum type) {
+	private String addColumn(String objectType, String internalName, UDFTypeEnum type) {
 		StringBuffer alterTableAddColumn = new StringBuffer();
+		String table = retrieveTableName(objectType);
 		alterTableAddColumn
 		.append("alter table ")
-		.append(objectName)
+		.append(table)
 		.append(" add(")
 		.append(internalName)
 		.append(" ")
@@ -108,10 +110,11 @@ public class PropertyMetaServiceImpl extends DataService implements PropertyMeta
 	}
 	
 	private String dropColumn(PropertyMeta propertyMeta) {
+		String table = retrieveTableName(propertyMeta.getObjectType());
 		StringBuffer alterTableDropColumn = new StringBuffer();
 		alterTableDropColumn
 		.append("alter table ")
-		.append(propertyMeta.getObjectType())
+		.append(table)
 		.append(" drop(")
 		.append(propertyMeta.getInternalName())
 		.append(" ")
