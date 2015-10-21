@@ -16,7 +16,7 @@ import com.sap.hackthon.utils.GlobalConstants;
 @Component	
 public class PropertiesAspector {
 
-	@PersistenceContext
+	@Autowired
 	private EntityManager entityManager;
 	
 	@Autowired
@@ -37,7 +37,7 @@ public class PropertiesAspector {
 	
 	@Before("execution(public * com.sap.hackthon.services.biz..*Service.*(..))")
 	public void injectUDFMapping(){
-		injector.scanAndInstallProperties();
+		injector.injectUDFMappings();
 	}
 	
 }

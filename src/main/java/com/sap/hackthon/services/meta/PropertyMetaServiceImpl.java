@@ -26,6 +26,7 @@ import com.sap.hackthon.entity.PropertyMeta;
 import com.sap.hackthon.enumeration.UDFTypeEnum;
 import com.sap.hackthon.framework.inject.OrmInjector;
 import com.sap.hackthon.framework.inject.UDFAttributeAccessor;
+import com.sap.hackthon.framework.mata.MetaInfoRetriever;
 import com.sap.hackthon.repository.PropertyMetaRepository;
 import com.sap.hackthon.utils.GlobalConstants;
 
@@ -43,7 +44,7 @@ public class PropertyMetaServiceImpl implements PropertyMetaService {
     private JdbcTemplate jdbcTemplate;
 	
 	@Autowired
-	private OrmInjector injector;
+	private MetaInfoRetriever metaInfo;
 	
 	
 	
@@ -64,7 +65,7 @@ public class PropertyMetaServiceImpl implements PropertyMetaService {
 	private String dropView(String objectType) {
 		StringBuffer dropView = new StringBuffer();
 		String tenantId = settings.getVariable(GlobalConstants.TENANT).toString();
-		String table = injector.retrieveTableName(objectType);
+		String table = metaInfo.retrieveTableName(objectType);
 		dropView
 		.append("drop view ")
 		.append(table)
@@ -79,7 +80,7 @@ public class PropertyMetaServiceImpl implements PropertyMetaService {
 	private String createView(String objectType) {
 		List<PropertyMeta> propertiesMeta = propertyMetaRepository.findByObjectType(objectType);
 		String tenantId = settings.getVariable(GlobalConstants.TENANT).toString();
-		String table = injector.retrieveTableName(objectType);
+		String table = metaInfo.retrieveTableName(objectType);
 		StringBuffer createView = new StringBuffer();
 		createView.append("create view ").append(table).append("_").append(tenantId).append("_").append("VIEW as select ");
 		for(PropertyMeta propertyMeta : propertiesMeta) {
@@ -92,7 +93,7 @@ public class PropertyMetaServiceImpl implements PropertyMetaService {
 	
 	private String addColumn(String objectType, String internalName, UDFTypeEnum type) {
 		StringBuffer alterTableAddColumn = new StringBuffer();
-		String table = injector.retrieveTableName(objectType);
+		String table = metaInfo.retrieveTableName(objectType);
 		alterTableAddColumn
 		.append("alter table ")
 		.append(table)
@@ -119,7 +120,7 @@ public class PropertyMetaServiceImpl implements PropertyMetaService {
 	}
 	
 	private String dropColumn(PropertyMeta propertyMeta) {
-		String table = injector.retrieveTableName(propertyMeta.getObjectType());
+		String table = metaInfo.retrieveTableName(propertyMeta.getObjectType());
 		StringBuffer alterTableDropColumn = new StringBuffer();
 		alterTableDropColumn
 		.append("alter table ")

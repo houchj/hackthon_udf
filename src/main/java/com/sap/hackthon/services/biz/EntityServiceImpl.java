@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sap.hackthon.entity.BasicEntity;
 import com.sap.hackthon.framework.inject.OrmInjector;
+import com.sap.hackthon.framework.mata.MetaInfoRetriever;
 
 @Service
 @Transactional
@@ -22,7 +23,7 @@ public class EntityServiceImpl implements EntityService {
 	private EntityManager entityManager;
 	
 	@Autowired
-	protected OrmInjector injector;
+	private MetaInfoRetriever metaInfo;
 	
 	@Override
 	public <T extends BasicEntity> T create(T entity) {
@@ -47,19 +48,19 @@ public class EntityServiceImpl implements EntityService {
 
 	@Override
 	public <T extends BasicEntity> T get(Long id, String objectType) {
-		Class<T> eCls = injector.<T>retrieveEntityType(objectType).getJavaType();
+		Class<T> eCls = metaInfo.<T>retrieveEntityType(objectType).getJavaType();
 		return entityManager.find(eCls, id);
 	}
 
 	@Override
 	public <T extends BasicEntity> List<T> list(String objectType) {
-		Class<T> eCls = injector.<T>retrieveEntityType(objectType).getJavaType();
+		Class<T> eCls = metaInfo.<T>retrieveEntityType(objectType).getJavaType();
 		return entityManager.createQuery("SELECT o FROM " + eCls.getName() + " o", eCls).getResultList();
 	}
 
 	@Override
 	public <T extends BasicEntity> List<T> find(String query, Map<String, Object> params, String objectType) {
-		Class<T> eCls = injector.<T>retrieveEntityType(objectType).getJavaType();
+		Class<T> eCls = metaInfo.<T>retrieveEntityType(objectType).getJavaType();
 		TypedQuery<T> typedQuery =  entityManager.createQuery(query, eCls);
 		params.entrySet().stream().forEach(e -> typedQuery.setParameter(e.getKey(), e.getValue()));
 		return typedQuery.getResultList();
