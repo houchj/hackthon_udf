@@ -19,8 +19,6 @@ public abstract class UserDefineEntity extends BasicEntityAdapter{
 	@Transient
 	private Map<String, Object> userDefineFields = new HashMap<String, Object>();
 
-	
-
 	public Map<String, Object> getUserDefineFields() {
 		return userDefineFields;
 	}
@@ -36,4 +34,23 @@ public abstract class UserDefineEntity extends BasicEntityAdapter{
 	public void setUserDefinedField(String name, Object value){
 		userDefineFields.put(name, value);
 	}
+
+	@Override
+	public void setProperty(String property, Object value) {
+		try {
+			super.setProperty(property, value);
+		} catch (NoSuchMethodException e) {
+			setUserDefinedField(property, value);
+		}
+	}
+
+	@Override
+	public Object getProperty(String property){
+		try {
+			return super.getProperty(property);
+		} catch (NoSuchMethodException e) {
+			return getUserDefinedField(property);
+		}
+	}
+	
 }

@@ -9,4 +9,8 @@ public interface BasicEntity {
 	public String getObjectType();
 
 	public void setObjectType(String objectType);
+	
+	public void setProperty(String property, Object value) throws NoSuchMethodException;
+	
+	public Object getProperty(String property) throws NoSuchMethodException;
 }

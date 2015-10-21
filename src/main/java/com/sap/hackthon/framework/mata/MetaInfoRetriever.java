@@ -1,9 +1,12 @@
 package com.sap.hackthon.framework.mata;
 
+import java.lang.reflect.Member;
+import java.util.Iterator;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Table;
+import javax.persistence.metamodel.Attribute;
 import javax.persistence.metamodel.EntityType;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +28,14 @@ public class MetaInfoRetriever {
 		return (EntityType<T>) res.get();
 	}
 	
-	public String retrieveTableName(String objectType){
-		EntityType<? extends BasicEntity> entityType = retrieveEntityType(objectType);
-		Class<? extends BasicEntity> eCls = entityType.getJavaType();
+	public <T extends BasicEntity> String retrieveTableName(String objectType){
+		EntityType<T> entityType = retrieveEntityType(objectType);
+		Class<T> eCls = entityType.getJavaType();
 		Table table = eCls.getAnnotation(Table.class);
 		if(table == null || table.name().isEmpty()){
 			return eCls.getSimpleName();
 		}
 		return table.name();
 	}
+	
 }
