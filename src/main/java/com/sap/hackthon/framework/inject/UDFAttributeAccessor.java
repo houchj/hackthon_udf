@@ -1,4 +1,4 @@
-package com.sap.hackthon.services.biz;
+package com.sap.hackthon.framework.inject;
 
 import org.eclipse.persistence.exceptions.DescriptorException;
 import org.eclipse.persistence.mappings.AttributeAccessor;

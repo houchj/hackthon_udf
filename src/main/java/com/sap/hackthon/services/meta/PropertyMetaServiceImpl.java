@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.metamodel.EntityType;
 
 import org.eclipse.persistence.descriptors.ClassDescriptor;
@@ -22,23 +24,28 @@ import com.sap.hackthon.entity.BasicEntity;
 import com.sap.hackthon.entity.GlobalSettings;
 import com.sap.hackthon.entity.PropertyMeta;
 import com.sap.hackthon.enumeration.UDFTypeEnum;
+import com.sap.hackthon.framework.inject.OrmInjector;
+import com.sap.hackthon.framework.inject.UDFAttributeAccessor;
 import com.sap.hackthon.repository.PropertyMetaRepository;
-import com.sap.hackthon.services.DataService;
-import com.sap.hackthon.services.biz.UDFAttributeAccessor;
 import com.sap.hackthon.utils.GlobalConstants;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
-public class PropertyMetaServiceImpl extends DataService implements PropertyMetaService {
+public class PropertyMetaServiceImpl implements PropertyMetaService {
 
 	@Autowired
 	private PropertyMetaRepository propertyMetaRepository;
-
+	
 	@Autowired
 	private GlobalSettings settings;
 	
 	@Autowired
     private JdbcTemplate jdbcTemplate;
+	
+	@Autowired
+	private OrmInjector injector;
+	
+	
 	
 	@Override
 	public boolean create(PropertyMeta propertyMeta) {
@@ -57,7 +64,7 @@ public class PropertyMetaServiceImpl extends DataService implements PropertyMeta
 	private String dropView(String objectType) {
 		StringBuffer dropView = new StringBuffer();
 		String tenantId = settings.getVariable(GlobalConstants.TENANT).toString();
-		String table = retrieveTableName(objectType);
+		String table = injector.retrieveTableName(objectType);
 		dropView
 		.append("drop view ")
 		.append(table)
@@ -72,7 +79,7 @@ public class PropertyMetaServiceImpl extends DataService implements PropertyMeta
 	private String createView(String objectType) {
 		List<PropertyMeta> propertiesMeta = propertyMetaRepository.findByObjectType(objectType);
 		String tenantId = settings.getVariable(GlobalConstants.TENANT).toString();
-		String table = retrieveTableName(objectType);
+		String table = injector.retrieveTableName(objectType);
 		StringBuffer createView = new StringBuffer();
 		createView.append("create view ").append(table).append("_").append(tenantId).append("_").append("VIEW as select ");
 		for(PropertyMeta propertyMeta : propertiesMeta) {
@@ -85,7 +92,7 @@ public class PropertyMetaServiceImpl extends DataService implements PropertyMeta
 	
 	private String addColumn(String objectType, String internalName, UDFTypeEnum type) {
 		StringBuffer alterTableAddColumn = new StringBuffer();
-		String table = retrieveTableName(objectType);
+		String table = injector.retrieveTableName(objectType);
 		alterTableAddColumn
 		.append("alter table ")
 		.append(table)
@@ -112,7 +119,7 @@ public class PropertyMetaServiceImpl extends DataService implements PropertyMeta
 	}
 	
 	private String dropColumn(PropertyMeta propertyMeta) {
-		String table = retrieveTableName(propertyMeta.getObjectType());
+		String table = injector.retrieveTableName(propertyMeta.getObjectType());
 		StringBuffer alterTableDropColumn = new StringBuffer();
 		alterTableDropColumn
 		.append("alter table ")
@@ -160,30 +167,4 @@ public class PropertyMetaServiceImpl extends DataService implements PropertyMeta
 		return false;
 	}
 
-	@Override
-	public void scanAndInstallProperties() {
-		
-		JpaEntityManager jpaEntityManager = JpaHelper.getEntityManager(entityManager);
-		DatabaseSession dbSession = jpaEntityManager.getDatabaseSession();
-		List<PropertyMeta> propertyMetas = propertyMetaRepository.findAll();
-		Map<Class<? extends BasicEntity>, ClassDescriptor> descriptors = new HashMap<Class<? extends BasicEntity>, ClassDescriptor>();
-		propertyMetas.forEach(meta -> {
-			EntityType<? extends BasicEntity> eType = retrieveEntityType(meta.getObjectType());
-			ClassDescriptor descriptor = dbSession.getDescriptor(eType.getJavaType());
-			AttributeAccessor accessor = new UDFAttributeAccessor();
-			accessor.setAttributeName(meta.getDisplayName());
-			DirectToFieldMapping udfMapping = new DirectToFieldMapping();
-			udfMapping.setFieldName(meta.getInternalName());
-			udfMapping.setAttributeAccessor(accessor);
-			descriptor.addMapping(udfMapping);
-			udfMapping.initialize((AbstractSession)dbSession);
-			descriptor.getFields().addAll(udfMapping.getFields());
-			descriptor.getAllFields().addAll(udfMapping.getFields());
-			descriptors.put(eType.getJavaType(), descriptor);
-		});
-		descriptors.values().stream().forEach(descriptor -> {
-			descriptor.getObjectBuilder().initialize((AbstractSession)dbSession);
-			descriptor.initialize(descriptor.getQueryManager(), (AbstractSession)dbSession);
-		});
-	}
 }

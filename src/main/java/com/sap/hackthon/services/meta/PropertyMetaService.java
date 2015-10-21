@@ -21,5 +21,4 @@ public interface PropertyMetaService {
 	
 	public boolean getByObjectTypeAndDisplayName(String objectType, String displayName);
 
-	public void scanAndInstallProperties();
 }

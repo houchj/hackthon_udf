@@ -6,13 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 
 import com.sap.hackthon.entity.PropertyCounting;
+import com.sap.hackthon.framework.inject.OrmInjector;
 import com.sap.hackthon.repository.PropertyCountingRepository;
-import com.sap.hackthon.services.DataService;
 
-public class PropertyCountingServiceImpl extends DataService implements PropertyCountingService {
+public class PropertyCountingServiceImpl implements PropertyCountingService {
 
 	@Autowired
-	PropertyCountingRepository propertyCountingRepository;
+	protected PropertyCountingRepository propertyCountingRepository;
 	
 	@Override
 	public void addReferenceCounting(String objectType, String fieldName,

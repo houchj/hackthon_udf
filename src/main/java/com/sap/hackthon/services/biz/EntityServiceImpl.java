@@ -3,19 +3,27 @@ package com.sap.hackthon.services.biz;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sap.hackthon.entity.BasicEntity;
-import com.sap.hackthon.services.DataService;
+import com.sap.hackthon.framework.inject.OrmInjector;
 
 @Service
 @Transactional
-public class EntityServiceImpl extends DataService implements EntityService {
+public class EntityServiceImpl implements EntityService {
 
-
+	@PersistenceContext
+	private EntityManager entityManager;
+	
+	@Autowired
+	protected OrmInjector injector;
+	
 	@Override
 	public <T extends BasicEntity> T create(T entity) {
 		entityManager.persist(entity);
@@ -39,19 +47,19 @@ public class EntityServiceImpl extends DataService implements EntityService {
 
 	@Override
 	public <T extends BasicEntity> T get(Long id, String objectType) {
-		Class<T> eCls = this.<T>retrieveEntityType(objectType).getJavaType();
+		Class<T> eCls = injector.<T>retrieveEntityType(objectType).getJavaType();
 		return entityManager.find(eCls, id);
 	}
 
 	@Override
 	public <T extends BasicEntity> List<T> list(String objectType) {
-		Class<T> eCls = this.<T>retrieveEntityType(objectType).getJavaType();
-		return entityManager.createQuery("FROM " + objectType, eCls).getResultList();
+		Class<T> eCls = injector.<T>retrieveEntityType(objectType).getJavaType();
+		return entityManager.createQuery("SELECT o FROM " + eCls.getName() + " o", eCls).getResultList();
 	}
 
 	@Override
 	public <T extends BasicEntity> List<T> find(String query, Map<String, Object> params, String objectType) {
-		Class<T> eCls = this.<T>retrieveEntityType(objectType).getJavaType();
+		Class<T> eCls = injector.<T>retrieveEntityType(objectType).getJavaType();
 		TypedQuery<T> typedQuery =  entityManager.createQuery(query, eCls);
 		params.entrySet().stream().forEach(e -> typedQuery.setParameter(e.getKey(), e.getValue()));
 		return typedQuery.getResultList();

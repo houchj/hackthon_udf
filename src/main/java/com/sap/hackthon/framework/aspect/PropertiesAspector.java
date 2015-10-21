@@ -1,4 +1,4 @@
-package com.sap.hackthon.services;
+package com.sap.hackthon.framework.aspect;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.sap.hackthon.entity.GlobalSettings;
-import com.sap.hackthon.services.meta.PropertyMetaService;
+import com.sap.hackthon.framework.inject.OrmInjector;
 import com.sap.hackthon.utils.GlobalConstants;
 
 @Aspect
@@ -23,7 +23,7 @@ public class PropertiesAspector {
 	private GlobalSettings settings;
 	
 	@Autowired
-	private PropertyMetaService metaService;
+	protected OrmInjector injector;
 
 
 	@Before("execution(public * com.sap.hackthon.services..*.*(..))")
@@ -37,7 +37,7 @@ public class PropertiesAspector {
 	
 	@Before("execution(public * com.sap.hackthon.services.biz..*Service.*(..))")
 	public void injectUDFMapping(){
-		metaService.scanAndInstallProperties();
+		injector.scanAndInstallProperties();
 	}
 	
 }
