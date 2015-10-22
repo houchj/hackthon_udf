@@ -1,4 +1,4 @@
-package com.sap.hackthon.framework.converter;
+package com.sap.hackthon.framework.exception;
 
 import org.springframework.http.converter.HttpMessageNotReadableException;
 

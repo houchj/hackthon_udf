@@ -1,6 +1,9 @@
 package com.sap.hackthon.framework.beans;
 
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
@@ -65,4 +68,19 @@ public abstract class BasicEntityAdapter implements BasicEntity{
 		} 
 		return ret;
 	}
+
+	@Override
+	public Map<String, Object> getProperties() {
+		PropertyDescriptor[] proDescs = PropertyUtils.getPropertyDescriptors(this);
+		Map<String, Object> pros = new LinkedHashMap<String, Object>();
+		for(PropertyDescriptor pDescs: proDescs){
+			try {
+				pros.put(pDescs.getName(), getProperty(pDescs.getName()));
+			} catch (NoSuchMethodException e) {
+				/* Never reach here*/
+			}
+		}
+		return pros;
+	}
+	
 }

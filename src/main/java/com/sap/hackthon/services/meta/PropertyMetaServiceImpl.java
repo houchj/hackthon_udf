@@ -1,20 +1,10 @@
 package com.sap.hackthon.services.meta;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.metamodel.EntityType;
 
-import org.eclipse.persistence.descriptors.ClassDescriptor;
-import org.eclipse.persistence.internal.sessions.AbstractSession;
-import org.eclipse.persistence.jpa.JpaEntityManager;
-import org.eclipse.persistence.jpa.JpaHelper;
-import org.eclipse.persistence.mappings.AttributeAccessor;
-import org.eclipse.persistence.mappings.DirectToFieldMapping;
-import org.eclipse.persistence.sessions.DatabaseSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -22,11 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sap.hackthon.entity.PropertyMeta;
 import com.sap.hackthon.enumeration.UDFTypeEnum;
-import com.sap.hackthon.framework.beans.BasicEntity;
 import com.sap.hackthon.framework.beans.GlobalSettings;
-import com.sap.hackthon.framework.inject.OrmInjector;
-import com.sap.hackthon.framework.inject.UDFAttributeAccessor;
+import com.sap.hackthon.framework.beans.VersionObserver;
 import com.sap.hackthon.framework.mata.MetaInfoRetriever;
+import com.sap.hackthon.framework.utils.CommonUtils;
 import com.sap.hackthon.framework.utils.GlobalConstants;
 import com.sap.hackthon.repository.PropertyMetaRepository;
 
@@ -36,6 +25,9 @@ public class PropertyMetaServiceImpl implements PropertyMetaService {
 
 	@Autowired
 	private PropertyMetaRepository propertyMetaRepository;
+	
+	@PersistenceContext
+	private EntityManager entityManager;
 	
 	@Autowired
 	private GlobalSettings settings;
@@ -54,6 +46,7 @@ public class PropertyMetaServiceImpl implements PropertyMetaService {
 		jdbcTemplate.execute(this.addColumn(propertyMeta.getObjectType(), propertyMeta.getInternalName(), propertyMeta.getType()));
 		try{
 			jdbcTemplate.execute(this.dropView(propertyMeta.getObjectType()));
+			updateMetaVersion();
 		}
 		catch(Exception e) {
 		}
@@ -112,6 +105,7 @@ public class PropertyMetaServiceImpl implements PropertyMetaService {
 		propertyMetaRepository.delete(propertyMeta);
 		try{
 			jdbcTemplate.execute(this.dropView(propertyMeta.getObjectType()));
+			updateMetaVersion();
 		}
 		catch(Exception e) {
 		}
@@ -137,6 +131,7 @@ public class PropertyMetaServiceImpl implements PropertyMetaService {
 		propertyMetaRepository.saveAndFlush(propertyMeta);
 		try{
 			jdbcTemplate.execute(this.dropView(propertyMeta.getObjectType()));
+			updateMetaVersion();
 		}
 		catch(Exception e) {
 		}
@@ -167,5 +162,18 @@ public class PropertyMetaServiceImpl implements PropertyMetaService {
 		}
 		return false;
 	}
-
+	
+	private void updateMetaVersion(){
+		VersionObserver vo = metaInfo.versionOfPropertyMeta();
+		String version = CommonUtils.uniqueString(25, false);
+		if(vo == null){
+			vo = new VersionObserver();
+			vo.setObserverType(GlobalConstants.VO_TYPE_PROPERTY_META);
+			vo.setVersion(version);
+			entityManager.persist(vo);
+		} else {
+			vo.setVersion(version);
+			entityManager.merge(vo);
+		}
+	}
 }

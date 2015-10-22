@@ -15,18 +15,9 @@ import com.sap.hackthon.enumeration.UDFTypeEnum;
  * @author I310717
  *
  */
-public class UDFTypeConvertor {
+public final class UDFTypeConvertor {
 
-    private UDFTypeConvertor() {
-
-    }
-
-    public synchronized static UDFTypeConvertor getInstance() {
-        return new UDFTypeConvertor();
-    }
-
-
-    public Object convert(PropertyMeta proMeta, Object value) {
+    public static synchronized Object convert(PropertyMeta proMeta, Object value) {
         if (proMeta == null || value == null) {
             return null;
         }
@@ -41,7 +32,7 @@ public class UDFTypeConvertor {
         }
     }
 
-    private BigDecimal decimalValue(Object value) {
+    private static synchronized BigDecimal decimalValue(Object value) {
         String numStr = value.toString();
         BigDecimal decimal = null;
         try {
@@ -52,7 +43,7 @@ public class UDFTypeConvertor {
         return decimal;
     }
 
-    private Timestamp timestampValue(Object value) {
+    private static synchronized Timestamp timestampValue(Object value) {
         Timestamp ts = null;
         try {
             ts = Timestamp.valueOf(value.toString());

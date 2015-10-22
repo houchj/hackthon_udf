@@ -4,6 +4,7 @@ import org.eclipse.persistence.exceptions.DescriptorException;
 import org.eclipse.persistence.mappings.AttributeAccessor;
 
 import com.sap.hackthon.framework.beans.UserDefineEntity;
+import com.sap.hackthon.framework.exception.NoSuchUserDefineFieldException;
 
 public class UDFAttributeAccessor extends AttributeAccessor {
 	
@@ -34,7 +35,11 @@ public class UDFAttributeAccessor extends AttributeAccessor {
 			throw new IllegalArgumentException("Attribute name can't be null");
 		}
 		UserDefineEntity ude = (UserDefineEntity) entity;
-		ude.setUserDefinedField(getAttributeName(), value);
+		try {
+			ude.setUserDefinedField(getAttributeName(), value);
+		} catch (NoSuchUserDefineFieldException e) {
+			/*Never reach here*/
+		}
 	}
 
 }

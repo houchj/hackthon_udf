@@ -35,14 +35,11 @@ public class OrmInjector {
 	@Autowired
 	private MetaInfoRetriever metaInfo;
 	
-	@Autowired
-	private PropertyMetaRepository propertyMetaRepository;
-	
 	public void injectUDFMappings() {
 		
 		JpaEntityManager jpaEntityManager = JpaHelper.getEntityManager(entityManager);
 		DatabaseSession dbSession = jpaEntityManager.getDatabaseSession();
-		List<PropertyMeta> propertyMetas = propertyMetaRepository.findAll();
+		List<PropertyMeta> propertyMetas = metaInfo.retrievePropertyMetas();
 		Map<Class<? extends BasicEntity>, ClassDescriptor> descriptors = new HashMap<Class<? extends BasicEntity>, ClassDescriptor>();
 		
 		propertyMetas.forEach(meta -> {
@@ -65,6 +62,5 @@ public class OrmInjector {
 			descriptor.initialize(descriptor.getQueryManager(), (AbstractSession)dbSession);
 		});
 	}
-	
 	
 }

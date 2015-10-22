@@ -20,6 +20,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.sap.hackthon.framework.beans.BasicEntity;
+import com.sap.hackthon.framework.exception.JsonConvertException;
 import com.sap.hackthon.framework.mata.MetaInfoRetriever;
 import com.sap.hackthon.framework.utils.GlobalConstants;
 import com.sap.hackthon.framework.utils.TypeResolver;
@@ -37,11 +38,9 @@ public class MappingJson2DynamicEntityConverter extends MappingJackson2HttpMessa
 	@Override
 	protected void writeInternal(Object object, HttpOutputMessage outputMessage)
 			throws IOException, HttpMessageNotWritableException {
-		super.writeInternal(object, outputMessage);
+		super.writeInternal(mapFrom(object), outputMessage);
 	}
 	
-	
-
 	@Override
 	@SuppressWarnings("unchecked")
 	public Object read(Type type, Class<?> contextClass, HttpInputMessage inputMessage)
@@ -49,7 +48,7 @@ public class MappingJson2DynamicEntityConverter extends MappingJackson2HttpMessa
 		return quenchTo(objectMapper.readValue(inputMessage.getBody(), Map.class), type);
 	}
 
-	private Object quenchTo(Map<String, Object> raw, Type type) throws JsonConvertException{
+	protected Object quenchTo(Map<String, Object> raw, Type type) throws JsonConvertException{
 		if(type == null || raw == null){
 			return null;
 		}
@@ -59,6 +58,16 @@ public class MappingJson2DynamicEntityConverter extends MappingJackson2HttpMessa
 			return quenchToBasic(raw);
 		}
 		return quenchToObject(raw, rawCls);
+	}
+	
+	protected Map<String, Object> mapFrom(Object obj){
+		if(obj == null){
+			return null;
+		}
+		if(obj instanceof BasicEntity){
+			return mapFromBasic(obj);
+		}
+		return mapFromObject(obj);
 	}
 
 	private Object quenchToBasic(Map<String, Object> raw) throws JsonConvertException{
@@ -75,12 +84,28 @@ public class MappingJson2DynamicEntityConverter extends MappingJackson2HttpMessa
 			throw new JsonConvertException("No default constructer found", e);
 		} 
 		raw.forEach((p, v) -> {
-			Object pv = getProperty(p, v);
+			PropertyDescriptor desc = null;
+			try {
+				desc = PropertyUtils.getPropertyDescriptor(entity, p);
+			} catch (Exception e1) {
+				return;
+			}
+			Class<?> pType = desc.getPropertyType();
+			Object pv = getProperty(v, pType);
 			try {
 				entity.setProperty(p, pv);
 			} catch (Exception e) {/* No operation */}
 		});
 		return entity;
+	}
+	
+	private Map<String, Object> mapFromBasic(Object obj){
+		BasicEntity entity = (BasicEntity) obj;
+		Map<String, Object> properties = entity.getProperties();
+		return properties.entrySet().stream().collect(Collectors.toMap( s -> s.getKey(), u -> {
+			Object v = u.getValue();
+			return v;
+		}));
 	}
 
 	private Object quenchToObject(Map<String, Object> raw, Class<?> type){
@@ -91,45 +116,69 @@ public class MappingJson2DynamicEntityConverter extends MappingJackson2HttpMessa
 			throw new JsonConvertException("No default constructer found", e);
 		} 
 		raw.forEach((p, v) -> {
-			Object pv = getProperty(p, v);
+			PropertyDescriptor desc = null;
+			try {
+				desc = PropertyUtils.getPropertyDescriptor(obj, p);
+			} catch (Exception e1) {
+				return;
+			}
+			Class<?> pType = desc.getPropertyType();
+			Object pv = getProperty(v, pType);
 			try {
 				PropertyUtils.setProperty(obj, p, pv);
 			} catch (Exception e) {/* No operation */}
 		});
 		return obj;
 	}
+	
+	private Map<String, Object> mapFromObject(Object obj){
+		return null;
+	}
 
 
-	private Object getProperty(String pro, Object bean){
-		PropertyDescriptor desc = null;
-		try {
-			desc = PropertyUtils.getPropertyDescriptor(bean, pro);
-		} catch (Exception e1) {
-			return  null;
-		}
-		Class<?> pType = desc.getPropertyType();
-		if(Collection.class.isAssignableFrom(pType)){
+	@SuppressWarnings("unchecked")
+	private Object getProperty(Object bean, Class<?> type){
+		
+		if(Collection.class.isAssignableFrom(type)){
 			return getCollectionProperty(bean);
 		}
-		if(Map.class.isAssignableFrom(pType) ){
-			Type keyType = TypeResolver.getParameterizedType(pType, 0);
+		if(Map.class.isAssignableFrom(type) ){
+			Type keyType = TypeResolver.getParameterizedType(type, 0);
 			if(keyType == null || 
 					((keyType instanceof Class) && String.class.isAssignableFrom((Class<?>)keyType))){
-				return getMapProperty(bean);
+				return quenchTo((Map<String, Object>)bean, type);
 			}
 		}
 		return bean;
+	}
+	
+	private Object mapProperty(Object obj){
+		if(obj instanceof Collection){
+			return mapCollectionProperty(obj);
+		}
+		if(obj instanceof Map){
+			return mapMappedProperty(obj);
+		}
+		return mapFrom(obj);
 	}
 
 	@SuppressWarnings("unchecked")
 	private Object getCollectionProperty(Object bean){
 		Collection<Object> ctn = new ArrayList<Object>();
 		((Collection<Object>)bean).stream().forEach(it -> {
-			Object pi = it;
-			if(Map.class.isAssignableFrom(it.getClass())){
-				pi = quenchTo((Map<String, Object>)pi, pi.getClass());
-			} 
-			ctn.add(pi);
+			if(it == null){
+				return;
+			}
+			ctn.add(getProperty(it, it.getClass()));
+		});
+		return ctn;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private Collection<Map<String, Object>> mapCollectionProperty(Object obj){
+		Collection<Map<String, Object>> ctn = new ArrayList<Map<String, Object>>();
+		((Collection<Map<String, Object>>)obj).stream().forEach(it -> {
+			ctn.add(mapFrom(it));
 		});
 		return ctn;
 	}
@@ -151,5 +200,17 @@ public class MappingJson2DynamicEntityConverter extends MappingJackson2HttpMessa
 		}));
 	}
 
+	@SuppressWarnings("unchecked")
+	private Object mapMappedProperty(Object obj){
+		return ((Map<String, Object>)obj).entrySet().stream().collect(Collectors.toMap(s->s.getKey(), u -> {
+			Object pi = u.getValue();
+			if(pi instanceof Map){
+				pi = mapMappedProperty(pi);
+			} else if(pi instanceof Collection){
+				pi = mapCollectionProperty(pi);
+			}
+			return pi;
+		}));
+	}
 
 }

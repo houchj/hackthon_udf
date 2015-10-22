@@ -1,5 +1,7 @@
 package com.sap.hackthon.framework.beans;
 
+import java.util.Map;
+
 public interface BasicEntity {
 	
 	public String getTenantId();
@@ -13,4 +15,6 @@ public interface BasicEntity {
 	public void setProperty(String property, Object value) throws NoSuchMethodException;
 	
 	public Object getProperty(String property) throws NoSuchMethodException;
+	
+	public Map<String, Object> getProperties();
 }

@@ -27,12 +27,13 @@ public class PropertiesAspector {
 
 
 	@Before("execution(public * com.sap.hackthon.services..*.*(..))")
-	public void injectTenant(){
-		Object tenantId = settings.getVariable(GlobalConstants.TENANT);
-		if(tenantId == null){
-			return;
-		}
-		entityManager.setProperty("multi-tenant.id", tenantId);
+	public void tenantPointCuts1(){
+		injectTenant();
+	}
+	
+	@Before("execution(public * com.sap.hackthon.framework.meta.MetaInfoRetriever.*(..))")
+	public void tenantPointCuts2(){
+		injectTenant();
 	}
 	
 	@Before("execution(public * com.sap.hackthon.services.biz..*Service.*(..))")
@@ -40,4 +41,11 @@ public class PropertiesAspector {
 		injector.injectUDFMappings();
 	}
 	
+	private void injectTenant(){
+		Object tenantId = settings.getVariable(GlobalConstants.TENANT);
+		if(tenantId == null){
+			return;
+		}
+		entityManager.setProperty("multi-tenant.id", tenantId);
+	}
 }
