@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.sap.hackthon.utils;
+package com.sap.hackthon.framework.utils;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;

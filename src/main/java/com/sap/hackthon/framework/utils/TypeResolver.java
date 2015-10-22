@@ -1,4 +1,4 @@
-package com.sap.hackthon.utils;
+package com.sap.hackthon.framework.utils;
 
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;

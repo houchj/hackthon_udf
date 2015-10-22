@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.sap.hackthon.utils;
+package com.sap.hackthon.framework.utils;
 
 /**
  * @author I310717

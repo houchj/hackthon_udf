@@ -21,8 +21,8 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import com.fasterxml.jackson.databind.JavaType;
 import com.sap.hackthon.framework.beans.BasicEntity;
 import com.sap.hackthon.framework.mata.MetaInfoRetriever;
-import com.sap.hackthon.utils.GlobalConstants;
-import com.sap.hackthon.utils.TypeResolver;
+import com.sap.hackthon.framework.utils.GlobalConstants;
+import com.sap.hackthon.framework.utils.TypeResolver;
 
 public class MappingJson2DynamicEntityConverter extends MappingJackson2HttpMessageConverter {
 

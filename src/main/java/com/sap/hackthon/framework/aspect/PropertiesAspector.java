@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.sap.hackthon.framework.beans.GlobalSettings;
 import com.sap.hackthon.framework.inject.OrmInjector;
-import com.sap.hackthon.utils.GlobalConstants;
+import com.sap.hackthon.framework.utils.GlobalConstants;
 
 @Aspect
 @Component	

@@ -27,8 +27,8 @@ import com.sap.hackthon.framework.beans.GlobalSettings;
 import com.sap.hackthon.framework.inject.OrmInjector;
 import com.sap.hackthon.framework.inject.UDFAttributeAccessor;
 import com.sap.hackthon.framework.mata.MetaInfoRetriever;
+import com.sap.hackthon.framework.utils.GlobalConstants;
 import com.sap.hackthon.repository.PropertyMetaRepository;
-import com.sap.hackthon.utils.GlobalConstants;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
