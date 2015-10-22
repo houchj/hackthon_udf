@@ -1,4 +1,4 @@
-package com.sap.hackthon.entity;
+package com.sap.hackthon.framework.beans;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -23,6 +23,10 @@ public abstract class BasicEntityAdapter implements BasicEntity{
 
 	@Column(name = "TENANT_ID", insertable = false, updatable = false)
 	protected String tenantId;
+	
+	public BasicEntityAdapter(){
+		
+	}
 
 	public String getObjectType() {
 		return objectType;

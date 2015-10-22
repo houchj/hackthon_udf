@@ -11,6 +11,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.sap.hackthon.enumeration.UDFTypeEnum;
+import com.sap.hackthon.framework.beans.BasicEntityAdapter;
 
 @Entity
 @Table(name = "T_PROPERTY_META")

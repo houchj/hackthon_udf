@@ -1,31 +1,35 @@
 package com.sap.hackthon.framework.mata;
 
-import java.lang.reflect.Member;
-import java.util.Iterator;
-import java.util.Optional;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Table;
-import javax.persistence.metamodel.Attribute;
 import javax.persistence.metamodel.EntityType;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import com.sap.hackthon.entity.BasicEntity;
+import com.sap.hackthon.framework.beans.BasicEntity;
 
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class MetaInfoRetriever {
 	
 	@Autowired
 	private EntityManager entityManager;
 	
+	private Map<String, EntityType<?>> eCache;
 	
 	@SuppressWarnings("unchecked")
 	public <T extends BasicEntity> EntityType<T> retrieveEntityType(String objectType){
-		Optional<EntityType<?>> res = entityManager.getMetamodel().getEntities().stream().
-				filter(e -> BasicEntity.class.isAssignableFrom(e.getJavaType()) && objectType.equals(e.getName())).findFirst();
-		return (EntityType<T>) res.get();
+		if(eCache == null){
+			eCache = entityManager.getEntityManagerFactory().getMetamodel().getEntities().stream()
+					.filter(s -> BasicEntity.class.isAssignableFrom(s.getJavaType()))
+					.collect(Collectors.toConcurrentMap(t -> t.getName(), u -> u));
+		}
+		return (EntityType<T>) eCache.get(objectType);
 	}
 	
 	public <T extends BasicEntity> String retrieveTableName(String objectType){

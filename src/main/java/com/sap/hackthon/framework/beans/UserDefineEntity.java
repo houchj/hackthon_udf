@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.sap.hackthon.entity;
+package com.sap.hackthon.framework.beans;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sap.hackthon.entity.GlobalSettings;
 import com.sap.hackthon.entity.PropertyMeta;
+import com.sap.hackthon.framework.beans.GlobalSettings;
 import com.sap.hackthon.services.meta.PropertyMetaService;
 import com.sap.hackthon.utils.GlobalConstants;
 

@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.sap.hackthon.framework.beans.BasicEntityAdapter;
+
 @Entity
 @Table(name = "T_PROPERTY_COUNTING")
 public class PropertyCounting extends BasicEntityAdapter{

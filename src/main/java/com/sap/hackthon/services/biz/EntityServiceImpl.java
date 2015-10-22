@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sap.hackthon.entity.BasicEntity;
+import com.sap.hackthon.framework.beans.BasicEntity;
 import com.sap.hackthon.framework.inject.OrmInjector;
 import com.sap.hackthon.framework.mata.MetaInfoRetriever;
 

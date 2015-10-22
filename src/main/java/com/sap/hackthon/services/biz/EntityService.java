@@ -3,7 +3,7 @@ package com.sap.hackthon.services.biz;
 import java.util.List;
 import java.util.Map;
 
-import com.sap.hackthon.entity.BasicEntity;
+import com.sap.hackthon.framework.beans.BasicEntity;
 
 /**
  * 

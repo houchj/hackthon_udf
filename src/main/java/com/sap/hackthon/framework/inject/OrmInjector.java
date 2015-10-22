@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.metamodel.EntityType;
 
 import org.eclipse.persistence.descriptors.ClassDescriptor;
@@ -16,14 +15,18 @@ import org.eclipse.persistence.mappings.AttributeAccessor;
 import org.eclipse.persistence.mappings.DirectToFieldMapping;
 import org.eclipse.persistence.sessions.DatabaseSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
 
-import com.sap.hackthon.entity.BasicEntity;
 import com.sap.hackthon.entity.PropertyMeta;
+import com.sap.hackthon.framework.beans.BasicEntity;
 import com.sap.hackthon.framework.mata.MetaInfoRetriever;
 import com.sap.hackthon.repository.PropertyMetaRepository;
 
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class OrmInjector {
 
 	@Autowired

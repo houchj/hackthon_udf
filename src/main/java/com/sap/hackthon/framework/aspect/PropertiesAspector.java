@@ -8,7 +8,7 @@ import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.sap.hackthon.entity.GlobalSettings;
+import com.sap.hackthon.framework.beans.GlobalSettings;
 import com.sap.hackthon.framework.inject.OrmInjector;
 import com.sap.hackthon.utils.GlobalConstants;
 

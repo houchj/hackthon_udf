@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sap.hackthon.dto.SessionInfo;
 import com.sap.hackthon.dto.User;
-import com.sap.hackthon.entity.GlobalSettings;
+import com.sap.hackthon.framework.beans.GlobalSettings;
 import com.sap.hackthon.utils.GlobalConstants;
 
 @Controller

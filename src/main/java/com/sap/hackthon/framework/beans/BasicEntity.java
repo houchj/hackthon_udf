@@ -1,4 +1,4 @@
-package com.sap.hackthon.entity;
+package com.sap.hackthon.framework.beans;
 
 public interface BasicEntity {
 	

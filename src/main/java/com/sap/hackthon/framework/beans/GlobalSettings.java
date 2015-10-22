@@ -1,4 +1,4 @@
-package com.sap.hackthon.entity;
+package com.sap.hackthon.framework.beans;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,10 +8,9 @@ import java.util.stream.Stream;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.WebApplicationContext;
 
 @Component
-@Scope(WebApplicationContext.SCOPE_GLOBAL_SESSION)
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class GlobalSettings {
 	
 	private Map<String, Object> settings = new HashMap<String, Object>();

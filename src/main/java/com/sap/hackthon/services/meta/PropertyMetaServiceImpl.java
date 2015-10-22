@@ -20,10 +20,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sap.hackthon.entity.BasicEntity;
-import com.sap.hackthon.entity.GlobalSettings;
 import com.sap.hackthon.entity.PropertyMeta;
 import com.sap.hackthon.enumeration.UDFTypeEnum;
+import com.sap.hackthon.framework.beans.BasicEntity;
+import com.sap.hackthon.framework.beans.GlobalSettings;
 import com.sap.hackthon.framework.inject.OrmInjector;
 import com.sap.hackthon.framework.inject.UDFAttributeAccessor;
 import com.sap.hackthon.framework.mata.MetaInfoRetriever;

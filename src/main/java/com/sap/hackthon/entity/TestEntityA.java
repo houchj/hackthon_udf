@@ -15,6 +15,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.sap.hackthon.framework.beans.UserDefineEntity;
+
 /**
  * @author I310717
  *

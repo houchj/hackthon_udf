@@ -3,7 +3,7 @@ package com.sap.hackthon.framework.inject;
 import org.eclipse.persistence.exceptions.DescriptorException;
 import org.eclipse.persistence.mappings.AttributeAccessor;
 
-import com.sap.hackthon.entity.UserDefineEntity;
+import com.sap.hackthon.framework.beans.UserDefineEntity;
 
 public class UDFAttributeAccessor extends AttributeAccessor {
 	

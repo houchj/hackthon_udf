@@ -3,6 +3,8 @@
  */
 package inject;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,9 +20,13 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sap.hackthon.Application;
-import com.sap.hackthon.entity.GlobalSettings;
 import com.sap.hackthon.entity.TestEntityB;
+import com.sap.hackthon.framework.beans.GlobalSettings;
 import com.sap.hackthon.services.biz.EntityService;
 import com.sap.hackthon.utils.GlobalConstants;
 
@@ -41,7 +47,7 @@ public class TestMain {
 	@PersistenceContext
 	private EntityManager entityManager;
 	
-    @Test
+//    @Test
     @Transactional
     @Rollback(false)
     public void test() {
@@ -52,6 +58,15 @@ public class TestMain {
     	params.put("p2", "DGADE");
     	List<TestEntityB> res = entityServcie.find("SELECT b FROM TestEntityB b where b.ABC = :p1 and b.GGG = :p2", params, "TestEntityB");
     	res.size();
+    }
+    
+    @Test
+    public void test2() throws JsonParseException, JsonMappingException, IOException{
+    	String json = "{\"c\":[{\"x\":\"xcdc\"}]}";
+    	ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		Object res = objectMapper.readValue(json, TestA.class);
+		System.out.println(res);
     }
     
 }
