@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.sap.hackthon.framework.beans.GlobalSettings;
-import com.sap.hackthon.framework.inject.OrmInjector;
+import com.sap.hackthon.framework.inject.UDFInjector;
 import com.sap.hackthon.framework.utils.GlobalConstants;
 
 @Aspect
@@ -23,7 +23,7 @@ public class PropertiesAspector {
 	private GlobalSettings settings;
 	
 	@Autowired
-	protected OrmInjector injector;
+	protected UDFInjector injector;
 
 
 	@Before("execution(public * com.sap.hackthon.services..*.*(..))")

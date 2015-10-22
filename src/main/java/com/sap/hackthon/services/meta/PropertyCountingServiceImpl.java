@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 
 import com.sap.hackthon.entity.PropertyCounting;
-import com.sap.hackthon.framework.inject.OrmInjector;
+import com.sap.hackthon.framework.inject.UDFInjector;
 import com.sap.hackthon.repository.PropertyCountingRepository;
 
 public class PropertyCountingServiceImpl implements PropertyCountingService {

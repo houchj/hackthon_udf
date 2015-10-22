@@ -27,7 +27,7 @@ import com.sap.hackthon.repository.PropertyMetaRepository;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-public class OrmInjector {
+public class UDFInjector {
 
 	@Autowired
 	private EntityManager entityManager;
