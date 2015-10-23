@@ -26,7 +26,7 @@ import com.sap.hackthon.framework.mata.MetaInfoRetriever;
 import com.sap.hackthon.repository.PropertyMetaRepository;
 
 @Component
-@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+@Scope(WebApplicationContext.SCOPE_SESSION)
 public class UDFInjector {
 
 	@Autowired

@@ -12,9 +12,9 @@ import javax.persistence.TypedQuery;
 import javax.persistence.metamodel.EntityType;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.sap.hackthon.entity.PropertyMeta;
 import com.sap.hackthon.framework.beans.BasicEntity;
@@ -22,7 +22,7 @@ import com.sap.hackthon.framework.beans.VersionObserver;
 import com.sap.hackthon.framework.utils.GlobalConstants;
 
 @Component
-@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+@Scope(WebApplicationContext.SCOPE_SESSION)
 public class MetaInfoRetriever {
 
 	@Autowired
