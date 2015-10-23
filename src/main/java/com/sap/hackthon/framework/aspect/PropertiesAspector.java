@@ -8,7 +8,7 @@ import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.sap.hackthon.framework.beans.GlobalSettings;
+import com.sap.hackthon.framework.beans.UserSettings;
 import com.sap.hackthon.framework.inject.UDFInjector;
 import com.sap.hackthon.framework.utils.GlobalConstants;
 
@@ -20,7 +20,7 @@ public class PropertiesAspector {
 	private EntityManager entityManager;
 	
 	@Autowired
-	private GlobalSettings settings;
+	private UserSettings settings;
 	
 	@Autowired
 	protected UDFInjector injector;

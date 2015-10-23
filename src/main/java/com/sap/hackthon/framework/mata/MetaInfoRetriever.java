@@ -13,6 +13,7 @@ import javax.persistence.metamodel.EntityType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -22,7 +23,7 @@ import com.sap.hackthon.framework.beans.VersionObserver;
 import com.sap.hackthon.framework.utils.GlobalConstants;
 
 @Component
-@Scope(WebApplicationContext.SCOPE_SESSION)
+@Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class MetaInfoRetriever {
 
 	@Autowired

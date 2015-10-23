@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sap.hackthon.entity.PropertyMeta;
 import com.sap.hackthon.enumeration.UDFTypeEnum;
-import com.sap.hackthon.framework.beans.GlobalSettings;
+import com.sap.hackthon.framework.beans.UserSettings;
 import com.sap.hackthon.framework.beans.VersionObserver;
 import com.sap.hackthon.framework.mata.MetaInfoRetriever;
 import com.sap.hackthon.framework.utils.CommonUtils;
@@ -30,7 +30,7 @@ public class PropertyMetaServiceImpl implements PropertyMetaService {
 	private EntityManager entityManager;
 	
 	@Autowired
-	private GlobalSettings settings;
+	private UserSettings settings;
 	
 	@Autowired
     private JdbcTemplate jdbcTemplate;

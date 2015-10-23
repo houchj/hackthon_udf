@@ -18,14 +18,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sap.hackthon.dto.SessionInfo;
 import com.sap.hackthon.dto.User;
-import com.sap.hackthon.framework.beans.GlobalSettings;
+import com.sap.hackthon.framework.beans.UserSettings;
 import com.sap.hackthon.framework.utils.GlobalConstants;
 
 @Controller
 public class UserController {
 
 	@Autowired
-	private GlobalSettings settings;
+	private UserSettings settings;
 	
     @RequestMapping(method = RequestMethod.POST, value = "login")
     public @ResponseBody boolean login(@RequestBody User user, HttpServletRequest request, HttpServletResponse response)

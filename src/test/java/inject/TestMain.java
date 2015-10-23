@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sap.hackthon.Application;
 import com.sap.hackthon.entity.TestEntityB;
-import com.sap.hackthon.framework.beans.GlobalSettings;
+import com.sap.hackthon.framework.beans.UserSettings;
 import com.sap.hackthon.framework.utils.GlobalConstants;
 import com.sap.hackthon.services.biz.EntityService;
 
@@ -40,7 +40,7 @@ import com.sap.hackthon.services.biz.EntityService;
 public class TestMain {
 
 	@Autowired
-	private GlobalSettings settings;
+	private UserSettings settings;
 	
 	@Autowired
 	private EntityService entityServcie;
