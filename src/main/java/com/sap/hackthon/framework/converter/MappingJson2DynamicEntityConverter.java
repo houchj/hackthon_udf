@@ -4,11 +4,13 @@ import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import javax.persistence.metamodel.EntityType;
@@ -27,6 +29,7 @@ import com.sap.hackthon.framework.exception.JsonConvertException;
 import com.sap.hackthon.framework.mata.MetaInfoRetriever;
 import com.sap.hackthon.framework.utils.CommonUtils;
 import com.sap.hackthon.framework.utils.GlobalConstants;
+import com.sap.hackthon.framework.utils.TypeResolver;
 
 public class MappingJson2DynamicEntityConverter extends MappingJackson2HttpMessageConverter {
 
@@ -77,12 +80,17 @@ public class MappingJson2DynamicEntityConverter extends MappingJackson2HttpMessa
 			return raw;
 		}
 		Class<?> rawCls = javaType.getRawClass();
+		try{
+			return TypeResolver.convertToPrototype(raw, TypeResolver.toPrototype(rawCls));
+		} catch(NoSuchElementException e){
+			/*Not supported prototype*/
+		}
 		if(BasicEntity.class.isAssignableFrom(rawCls)){
 			return quenchToBasicEntity((Map<String, Object>)raw, javaType);
 		}
 		return quenchToObject((Map<String, Object>)raw, javaType);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	protected Object depositeFrom(Object pole){
 		if(pole == null){
@@ -108,8 +116,10 @@ public class MappingJson2DynamicEntityConverter extends MappingJackson2HttpMessa
 		if(javaType.isPrimitive()){
 			return pole;
 		}
-		Class<?> rawCls = javaType.getRawClass();
-		if(BasicEntity.class.isAssignableFrom(rawCls)){
+		if(TypeResolver.isPrototype(pCls)){
+			return pole;
+		}
+		if(BasicEntity.class.isAssignableFrom(pCls)){
 			return depositeFromBasicEntity((BasicEntity) pole);
 		}
 		return depositeFromObject(pole);
@@ -161,7 +171,7 @@ public class MappingJson2DynamicEntityConverter extends MappingJackson2HttpMessa
 		});
 		return container;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private Map<String, Object> newMap(JavaType javaType){
 		Class<? extends Collection<?>> rawCls = (Class<? extends Collection<?>>) javaType.getRawClass(); 
@@ -220,39 +230,31 @@ public class MappingJson2DynamicEntityConverter extends MappingJackson2HttpMessa
 		});
 		return entity;
 	}
-	
+
 	private List<Object> depositeFromArray(Object[] pole){
-		List<Object> wrapper = new LinkedList<Object>();
-		for(Object item : pole){
-			wrapper.add(depositeFrom(item));
-		}
-		return wrapper;
+		return Arrays.stream(pole).map(s -> depositeFrom(s)).collect(Collectors.toList());
 	}
-	
+
 	private List<Object> depositeFromCollection(Collection<Object> pole){
 		return pole.stream().map(s -> depositeFrom(s)).collect(Collectors.toList());
 	}
-	
+
 	private Map<String, Object> depositeFromMap(Map<String, Object> pole){
-		return pole.entrySet().stream().collect(Collectors.toMap(m -> m.getKey(), m -> depositeFrom(m.getValue())));
+		return pole.entrySet().stream().collect(Collectors.toMap(Entry<String, Object>::getKey, m -> depositeFrom(m.getValue())));
 	}
-	
+
 	private Map<String, Object> depositeFromBasicEntity(BasicEntity pole){
 		Map<String, Object> properties = pole.getProperties();
-		return properties.entrySet().stream().collect(Collectors.toMap(e -> e.getKey(), r -> depositeFrom(r.getValue())));
+		return properties.entrySet().stream().collect(Collectors.toMap(Entry<String, Object>::getKey, r -> depositeFrom(r.getValue())));
 	}
-	
+
 	private Map<String, Object> depositeFromObject(Object pole){
 		PropertyDescriptor[] descriptors = PropertyUtils.getPropertyDescriptors(pole);
-		Map<String, Object> wrapper = new LinkedHashMap<String, Object>();
-		for(PropertyDescriptor descriptor: descriptors){
-			String pro = descriptor.getName();
-			try {
-				wrapper.put(pro, depositeFrom(PropertyUtils.getProperty(pole, pro)));
-			} catch (Exception e) {
-				/* Never reach here*/
-			} 
-		}
-		return wrapper;
+		return Arrays.stream(descriptors).collect(Collectors.toMap(PropertyDescriptor::getName, u -> {
+			Object value = null;
+			try { value = depositeFrom(PropertyUtils.getProperty(pole, u.getName()));} catch (Exception e) {/* Never reach here*/}
+			return value;
+		}));
+
 	}
 }

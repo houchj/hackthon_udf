@@ -21,7 +21,6 @@ public class Application{
 		if(env == null || env.equals("")) {
 			System.setProperty("app.env", "local");
 		}
-		
 		SpringApplication.run(Application.class, args);
     }
 

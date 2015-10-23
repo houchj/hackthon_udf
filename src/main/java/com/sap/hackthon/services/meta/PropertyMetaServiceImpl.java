@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sap.hackthon.entity.PropertyMeta;
-import com.sap.hackthon.enumeration.UDFTypeEnum;
 import com.sap.hackthon.framework.beans.UserSettings;
 import com.sap.hackthon.framework.beans.VersionObserver;
+import com.sap.hackthon.framework.enumeration.UDFType;
 import com.sap.hackthon.framework.mata.MetaInfoRetriever;
 import com.sap.hackthon.framework.utils.CommonUtils;
 import com.sap.hackthon.framework.utils.GlobalConstants;
@@ -84,7 +84,7 @@ public class PropertyMetaServiceImpl implements PropertyMetaService {
 		return createView.toString();
 	}
 	
-	private String addColumn(String objectType, String internalName, UDFTypeEnum type) {
+	private String addColumn(String objectType, String internalName, UDFType type) {
 		StringBuffer alterTableAddColumn = new StringBuffer();
 		String table = metaInfo.retrieveTableName(objectType);
 		alterTableAddColumn
@@ -93,7 +93,7 @@ public class PropertyMetaServiceImpl implements PropertyMetaService {
 		.append(" add(")
 		.append(internalName)
 		.append(" ")
-		.append(type.equals(UDFTypeEnum.NVARCHAR) ? type + "(200)" : type)
+		.append(type.equals(UDFType.NVARCHAR) ? type + "(200)" : type)
 		.append(")");
 		return alterTableAddColumn.toString();
 	}
@@ -150,7 +150,7 @@ public class PropertyMetaServiceImpl implements PropertyMetaService {
 	}
 
 	@Override
-	public int getMaxParamIndexByObjectTypeAndType(String objectType, UDFTypeEnum type) {
+	public int getMaxParamIndexByObjectTypeAndType(String objectType, UDFType type) {
 		return propertyMetaRepository.findMaxParamIndexByObjectTypeAndType(objectType, type);
 	}
 

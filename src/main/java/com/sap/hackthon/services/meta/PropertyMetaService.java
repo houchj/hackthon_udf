@@ -3,7 +3,7 @@ package com.sap.hackthon.services.meta;
 import java.util.List;
 
 import com.sap.hackthon.entity.PropertyMeta;
-import com.sap.hackthon.enumeration.UDFTypeEnum;
+import com.sap.hackthon.framework.enumeration.UDFType;
 
 public interface PropertyMetaService {
 
@@ -17,7 +17,7 @@ public interface PropertyMetaService {
 
 	public List<PropertyMeta> getByObjectType(String objectType);
 
-	public int getMaxParamIndexByObjectTypeAndType(String objectType, UDFTypeEnum type);
+	public int getMaxParamIndexByObjectTypeAndType(String objectType, UDFType type);
 	
 	public boolean getByObjectTypeAndDisplayName(String objectType, String displayName);
 

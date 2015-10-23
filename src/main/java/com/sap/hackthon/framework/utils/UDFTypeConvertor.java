@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 import org.springframework.util.NumberUtils;
 
 import com.sap.hackthon.entity.PropertyMeta;
-import com.sap.hackthon.enumeration.UDFTypeEnum;
+import com.sap.hackthon.framework.enumeration.UDFType;
 
 /**
  * @author I310717
@@ -21,7 +21,7 @@ public final class UDFTypeConvertor {
         if (proMeta == null || value == null) {
             return null;
         }
-        UDFTypeEnum typeEnum = proMeta.getType();
+        UDFType typeEnum = proMeta.getType();
         switch (typeEnum) {
         case DECIMAL:
             return decimalValue(value);

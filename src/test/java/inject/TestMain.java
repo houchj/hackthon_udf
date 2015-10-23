@@ -5,10 +5,13 @@ package inject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -83,13 +86,26 @@ public class TestMain {
 		System.out.println(res2);
     }
     
-    @Test
+//    @Test
     public void test4() throws JsonParseException, JsonMappingException, IOException{
     	String json = "[{\"c\":[{\"x\":\"xcdc\"}]}]";
     	ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		Object res = objectMapper.readValue(json, Collection.class);
 		System.out.println(res);
+    }
+    
+    @Test
+    public void test5(){
+    	TestC[] cs = new TestC[2];
+    	TestC c1 = new TestC();
+    	c1.setX("c1");
+    	TestC c2 = new TestC();
+    	c2.setX("c2");
+    	cs[0] = c1;
+    	cs[1] = c2;
+    	Map<String, TestC> m = Arrays.stream(cs).collect(Collectors.toMap(TestC::getX, null));
+    	System.out.println(m.size());
     }
     
 }

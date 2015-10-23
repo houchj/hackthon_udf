@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
@@ -40,7 +41,7 @@ public class MetaInfoRetriever {
 		if(eCache == null){
 			eCache = entityManager.getEntityManagerFactory().getMetamodel().getEntities().stream()
 					.filter(s -> BasicEntity.class.isAssignableFrom(s.getJavaType()))
-					.collect(Collectors.toConcurrentMap(t -> t.getName(), u -> u));
+					.collect(Collectors.toConcurrentMap(EntityType::getName, Function.identity()));
 		}
 		return (EntityType<T>) eCache.get(objectType);
 	}
@@ -78,7 +79,7 @@ public class MetaInfoRetriever {
 			pCache = new ConcurrentHashMap<String, PropertyMeta>();
 			return;
 		}
-		pCache = propertyMetas.stream().collect(Collectors.toConcurrentMap(p -> p.getDisplayName(), p -> p));
+		pCache = propertyMetas.stream().collect(Collectors.toConcurrentMap(PropertyMeta::getDisplayName, Function.identity()));
 	}
 
 	public VersionObserver versionOfPropertyMeta(){
