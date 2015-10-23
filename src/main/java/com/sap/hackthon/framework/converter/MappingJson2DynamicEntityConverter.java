@@ -2,11 +2,11 @@ package com.sap.hackthon.framework.converter;
 
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.persistence.metamodel.EntityType;
 
@@ -22,8 +22,8 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.sap.hackthon.framework.beans.BasicEntity;
 import com.sap.hackthon.framework.exception.JsonConvertException;
 import com.sap.hackthon.framework.mata.MetaInfoRetriever;
+import com.sap.hackthon.framework.utils.CommonUtils;
 import com.sap.hackthon.framework.utils.GlobalConstants;
-import com.sap.hackthon.framework.utils.TypeResolver;
 
 public class MappingJson2DynamicEntityConverter extends MappingJackson2HttpMessageConverter {
 
@@ -38,39 +38,128 @@ public class MappingJson2DynamicEntityConverter extends MappingJackson2HttpMessa
 	@Override
 	protected void writeInternal(Object object, HttpOutputMessage outputMessage)
 			throws IOException, HttpMessageNotWritableException {
-		super.writeInternal(mapFrom(object), outputMessage);
 	}
-	
+
 	@Override
-	@SuppressWarnings("unchecked")
 	public Object read(Type type, Class<?> contextClass, HttpInputMessage inputMessage)
 			throws IOException, HttpMessageNotReadableException {
-		return quenchTo(objectMapper.readValue(inputMessage.getBody(), Map.class), type);
+		JavaType javaType = getJavaType(type, contextClass);
+		Class<?> rawCls = javaType.getRawClass();
+		rawCls = Collection.class.isAssignableFrom(rawCls) ? Collection.class : Map.class;
+		return quenchTo(objectMapper.readValue(inputMessage.getBody(), rawCls), javaType);
 	}
 
-	protected Object quenchTo(Map<String, Object> raw, Type type) throws JsonConvertException{
-		if(type == null || raw == null){
+	@SuppressWarnings("unchecked")
+	protected Object quenchTo(Object raw, JavaType javaType) throws JsonConvertException{
+		if(raw == null){
 			return null;
 		}
-		JavaType javaType = getJavaType(type, null);
+		if(javaType == null){
+			javaType = getJavaType(Map.class, null);
+		}
+		if(javaType.isArrayType()){
+			return quenchToArray((Map<String, Object>[])raw, javaType);
+		}
+		if(javaType.isCollectionLikeType()){
+			return quenchToCollection((Collection<Map<String, Object>>)raw, javaType);
+		}
+		if(javaType.isMapLikeType()){
+			return quenchToMap((Map<String, Object>)raw, javaType);
+		}
+		if(javaType.isEnumType()){
+			return quenchToEnum((String)raw, javaType);
+		}
+		if(javaType.isPrimitive()){
+			return raw;
+		}
 		Class<?> rawCls = javaType.getRawClass();
 		if(BasicEntity.class.isAssignableFrom(rawCls)){
-			return quenchToBasic(raw);
+			return quenchToBasicEntity((Map<String, Object>)raw, javaType);
 		}
-		return quenchToObject(raw, rawCls);
-	}
-	
-	protected Map<String, Object> mapFrom(Object obj){
-		if(obj == null){
-			return null;
-		}
-		if(obj instanceof BasicEntity){
-			return mapFromBasic(obj);
-		}
-		return mapFromObject(obj);
+		return quenchToObject((Map<String, Object>)raw, javaType);
 	}
 
-	private Object quenchToBasic(Map<String, Object> raw) throws JsonConvertException{
+	private Object quenchToCollection(Collection<Map<String, Object>> raw, JavaType javaType){
+		Collection<Object> container = newCollection(javaType);
+		JavaType contentType = javaType.getContentType();
+		raw.forEach(m -> container.add(quenchTo(m, contentType)));
+		return container;
+	}
+
+	@SuppressWarnings("unchecked")
+	private Collection<Object> newCollection(JavaType javaType){
+		Class<? extends Collection<?>> rawCls = (Class<? extends Collection<?>>) javaType.getRawClass(); 
+		if(javaType.isConcrete()){
+			try {
+				return (Collection<Object>) rawCls.newInstance();
+			} catch (Exception e) {
+				return CommonUtils.getCollectionInstance(rawCls);
+			} 
+		} 
+		return CommonUtils.getCollectionInstance(rawCls);
+	}
+
+	private Object quenchToArray(Map<String, Object>[] raw, JavaType javaType){
+		JavaType contentType = javaType.getContentType();
+		Class<?> contentCls = Map.class;
+		if(contentType != null){
+			contentCls = contentType.getRawClass();
+		}
+		Object container = Array.newInstance(contentCls, raw.length);
+		for(int i = 0 ; i < raw.length ; i++ ){
+			Array.set(container, i, quenchTo(raw[i], contentType));
+		}
+		return container;
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private Object quenchToEnum(String raw, JavaType javaType){
+		return Enum.valueOf((Class<Enum>) javaType.getRawClass(), raw);
+	}
+
+	private Object quenchToMap(Map<String, Object> raw, JavaType javaType){
+		Map<String, Object> container = newMap(javaType);
+		JavaType contentType = javaType.getContentType();
+		raw.forEach((k, v) -> {
+			container.put(k, quenchTo(v, contentType));
+		});
+		return container;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private Map<String, Object> newMap(JavaType javaType){
+		Class<? extends Collection<?>> rawCls = (Class<? extends Collection<?>>) javaType.getRawClass(); 
+		if(javaType.isConcrete()){
+			try {
+				return (Map<String, Object>) rawCls.newInstance();
+			} catch (Exception e) {
+				return new LinkedHashMap<String, Object>();
+			} 
+		} 
+		return new LinkedHashMap<String, Object>();
+	}
+
+	private Object quenchToObject(Map<String, Object> raw, JavaType javaType){
+		Object obj;
+		try {
+			obj = javaType.getRawClass().getDeclaredConstructor().newInstance();
+		} catch (Exception e) {
+			throw new JsonConvertException("No default constructer found", e);
+		} 
+		raw.forEach((p, v) -> {
+			PropertyDescriptor desc = null;
+			try {
+				desc = PropertyUtils.getPropertyDescriptor(obj, p);
+				JavaType pType = getJavaType(desc.getPropertyType(), null);
+				PropertyUtils.setProperty(obj, p, quenchTo(v, pType));
+			} catch (Exception e1) {
+				return;
+			}
+		});
+		return obj;
+	}
+
+	private Object quenchToBasicEntity(Map<String, Object> raw, JavaType javaType){
 		Object objectType = raw.get(GlobalConstants.OBJECT_TYPE);
 		if(objectType == null){
 			throw new JsonConvertException("Not a valid basic entity type!");
@@ -87,130 +176,13 @@ public class MappingJson2DynamicEntityConverter extends MappingJackson2HttpMessa
 			PropertyDescriptor desc = null;
 			try {
 				desc = PropertyUtils.getPropertyDescriptor(entity, p);
+				JavaType pType = getJavaType(desc.getPropertyType(), null);
+				entity.setProperty(p, quenchTo(v, pType));
 			} catch (Exception e1) {
 				return;
 			}
-			Class<?> pType = desc.getPropertyType();
-			Object pv = getProperty(v, pType);
-			try {
-				entity.setProperty(p, pv);
-			} catch (Exception e) {/* No operation */}
 		});
 		return entity;
-	}
-	
-	private Map<String, Object> mapFromBasic(Object obj){
-		BasicEntity entity = (BasicEntity) obj;
-		Map<String, Object> properties = entity.getProperties();
-		return properties.entrySet().stream().collect(Collectors.toMap( s -> s.getKey(), u -> {
-			Object v = u.getValue();
-			return v;
-		}));
-	}
-
-	private Object quenchToObject(Map<String, Object> raw, Class<?> type){
-		Object obj;
-		try {
-			obj = type.getDeclaredConstructor().newInstance();
-		} catch (Exception e) {
-			throw new JsonConvertException("No default constructer found", e);
-		} 
-		raw.forEach((p, v) -> {
-			PropertyDescriptor desc = null;
-			try {
-				desc = PropertyUtils.getPropertyDescriptor(obj, p);
-			} catch (Exception e1) {
-				return;
-			}
-			Class<?> pType = desc.getPropertyType();
-			Object pv = getProperty(v, pType);
-			try {
-				PropertyUtils.setProperty(obj, p, pv);
-			} catch (Exception e) {/* No operation */}
-		});
-		return obj;
-	}
-	
-	private Map<String, Object> mapFromObject(Object obj){
-		return null;
-	}
-
-
-	@SuppressWarnings("unchecked")
-	private Object getProperty(Object bean, Class<?> type){
-		
-		if(Collection.class.isAssignableFrom(type)){
-			return getCollectionProperty(bean);
-		}
-		if(Map.class.isAssignableFrom(type) ){
-			Type keyType = TypeResolver.getParameterizedType(type, 0);
-			if(keyType == null || 
-					((keyType instanceof Class) && String.class.isAssignableFrom((Class<?>)keyType))){
-				return quenchTo((Map<String, Object>)bean, type);
-			}
-		}
-		return bean;
-	}
-	
-	private Object mapProperty(Object obj){
-		if(obj instanceof Collection){
-			return mapCollectionProperty(obj);
-		}
-		if(obj instanceof Map){
-			return mapMappedProperty(obj);
-		}
-		return mapFrom(obj);
-	}
-
-	@SuppressWarnings("unchecked")
-	private Object getCollectionProperty(Object bean){
-		Collection<Object> ctn = new ArrayList<Object>();
-		((Collection<Object>)bean).stream().forEach(it -> {
-			if(it == null){
-				return;
-			}
-			ctn.add(getProperty(it, it.getClass()));
-		});
-		return ctn;
-	}
-	
-	@SuppressWarnings("unchecked")
-	private Collection<Map<String, Object>> mapCollectionProperty(Object obj){
-		Collection<Map<String, Object>> ctn = new ArrayList<Map<String, Object>>();
-		((Collection<Map<String, Object>>)obj).stream().forEach(it -> {
-			ctn.add(mapFrom(it));
-		});
-		return ctn;
-	}
-
-	@SuppressWarnings("unchecked")
-	private Object getMapProperty(Object bean){
-		return ((Map<String, Object>)bean).entrySet().stream().collect(Collectors.toMap(s->s.getKey(), u -> {
-			Object pi = u.getValue();
-			if(pi == null){
-				return null;
-			}
-			Class<?> pType = pi.getClass();
-			if(Map.class.isAssignableFrom(pType)){
-				pi = getMapProperty(pi);
-			} else if(Collection.class.isAssignableFrom(pType)){
-				pi = getCollectionProperty(pi);
-			}
-			return pi;
-		}));
-	}
-
-	@SuppressWarnings("unchecked")
-	private Object mapMappedProperty(Object obj){
-		return ((Map<String, Object>)obj).entrySet().stream().collect(Collectors.toMap(s->s.getKey(), u -> {
-			Object pi = u.getValue();
-			if(pi instanceof Map){
-				pi = mapMappedProperty(pi);
-			} else if(pi instanceof Collection){
-				pi = mapCollectionProperty(pi);
-			}
-			return pi;
-		}));
 	}
 
 }

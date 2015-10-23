@@ -5,6 +5,7 @@ package inject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,7 +88,7 @@ public class TestMain {
     	String json = "[{\"c\":[{\"x\":\"xcdc\"}]}]";
     	ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		Object res = objectMapper.readValue(json, List.class);
+		Object res = objectMapper.readValue(json, Collection.class);
 		System.out.println(res);
     }
     
