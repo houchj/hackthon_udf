@@ -1,4 +1,4 @@
-package com.sap.hackthon.controller;
+package com.sap.hackthon.framework.controller;
 
 import java.util.List;
 
