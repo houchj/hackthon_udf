@@ -9,7 +9,6 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -240,21 +239,26 @@ public class MappingJson2DynamicEntityConverter extends MappingJackson2HttpMessa
 	}
 
 	private Map<String, Object> depositeFromMap(Map<String, Object> pole){
-		return pole.entrySet().stream().collect(Collectors.toMap(Entry<String, Object>::getKey, m -> depositeFrom(m.getValue())));
+		Map<String, Object> deposited = new LinkedHashMap<String, Object>();
+		pole.forEach((k, v) -> deposited.put(k, depositeFrom(v)));
+		return deposited;
 	}
 
 	private Map<String, Object> depositeFromBasicEntity(BasicEntity pole){
-		Map<String, Object> properties = pole.getProperties();
-		return properties.entrySet().stream().collect(Collectors.toMap(Entry<String, Object>::getKey, r -> depositeFrom(r.getValue())));
+		Map<String, Object> deposited = new LinkedHashMap<String, Object>();
+		pole.getProperties().forEach((k, v) -> deposited.put(k, depositeFrom(v)));
+		return deposited;
 	}
 
 	private Map<String, Object> depositeFromObject(Object pole){
+		Map<String, Object> deposited = new LinkedHashMap<String, Object>();
 		PropertyDescriptor[] descriptors = PropertyUtils.getPropertyDescriptors(pole);
-		return Arrays.stream(descriptors).collect(Collectors.toMap(PropertyDescriptor::getName, u -> {
+		Arrays.stream(descriptors).forEach(s -> {
+			String pro = s.getName();
 			Object value = null;
-			try { value = depositeFrom(PropertyUtils.getProperty(pole, u.getName()));} catch (Exception e) {/* Never reach here*/}
-			return value;
-		}));
-
+			try { value = depositeFrom(PropertyUtils.getProperty(pole, pro));} catch (Exception e) {/* Never reach here*/}
+			deposited.put(pro, value);
+		});
+		return deposited;
 	}
 }

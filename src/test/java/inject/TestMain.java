@@ -104,7 +104,7 @@ public class TestMain {
     	c2.setX("c2");
     	cs[0] = c1;
     	cs[1] = c2;
-    	Map<String, TestC> m = Arrays.stream(cs).collect(Collectors.toMap(TestC::getX, null));
+    	Map<String, TestC> m = Arrays.stream(cs).collect(Collectors.toMap(TestC::getX, Function.identity()));
     	System.out.println(m.size());
     }
     
