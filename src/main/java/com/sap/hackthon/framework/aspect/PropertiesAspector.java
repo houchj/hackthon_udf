@@ -31,7 +31,7 @@ public class PropertiesAspector {
 		injectTenant();
 	}
 	
-	@Before("execution(public * com.sap.hackthon.framework.meta.MetaInfoRetriever.*(..))")
+	@Before("execution(public * com.sap.hackthon.framework.mata.MetaInfoRetriever.*(..))")
 	public void tenantPointCuts2(){
 		injectTenant();
 	}

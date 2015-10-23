@@ -69,19 +69,26 @@ public class TestMain {
 		System.out.println(res);
     }
     
-    @Test
+//    @Test
     public void test3() throws JsonParseException, JsonMappingException, IOException{
-//    	TestC c = new TestC();
-//    	c.setX("gagadddd");
-//    	List<TestC> cList = new ArrayList<TestC>();
-//    	cList.add(c);
-//    	TestA a = new TestA();
-//    	a.setC(cList);
+    	TestC c = new TestC();
+    	c.setX("gagadddd");
+    	List<TestC> cList = new ArrayList<TestC>();
+    	cList.add(c);
+    	TestA a = new TestA();
+    	a.setC(cList);
     	ObjectMapper objectMapper = new ObjectMapper();
-    	String json = "{\"c\":[{\"x\":\"xcdc\"}]}";
-    	Object res1 = objectMapper.readValue(json, Map.class);
-		String res2 = objectMapper.writeValueAsString(res1);
+		String res2 = objectMapper.writeValueAsString(a);
 		System.out.println(res2);
+    }
+    
+    @Test
+    public void test4() throws JsonParseException, JsonMappingException, IOException{
+    	String json = "[{\"c\":[{\"x\":\"xcdc\"}]}]";
+    	ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		Object res = objectMapper.readValue(json, List.class);
+		System.out.println(res);
     }
     
 }
