@@ -6,7 +6,10 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.persistence.metamodel.EntityType;
 
@@ -38,6 +41,7 @@ public class MappingJson2DynamicEntityConverter extends MappingJackson2HttpMessa
 	@Override
 	protected void writeInternal(Object object, HttpOutputMessage outputMessage)
 			throws IOException, HttpMessageNotWritableException {
+		super.writeInternal(depositeFrom(object), outputMessage);
 	}
 
 	@Override
@@ -77,6 +81,38 @@ public class MappingJson2DynamicEntityConverter extends MappingJackson2HttpMessa
 			return quenchToBasicEntity((Map<String, Object>)raw, javaType);
 		}
 		return quenchToObject((Map<String, Object>)raw, javaType);
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected Object depositeFrom(Object pole){
+		if(pole == null){
+			return null;
+		}
+		Class<?> pCls = pole.getClass();
+		JavaType javaType = getJavaType(pCls, null);
+		if(javaType == null){
+			javaType = getJavaType(Map.class, null);
+		}
+		if(javaType.isArrayType()){
+			return depositeFromArray((Object[]) pole);
+		}
+		if(javaType.isCollectionLikeType()){
+			return depositeFromCollection((Collection<Object>) pole);
+		}
+		if(javaType.isMapLikeType()){
+			return depositeFromMap((Map<String, Object>) pole);
+		}
+		if(javaType.isEnumType()){
+			return pole;
+		}
+		if(javaType.isPrimitive()){
+			return pole;
+		}
+		Class<?> rawCls = javaType.getRawClass();
+		if(BasicEntity.class.isAssignableFrom(rawCls)){
+			return depositeFromBasicEntity((BasicEntity) pole);
+		}
+		return depositeFromObject(pole);
 	}
 
 	private Object quenchToCollection(Collection<Map<String, Object>> raw, JavaType javaType){
@@ -184,5 +220,39 @@ public class MappingJson2DynamicEntityConverter extends MappingJackson2HttpMessa
 		});
 		return entity;
 	}
-
+	
+	private List<Object> depositeFromArray(Object[] pole){
+		List<Object> wrapper = new LinkedList<Object>();
+		for(Object item : pole){
+			wrapper.add(depositeFrom(item));
+		}
+		return wrapper;
+	}
+	
+	private List<Object> depositeFromCollection(Collection<Object> pole){
+		return pole.stream().map(s -> depositeFrom(s)).collect(Collectors.toList());
+	}
+	
+	private Map<String, Object> depositeFromMap(Map<String, Object> pole){
+		return pole.entrySet().stream().collect(Collectors.toMap(m -> m.getKey(), m -> depositeFrom(m.getValue())));
+	}
+	
+	private Map<String, Object> depositeFromBasicEntity(BasicEntity pole){
+		Map<String, Object> properties = pole.getProperties();
+		return properties.entrySet().stream().collect(Collectors.toMap(e -> e.getKey(), r -> depositeFrom(r.getValue())));
+	}
+	
+	private Map<String, Object> depositeFromObject(Object pole){
+		PropertyDescriptor[] descriptors = PropertyUtils.getPropertyDescriptors(pole);
+		Map<String, Object> wrapper = new LinkedHashMap<String, Object>();
+		for(PropertyDescriptor descriptor: descriptors){
+			String pro = descriptor.getName();
+			try {
+				wrapper.put(pro, depositeFrom(PropertyUtils.getProperty(pole, pro)));
+			} catch (Exception e) {
+				/* Never reach here*/
+			} 
+		}
+		return wrapper;
+	}
 }
