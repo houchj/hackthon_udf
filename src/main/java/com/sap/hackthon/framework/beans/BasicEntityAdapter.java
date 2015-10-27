@@ -74,6 +74,9 @@ public abstract class BasicEntityAdapter implements BasicEntity{
 		PropertyDescriptor[] proDescs = PropertyUtils.getPropertyDescriptors(this);
 		Map<String, Object> pros = new LinkedHashMap<String, Object>();
 		for(PropertyDescriptor pDescs: proDescs){
+			if("class".equals(pDescs.getName())){
+				continue;
+			}
 			try {
 				pros.put(pDescs.getName(), getProperty(pDescs.getName()));
 			} catch (NoSuchMethodException e) {

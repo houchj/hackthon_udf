@@ -255,6 +255,9 @@ public class MappingJson2DynamicEntityConverter extends MappingJackson2HttpMessa
 		PropertyDescriptor[] descriptors = PropertyUtils.getPropertyDescriptors(pole);
 		Arrays.stream(descriptors).forEach(s -> {
 			String pro = s.getName();
+			if("class".equals(pro)){
+				return;
+			}
 			Object value = null;
 			try { value = depositeFrom(PropertyUtils.getProperty(pole, pro));} catch (Exception e) {/* Never reach here*/}
 			deposited.put(pro, value);
