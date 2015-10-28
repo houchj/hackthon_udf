@@ -1,4 +1,4 @@
-package com.sap.hackthon.entity;
+package com.sap.hackthon.framework.beans;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.sap.hackthon.framework.beans.BasicEntityAdapter;
 import com.sap.hackthon.framework.enumeration.UDFType;
 
 @Entity

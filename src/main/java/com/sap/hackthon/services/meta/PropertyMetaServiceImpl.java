@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sap.hackthon.entity.PropertyMeta;
+import com.sap.hackthon.framework.beans.PropertyMeta;
 import com.sap.hackthon.framework.beans.UserSettings;
 import com.sap.hackthon.framework.beans.VersionObserver;
 import com.sap.hackthon.framework.enumeration.UDFType;

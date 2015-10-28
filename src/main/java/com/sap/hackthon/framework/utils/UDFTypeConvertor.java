@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 
 import org.springframework.util.NumberUtils;
 
-import com.sap.hackthon.entity.PropertyMeta;
+import com.sap.hackthon.framework.beans.PropertyMeta;
 import com.sap.hackthon.framework.enumeration.UDFType;
 
 /**

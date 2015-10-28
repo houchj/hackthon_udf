@@ -11,7 +11,6 @@ import javax.persistence.Transient;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.sap.hackthon.entity.PropertyMeta;
 import com.sap.hackthon.framework.exception.NoSuchUserDefineFieldException;
 import com.sap.hackthon.framework.mata.MetaInfoRetriever;
 import com.sap.hackthon.framework.utils.UDFTypeConvertor;

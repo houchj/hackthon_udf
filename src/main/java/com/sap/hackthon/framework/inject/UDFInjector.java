@@ -21,8 +21,8 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.sap.hackthon.entity.PropertyMeta;
 import com.sap.hackthon.framework.beans.BasicEntity;
+import com.sap.hackthon.framework.beans.PropertyMeta;
 import com.sap.hackthon.framework.mata.MetaInfoRetriever;
 import com.sap.hackthon.repository.PropertyMetaRepository;
 
